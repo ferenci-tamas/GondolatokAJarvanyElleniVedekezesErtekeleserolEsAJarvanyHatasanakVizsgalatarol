@@ -275,7 +275,7 @@ Ez itt egy nagyon fontos általános gondolat: hogy egy változó hatását úgy
 
 Egy pillanatra még érdemes elidőzni az ábrázolásoknál. Ez keményebb dió lesz az eddigieknél, de kiegészítő pontként nem felesleges: egy utolsó vizualizációt mutatok, ami az előbbieknél jobb térlátást igényel, de megéri, ha az ember becsukja a szemét, és igyekszik meglátni maga előtt a helyzetet, mert segíti, hogy mélyebben megértse a confounding mibenlétét. Készítsünk egy három dimenziós ábrát! Itt természetesen nem egyenest, hanem egy síkot illesztünk a pontjainkra (a függőleges piros vonalak csak a síktól vett eltérést mutatják):
 
-```{r}
+```{r, rgl = TRUE, fig.width = 3, fig.height = 2}
 fit <- lm(cumexcessperpop ~ gdp + nurses, data = RawData)
 
 gdpgrid <- seq(min(RawData$gdp), max(RawData$gdp), length = 10)
@@ -283,9 +283,10 @@ nursegrid <- seq(min(RawData$nurses), max(RawData$nurses), length = 10)
 predgrid <- predict(fit, expand.grid(gdp = gdpgrid, nurses = nursegrid))
 
 rgl::plot3d(RawData$gdp, RawData$nurses, RawData$cumexcessperpop,
-            xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
-            ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
-            zlab = "Összesített többlethalálozás [fő/1M fő]")
+            xlab = "GDP", ylab = "Nővérek száma", zlab = "Halálozás")
+            # xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
+            # ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+            # zlab = "Összesített többlethalálozás [fő/1M fő]")
 rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95, 0.30,
                                   0, 0, 0, 0, 1), nc = 4))
 rgl::segments3d(rbind(RawData$gdp, RawData$gdp),
@@ -297,8 +298,6 @@ rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2), c(predgrid[1], pr
              col = "blue")
 rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]), c(predgrid[10], predgrid[100]),
              col = "green")
-
-rgl::rglwidget(width = 1000, height = 800)
 ```
 
 Amit látunk, hogy a GDP--halálozás vetületben ferde a sík (nézzük a kék élet) -- ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás. Viszont a nővér--halálozás vetületben (zöld él) szinte vízszintes -- a GDP-t is figyelembe véve már nincs hatása a nővérek számának! Ez egy fontos megállapítás, vagy jobban mondva újabb elmondása a korábbi megállapításnak: _ha_ lerögzítjük a GDP-t, akkor a nővérek változtatása már nem számít. Ha rögzítjük a GDP értékét, azaz kiválasztunk egy pontot a kék él mentén, majd _adott, rögzített GDP mellett_ elkezdjük változtatni a nővérek számát, azaz a kiválasztott ponttól elindulunk a sík mentén a nővér él növekvő irányába, akkor szinte vízszintesen haladunk -- nem változik a halálozás.

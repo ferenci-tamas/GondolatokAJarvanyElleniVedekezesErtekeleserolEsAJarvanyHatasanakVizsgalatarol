@@ -481,12 +481,6 @@ RawData <- Reduce(function(...) merge(..., by = "geo"), list(
   as.data.table(eurostat::get_eurostat("hlth_rs_prsns"))[
   unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
   .(geo, nurses = values)]))
-```
-
-    ## Warning in utils::download.file(url, tfile): downloaded length 1179648 !=
-    ## reported length 2246678
-
-``` r
 names(RawData) <- tolower(names(RawData))
 
 write.csv2(RawData, "RawData.csv", row.names = FALSE)
@@ -510,28 +504,28 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 
 | geo | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |   gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure | nurses |
 |:----|:------------|----------------:|-----------:|-------------:|-------------:|------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|-------:|
-| AT  | Austria     |          1802.4 |      107.6 |         15.1 |         31.0 | 40350 |      0 |  17.1 |  26.2 |     5.7 |    4.4 |         2.2 |  4.9 |  21.1 |            4671.6 |  685.0 |
-| BE  | Belgium     |          2009.9 |      377.3 |          5.7 |         29.5 | 37690 |      0 |  16.3 |  19.4 |     9.7 |    4.3 |         1.5 |  5.3 |  16.5 |            4418.1 | 1122.4 |
-| BG  | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 17010 |      0 |  13.6 |  36.2 |    10.2 |    2.7 |         9.1 |  6.4 |  29.6 |             625.6 |  437.5 |
-| CY  | Cyprus      |           855.1 |       95.7 |          2.2 |         51.8 | 29400 |      0 |  15.2 |  25.5 |     4.0 |    4.3 |         1.6 |  6.1 |  17.3 |            1771.2 |  538.1 |
-| CZ  | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29760 |      0 |  19.8 |  26.4 |     7.8 |    4.5 |         4.3 |  7.7 |  23.7 |            1644.1 |  850.1 |
-| DE  | Germany     |           932.0 |      235.2 |          7.8 |         36.3 | 38650 |      0 |  19.0 |  28.3 |     7.5 |    6.1 |         3.9 |  7.2 |  28.5 |            4855.3 | 1312.7 |
-| DK  | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 40750 |      0 |  16.5 |  20.0 |     9.6 |    6.5 |         1.9 |  4.6 |  17.7 |            5355.1 | 1003.0 |
-| EE  | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 26330 |      0 |  21.8 |  24.8 |     1.3 |    3.1 |         5.6 |  5.5 |  22.9 |            1426.0 |  619.2 |
-| EL  | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 21080 |      0 |  16.7 |  28.6 |     5.9 |    4.4 |         3.4 |  9.2 |  20.9 |            1340.8 |  330.9 |
-| ES  | Spain       |          1799.7 |       93.8 |          5.9 |         49.6 | 28980 |      0 |  16.0 |  22.1 |    13.0 |    4.5 |         0.8 |  6.8 |  18.7 |            2411.7 |  573.6 |
-| HR  | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 21200 |      0 |  23.0 |  25.7 |    10.2 |    3.0 |         5.1 |  7.1 |  24.6 |             930.6 |  656.0 |
-| HU  | Hungary     |          3534.0 |      107.1 |         20.3 |         32.8 | 23280 |      0 |  24.5 |  27.2 |     6.3 |    4.9 |         4.9 |  8.1 |  31.9 |             949.4 |  651.2 |
-| IT  | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30820 |      0 |  11.7 |  22.4 |    12.1 |    4.8 |         2.5 |  6.7 |  20.6 |            2599.2 |  579.8 |
-| LT  | Lithuania   |          4772.7 |       44.6 |         22.9 |         43.2 | 26770 |      0 |  18.9 |  23.7 |     0.8 |    2.7 |         7.5 |  4.4 |  28.1 |            1223.8 |  770.8 |
-| LU  | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 81300 |      0 |  16.5 |  18.2 |     8.9 |    6.8 |         2.5 |  5.6 |  16.5 |            5502.1 | 1172.5 |
-| LV  | Latvia      |          3108.7 |       30.2 |         42.2 |         43.8 | 22150 |      0 |  23.0 |  26.8 |     1.2 |    3.5 |         6.6 |  4.7 |  29.4 |            1045.6 |  456.8 |
-| NL  | Netherlands |          1595.6 |      507.3 |          4.8 |         56.2 | 40980 |      0 |  14.7 |  21.1 |     8.3 |    5.5 |         1.9 |  5.4 |  16.8 |            4748.7 | 1093.6 |
-| NO  | Norway      |           514.0 |       17.3 |          6.1 |         28.9 | 46390 |      0 |  14.1 |  18.1 |     1.4 |    6.7 |         1.7 |  4.2 |  12.7 |            7126.7 | 1766.2 |
-| PL  | Poland      |          4352.6 |      123.6 |         37.6 |         35.0 | 23220 |      0 |  19.0 |  22.6 |     1.6 |    4.1 |         9.0 |  6.6 |  23.1 |             906.1 |  510.1 |
-| RO  | Romania     |          5967.9 |       82.7 |         45.8 |         28.8 | 22130 |      0 |  10.9 |  27.3 |     2.9 |    2.0 |         3.4 |  4.8 |  17.1 |             661.3 |  696.7 |
-| SE  | Sweden      |          1457.1 |       25.2 |         15.6 |         40.3 | 37920 |      0 |  15.3 |  12.6 |     1.8 |    7.6 |         1.5 |  4.8 |  16.2 |            5041.8 | 1089.4 |
-| SI  | Slovenia    |          2218.2 |      103.7 |         11.6 |         19.5 | 28240 |      0 |  19.9 |  23.2 |     6.6 |    5.0 |         3.2 |  6.9 |  24.8 |            1975.2 |  992.3 |
+| AT  | Austria     |          1802.4 |      107.6 |         15.1 |         31.0 | 40350 |   18.8 |  17.1 |  26.2 |     5.7 |    4.4 |         2.2 |  4.9 |  21.1 |            4671.6 |  685.0 |
+| BE  | Belgium     |          2009.9 |      377.3 |          5.7 |         29.5 | 37690 |   18.9 |  16.3 |  19.4 |     9.7 |    4.3 |         1.5 |  5.3 |  16.5 |            4418.1 | 1122.4 |
+| BG  | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 17010 |   21.3 |  13.6 |  36.2 |    10.2 |    2.7 |         9.1 |  6.4 |  29.6 |             625.6 |  437.5 |
+| CY  | Cyprus      |           855.1 |       95.7 |          2.2 |         51.8 | 29400 |   16.1 |  15.2 |  25.5 |     4.0 |    4.3 |         1.6 |  6.1 |  17.3 |            1771.2 |  538.1 |
+| CZ  | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29760 |   19.6 |  19.8 |  26.4 |     7.8 |    4.5 |         4.3 |  7.7 |  23.7 |            1644.1 |  850.1 |
+| DE  | Germany     |           932.0 |      235.2 |          7.8 |         36.3 | 38650 |   21.5 |  19.0 |  28.3 |     7.5 |    6.1 |         3.9 |  7.2 |  28.5 |            4855.3 | 1312.7 |
+| DK  | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 40750 |   19.6 |  16.5 |  20.0 |     9.6 |    6.5 |         1.9 |  4.6 |  17.7 |            5355.1 | 1003.0 |
+| EE  | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 26330 |   19.8 |  21.8 |  24.8 |     1.3 |    3.1 |         5.6 |  5.5 |  22.9 |            1426.0 |  619.2 |
+| EL  | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 21080 |   22.0 |  16.7 |  28.6 |     5.9 |    4.4 |         3.4 |  9.2 |  20.9 |            1340.8 |  330.9 |
+| ES  | Spain       |          1799.7 |       93.8 |          5.9 |         49.6 | 28980 |   19.4 |  16.0 |  22.1 |    13.0 |    4.5 |         0.8 |  6.8 |  18.7 |            2411.7 |  573.6 |
+| HR  | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 21200 |   20.6 |  23.0 |  25.7 |    10.2 |    3.0 |         5.1 |  7.1 |  24.6 |             930.6 |  656.0 |
+| HU  | Hungary     |          3534.0 |      107.1 |         20.3 |         32.8 | 23280 |   19.3 |  24.5 |  27.2 |     6.3 |    4.9 |         4.9 |  8.1 |  31.9 |             949.4 |  651.2 |
+| IT  | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30820 |   22.9 |  11.7 |  22.4 |    12.1 |    4.8 |         2.5 |  6.7 |  20.6 |            2599.2 |  579.8 |
+| LT  | Lithuania   |          4772.7 |       44.6 |         22.9 |         43.2 | 26770 |   19.8 |  18.9 |  23.7 |     0.8 |    2.7 |         7.5 |  4.4 |  28.1 |            1223.8 |  770.8 |
+| LU  | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 81300 |   14.4 |  16.5 |  18.2 |     8.9 |    6.8 |         2.5 |  5.6 |  16.5 |            5502.1 | 1172.5 |
+| LV  | Latvia      |          3108.7 |       30.2 |         42.2 |         43.8 | 22150 |   20.3 |  23.0 |  26.8 |     1.2 |    3.5 |         6.6 |  4.7 |  29.4 |            1045.6 |  456.8 |
+| NL  | Netherlands |          1595.6 |      507.3 |          4.8 |         56.2 | 40980 |   19.2 |  14.7 |  21.1 |     8.3 |    5.5 |         1.9 |  5.4 |  16.8 |            4748.7 | 1093.6 |
+| NO  | Norway      |           514.0 |       17.3 |          6.1 |         28.9 | 46390 |   17.2 |  14.1 |  18.1 |     1.4 |    6.7 |         1.7 |  4.2 |  12.7 |            7126.7 | 1766.2 |
+| PL  | Poland      |          4352.6 |      123.6 |         37.6 |         35.0 | 23220 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         9.0 |  6.6 |  23.1 |             906.1 |  510.1 |
+| RO  | Romania     |          5967.9 |       82.7 |         45.8 |         28.8 | 22130 |   18.5 |  10.9 |  27.3 |     2.9 |    2.0 |         3.4 |  4.8 |  17.1 |             661.3 |  696.7 |
+| SE  | Sweden      |          1457.1 |       25.2 |         15.6 |         40.3 | 37920 |   19.9 |  15.3 |  12.6 |     1.8 |    7.6 |         1.5 |  4.8 |  16.2 |            5041.8 | 1089.4 |
+| SI  | Slovenia    |          2218.2 |      103.7 |         11.6 |         19.5 | 28240 |   19.8 |  19.9 |  23.2 |     6.6 |    5.0 |         3.2 |  6.9 |  24.8 |            1975.2 |  992.3 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -678,9 +672,10 @@ nursegrid <- seq(min(RawData$nurses), max(RawData$nurses), length = 10)
 predgrid <- predict(fit, expand.grid(gdp = gdpgrid, nurses = nursegrid))
 
 rgl::plot3d(RawData$gdp, RawData$nurses, RawData$cumexcessperpop,
-            xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
-            ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
-            zlab = "Összesített többlethalálozás [fő/1M fő]")
+            xlab = "GDP", ylab = "Nővérek száma", zlab = "Halálozás")
+            # xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
+            # ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+            # zlab = "Összesített többlethalálozás [fő/1M fő]")
 rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95, 0.30,
                                   0, 0, 0, 0, 1), nc = 4))
 rgl::segments3d(rbind(RawData$gdp, RawData$gdp),
@@ -692,11 +687,9 @@ rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2), c(predgrid[1], pr
              col = "blue")
 rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]), c(predgrid[10], predgrid[100]),
              col = "green")
-
-rgl::rglwidget(width = 1000, height = 800)
 ```
 
-![](C:\Users\FERENC~1\AppData\Local\Temp\RtmpGIEF38\fileb60c4cb762f8.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Amit látunk, hogy a GDP–halálozás vetületben ferde a sík (nézzük a kék
 élet) – ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás.
@@ -1002,8 +995,6 @@ fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + po
 sjPlot::tab_model(fit2)
 ```
 
-    ## Warning: Model matrix is rank deficient. Parameters popold were not estimable.
-
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1032,13 +1023,13 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5782.35
+8593.20
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--3817.84 – 15382.54
+-5967.44 – 23153.83
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.202
+0.206
 </td>
 </tr>
 <tr>
@@ -1046,13 +1037,13 @@ p
 popdensity
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05
+-0.35
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--5.86 – 5.76
+-6.64 – 5.94
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.985
+0.899
 </td>
 </tr>
 <tr>
@@ -1060,13 +1051,13 @@ popdensity
 overcrowding
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-21.21
+36.77
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--56.73 – 99.15
+-64.16 – 137.70
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.548
+0.418
 </td>
 </tr>
 <tr>
@@ -1074,13 +1065,13 @@ overcrowding
 urbanization
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--16.25
+-4.91
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--91.38 – 58.89
+-95.22 – 85.40
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.631
+0.901
 </td>
 </tr>
 <tr>
@@ -1088,13 +1079,27 @@ urbanization
 gdp
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02
+-0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.10 – 0.06
+-0.14 – 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.581
+0.439
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+popold
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-187.95
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-880.95 – 505.04
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.542
 </td>
 </tr>
 <tr>
@@ -1102,13 +1107,13 @@ gdp
 obese
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--205.19
+-245.32
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--453.38 – 43.01
+-548.34 – 57.69
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.093
+0.097
 </td>
 </tr>
 <tr>
@@ -1116,13 +1121,13 @@ obese
 smoke
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-14.63
+-37.66
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--250.13 – 279.38
+-379.32 – 303.99
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.902
+0.802
 </td>
 </tr>
 <tr>
@@ -1130,13 +1135,13 @@ smoke
 alcohol
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-98.12
+109.46
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--99.86 – 296.10
+-105.57 – 324.48
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.286
+0.268
 </td>
 </tr>
 <tr>
@@ -1144,13 +1149,13 @@ alcohol
 asthma
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--142.10
+-310.45
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1274.29 – 990.09
+-1666.98 – 1046.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.780
+0.605
 </td>
 </tr>
 <tr>
@@ -1158,13 +1163,13 @@ asthma
 chrt angpec
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-354.22
+292.37
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--105.10 – 813.53
+-247.49 – 832.23
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.113
+0.241
 </td>
 </tr>
 <tr>
@@ -1172,13 +1177,13 @@ chrt angpec
 diab
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--204.38
+-18.78
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1084.71 – 675.95
+-1179.77 – 1142.21
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.607
+0.971
 </td>
 </tr>
 <tr>
@@ -1186,13 +1191,13 @@ diab
 hblpr
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-44.89
+123.88
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--223.68 – 313.46
+-284.40 – 532.16
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.710
+0.496
 </td>
 </tr>
 <tr>
@@ -1200,13 +1205,13 @@ hblpr
 healthexpenditure
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.50
+-0.25
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.51 – 0.51
+-1.66 – 1.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.291
+0.686
 </td>
 </tr>
 <tr>
@@ -1214,13 +1219,13 @@ healthexpenditure
 nurses
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.58
+1.61
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.84 – 5.00
+-2.03 – 5.26
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.318
+0.330
 </td>
 </tr>
 <tr>
@@ -1236,7 +1241,7 @@ Observations
 R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.904 / 0.747
+0.909 / 0.727
 </td>
 </tr>
 </table>
