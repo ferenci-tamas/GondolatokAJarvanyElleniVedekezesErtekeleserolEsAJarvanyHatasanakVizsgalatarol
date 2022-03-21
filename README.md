@@ -30,6 +30,12 @@ Ferenci Tamás
 
 ------------------------------------------------------------------------
 
+(A dolgozat letölthető
+[PDF](https://raw.githubusercontent.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf)
+és
+[EPUB](https://github.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub)
+formátumokban is.)
+
 E pillanatban Európa a koronavírus-járványt lényegileg lezártnak
 tekinti. Noha a dolog véglegességében azért van még kérdőjel, az alkalom
 tökéletesen megfelelő arra, hogy feltegyünk két olyan kérdést, melyek

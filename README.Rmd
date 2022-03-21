@@ -39,6 +39,8 @@ library(data.table)
 library(ggplot2)
 ```
 
+(A dolgozat letölthető [PDF](https://raw.githubusercontent.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf) és [EPUB](https://github.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub) formátumokban is.)
+
 E pillanatban Európa a koronavírus-járványt lényegileg lezártnak tekinti. Noha a dolog véglegességében azért van még kérdőjel, az alkalom tökéletesen megfelelő arra, hogy feltegyünk két olyan kérdést, melyek legjobban visszatekintve válaszolhatóak meg, egy járvány végén relevánsak -- de akkor viszont nagyon is. (Ebben a dolgozatban az ,,a járvány'' kitétel alatt a COVID-19 járványt értem, de az elmondottak lényegében teljesen általánosak, és más esetre is alkalmazhatóak.) Jelesül:
 
 - Hogyan értékeljük egy ország járványügyi intézkedéseit? Megfelelő lépéseket hoztak és a kellő időben? Jó volt a járványügyi rendszer, a tesztelés, a korlátozó intézkedések, a tájékoztatás vagy lehetett volna jobban is eljárni?
