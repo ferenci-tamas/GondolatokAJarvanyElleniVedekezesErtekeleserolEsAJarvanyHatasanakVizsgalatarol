@@ -1,19 +1,30 @@
 ---
-title: "Gondolatok a járvány elleni védekezés értékeléséről, és a járvány hatásának vizsgálatáról"
+title: Gondolatok a járvány elleni védekezés értékeléséről, és a járvány hatásának
+  vizsgálatáról
 author: "Ferenci Tamás"
+lang: hu
 output:
-  github_document:
+  bookdown::epub_book:
     toc: true
     toc_depth: 3
-    math_method: NULL
-editor_options: 
+  pdf_document:
+    extra_dependencies: ["animate"]
+    latex_engine: lualatex
+    toc: true
+    toc_depth: 3
+  github_document:
+    toc: yes
+    toc_depth: 3
+    math_method: null
+editor_options:
   chunk_output_type: console
+knit: (function(input, ...) rmarkdown::render(input, ..., output_format = "all"))
 ---
 
 _"Ne fogjon senki könnyelműen_  
 _A húrok pengetésihez!_  
 _Nagy munkát vállal az magára,_  
-_Ki most kezébe lantot vesz._  
+_Ki most kezébe lantot vesz."_  
 
 _(Petőfi Sándor: A XIX. század költői)_
 
@@ -39,7 +50,7 @@ A kérdéskör rendkívüli fontosságát az adja, hogy nem csak „tudományos 
 
 E kérdések megválaszolását számos irányból kísérelhetjük meg: használhatunk járványügyi megfontolásokat, biológiai modelleket, epidemiológiai elméleteket és így tovább, én azonban most egyetlen módszerrel fogok foglalkozni: az _empirikus_ vizsgálattal, vagyis amikor a begyűjtött tényadatok alapján próbáljuk megválaszolni ezeket a kérdéseket. Gyakori vita tárgya ennek pontos szerepe, ám e kérdésben -- mind tudományosan, mind a közvélemény előtt -- a legmegbízhatóbb módszerként tűnik fel az empirikus kutatás.
 
-Előre megmondom, hogy az írásomnak nem az a célja, hogy „végeredményt hirdessen“. Sokkal inkább a módszerekre akarok fókuszálni, helyesekre és hibásakra egyaránt, bemutatva a megfelelő eljásárokat, és -- különös hangsúllyal -- a tipikus csapdákat és buktatókat is. Remélem, hogy ezzel hozzá tudok járulni a már most is zajló, és -- az előbb említett megbízhatóság miatt -- várhatóan a jövőben sem elhalkuló viták színvonalának emeléséhez. Aggodalomra ugyanis lehet okunk e téren: a téma jellegéből adódóan lényegében óhatatlan a politikai szempontok szerinti értelmezése az adatoknak (ami soha nem tesz jót), de hiszek benne, hogy a tudományos szempontok hozzáférhető összefoglalása segít a diskurzus javításában.
+Előre mondom, hogy az írásomnak nem az a célja, hogy „végeredményt hirdessen“. Én most a módszerekre akarok fókuszálni, helyesekre és hibásakra egyaránt, bemutatva a megfelelő eljásárokat, és -- különös hangsúllyal -- a tipikus csapdákat és buktatókat is. Remélem, hogy ezzel hozzá tudok járulni a már most is zajló, és -- az előbb említett megbízhatóság miatt -- várhatóan a jövőben sem elhalkuló viták színvonalának emeléséhez. Aggodalomra ugyanis lehet okunk e téren: a téma jellegéből adódóan lényegében óhatatlan a politikai szempontok szerinti értelmezése az adatoknak (ami soha nem tesz jót), de hiszek benne, hogy a tudományos szempontok hozzáférhető összefoglalása segít a diskurzus javításában.
 
 A keretes szerkezet kedvéért elmondom az egyik utolsó állításomat is: a kérdést rendkívül nehéz megválaszolni empirikusan, tehát a különböző országok tényadatai alapján következtetve. Bár megpróbálok helyes vizsgálati módszereket bemutatni, és lehetőségeket a nehézségek enyhítésére, a kérdésre nem lehet egyszerű és perdöntő választ adni. Mégis, azt gondolom, hogy ennek ellenére nem haszontalan végiggondolni a problémát, sőt -- részint mert segít elkerülni a tipikus csapdákat, buktatókat, téves következtetéseket, részint pedig a probléma jó megértése, átlátása néha még értékesebb is, mint egy egyszerű eredményközlés.
 
@@ -49,7 +60,7 @@ Az első állításom tehát az, hogy a két kérdéscsoport lényegében ugyana
 
 Itt térhetünk át a második kérdésre, illetve arra, hogy miért ugyanaz lényegében a kettő. A fenti okfejtés ugyanis egy speciális esete egy általános kérdésnek: annak, hogy milyen tényezők befolyásolták, és milyen mértékben a járvány hatását egy adott országban. Azért speciális eset, mert leszűkítettük a kérdést egy tényezőre, a járvány kezelésének jóságára. De nem muszáj ezt a leszűkítést megtennünk, nyugodtan vizsgálhatjuk általában (sőt, mint majd látni fogjuk, vizsgálnunk is _kell_, a speciális kérdés jó megválaszolásához _is_), hogy milyen tényezők alakították ki, hogy hány halálozás volt, és melyik tényezőnek mekkora a szerepe. És ebből, mintegy mellesleg, majd azt is kiolvashatjuk, hogy mi a helyzet a járvány kezelésének a jósága kapcsán. Ezért mondtam, hogy elég erről a kérdésről beszélni, és ez mindkettőt megválaszolja.
 
-A probléma, hogy itt _pontosan ugyanabba_ a problémába futunk bele, mint az előbb. Amennyiben tudnánk egyetlen és csakis egyetlen tényezőt változtatni, majd megnézni úgy a járvány áldozatainak a számát, akkor meg tudnánk mondani, hogy az a tényező hat-e rá, és ha igen, milyen mértékben. De a probléma ugyanaz: ezt csak időgéppel lehet megtenni, ha vissza tudnánk menni az időben, és pontosan egy dolgot megváltoztatni. (Azért mondok időgépet, hogy látszódjon: az egyetlen dolgon kívül _minden más_ változatlanul marad.) Jelen tudásunk szerint e megoldás kivitelezése technikai nehézségekbe ütközik, így visszajutunk ugyanahhoz a gondolathoz: nézzünk e helyett különböző országokat, amik a vizsgált tényezőben eltérnek. Mondjuk, ha az érdekel minket, hogy a 100 ezer lakosra jutó nővérek száma hogyan hat a halálozásra, akkor vegyünk országokat, ahol ez a szám -- az egyszerűség kedvéért kereken mondva -- 2000, és vegyünk olyanokat, ahol csak 1000, majd hasonlítsuk össze a járvány-halálozást. De a probléma ugyanaz: mi van, ha a 2000-es, tehát jobb nővér-ellátottságú országokban egyúttal mondjuk az elhízottak aránya is alacsonyabb? Azért hoztam épp ezt a példát, mert ez is a kisebb halálozás irányába hat. Innen kezdve, ha azt is találjuk, hogy a 2000-es országokban kisebb a halálozás, honnan tudhatjuk, hogy az tényleg a több nővér miatt van? Mi van, ha valójában a nővéreknek a világon semmi szerepe, csak ezekben az országokban kevesebb az elhízott, és _ez_ a valódi oka annak, hogy ott kisebb a halálozás?
+A probléma, hogy itt _pontosan ugyanabba_ a helyzetbe futunk bele, mint az előbb. Amennyiben tudnánk egyetlen és csakis egyetlen tényezőt változtatni, majd megnézni úgy a járvány áldozatainak a számát, akkor meg tudnánk mondani, hogy az a tényező hat-e rá, és ha igen, milyen mértékben. De a probléma ugyanaz: ezt csak időgéppel lehet megtenni, ha vissza tudnánk menni az időben, és pontosan egy dolgot megváltoztatni. (Azért mondok időgépet, hogy látszódjon: az egyetlen dolgon kívül _minden más_ változatlanul marad.) Jelen tudásunk szerint e megoldás kivitelezése technikai nehézségekbe ütközik, így visszajutunk ugyanahhoz a gondolathoz: nézzünk e helyett különböző országokat, amik a vizsgált tényezőben eltérnek. Mondjuk, ha az érdekel minket, hogy a 100 ezer lakosra jutó nővérek száma hogyan hat a halálozásra, akkor vegyünk országokat, ahol ez a szám -- az egyszerűség kedvéért kereken mondva -- 2000, és vegyünk olyanokat, ahol csak 1000, majd hasonlítsuk össze a járvány-halálozást. De a probléma ugyanaz: mi van, ha a 2000-es, tehát jobb nővér-ellátottságú országokban egyúttal mondjuk az elhízottak aránya is alacsonyabb? Azért hoztam épp ezt a példát, mert ez is a kisebb halálozás irányába hat. Innen kezdve, ha azt is találjuk, hogy a 2000-es országokban kisebb a halálozás, honnan tudhatjuk, hogy az tényleg a több nővér miatt van? Mi van, ha valójában a nővéreknek a világon semmi szerepe, csak ezekben az országokban kevesebb az elhízott, és _ez_ a valódi oka annak, hogy ott kisebb a halálozás?
 
 Ezt a problémát szokták úgy hívni angol szóval, hogy confounding. (Angolul nagyon találó kifejezés: szó szerint „egybemosódást“ jelent, és valóban arról van szó, hogy a különböző tényezők hatása egybemosódik, a több nővér egybemosódik a kevesebb elhízottal. Magyarra leginkább „zavaró vátozós hatásként“ szoktak fordítani, csak sajnos ez jóval nyakatekertebb, mint az angol kifejezés.) Ez egy általános probléma, ami akkor jelentkezik, ha adott tényező szerint eltérő csoportokat hasonlítunk össze, de azok a csoportok más tényezőkben is el fognak térni -- innen kezdve, ha találunk is különbséget a kimenetben, nem lehet tudni, hogy az mi miatt van: az általunk vizsgált eltérés miatt, a vele együtt járó egyéb eltérés(ek) miatt, vagy ezek valamilyen keveréke miatt. A fenti példából is látható módon leginkább úgy ragadható meg a probléma, hogy van egy -- vagy több -- háttérben lévő változó, a példában mondjuk a gazdasági fejlettség, ami _egyszerre_ függ össze a vizsgált tényezővel (fejlettebb országokban több a nővér) _és_ hat a kimenetre (fejletebb országokban kevesebb az elhízott, ami szintén csökkenti a halálozást).
 
@@ -76,12 +87,14 @@ Ez azért is fontos, mert azt mondja, hogy -- szerencsére -- a két mutató kö
 Ennek az értékei így néznek ki a 2021. 52. heti állapot szerint (ezt az indikátort nagy késleltetéssel közlik, így sokat visszamegyünk, hogy a lehető legtöbb országra legyen adatunk):
 
 ```{r}
-RawData <- fread("https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
-                 dec = ",")[time=="2021W52"&nuts_level==0]
+RawData <- fread(
+  "https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
+  dec = ",")[time=="2021W52"&nuts_level==0]
 RawData$cumexcessperpop <- RawData$cumexcess/RawData$meanpopulation*1e6
 ggplot(RawData[order(cumexcessperpop)],
        aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo=="HU")) +
-  geom_col() + guides(fill = "none") + labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
+  geom_col() + guides(fill = "none") +
+  labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
 Az rögtön látszik, hogy Magyaroszág az utolsó harmad elején található; arról persze ez még nem nyilatkozik, hogy ennek mi az oka -- pontosan ezt próbáljuk most felderíteni.
@@ -112,8 +125,7 @@ ggplot(ggdag::tidy_dagitty(ggdag::dagify(
   personal ~ age + obese + smoke + alcohol + asthma + chrt_angpec + diab + hblpr,
   care ~ vaccination + healthexpenditure + nurses,
   labels = c("death" = "Járvány terhe", "inf" = "Megfertőződöttek száma",
-             "letal" = "Megfertőződöttek halálozási aránya",
-             "contact" = "Kontaktusszám",
+             "letal" = "Megfertőződöttek halálozási aránya", "contact" = "Kontaktusszám",
              "reduc" = "Kontaktusszámot csökkentő\nintézkedések",
              "personal" = "Megfertőződöttek\negyéni jellemzői",
              "care" = "Ellátás hatásossága",
@@ -129,8 +141,9 @@ ggplot(ggdag::tidy_dagitty(ggdag::dagify(
              "nurses" = "Nővérek száma")), layout = "igraph", algorithm = "sugiyama"),
   aes(x = x, y = y, xend = xend, yend = yend)) +
   ggdag::geom_dag_edges() + ggdag::geom_dag_point(size = 16) +
-  ggdag::geom_dag_label_repel(aes(label = label), size = 3.88, col = "black", show.legend = FALSE,
-                              segment.alpha = 0.5) + ggdag::theme_dag()
+  ggdag::geom_dag_label_repel(aes(label = label), size = 3.88, col = "black",
+                              show.legend = FALSE, segment.alpha = 0.5) +
+  ggdag::theme_dag()
 ```
 
 A valóságban a [kauzális diagramok](http://bayes.cs.ucla.edu/BOOK-2K/) ennél jóval összetettebbek, itt ez némileg idézőjelben értendő, és inkább csak egyfajta grafikus megjelenítése a fenti leírásnak. Ha csak annyit teszünk, hogy egy ilyet felvázolunk, sokszor már az is segíti a strukturálást és így a jobb megértést.
@@ -177,24 +190,27 @@ RawData <- Reduce(function(...) merge(..., by = "geo"), list(
   as.data.table(eurostat::get_eurostat("nama_10_pc"))[
     unit=="CP_PPS_HAB"&na_item=="B1GQ"&time=="2019-01-01",.(geo, gdp = values)],
   as.data.table(eurostat::get_eurostat("demo_pjan"))[
-    sex=="T"&time=="2019-01-01",.(popold = sum(values[age%in%c(paste0("Y", 65:99),
-                                                               "Y_OPEN")])/values[age=="TOTAL"]*100),
-    .(geo)],
+    sex=="T"&time=="2019-01-01",
+    .(popold = sum(values[age%in%c(paste0("Y", 65:99),
+                                   "Y_OPEN")])/values[age=="TOTAL"]*100), .(geo)],
   as.data.table(eurostat::get_eurostat("sdg_02_10"))[
     bmi=="BMI_GE30"&time=="2019-01-01", .(geo, obese = values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_sk1i"))[
-    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01", .(geo, smoke = 100-values)],
+    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    .(geo, smoke = 100-values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_al1i"))[
-    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01", .(geo, alcohol = values)],
+    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    .(geo, alcohol = values)],
   dcast(as.data.table(eurostat::get_eurostat("hlth_ehis_cd1e"))[
     unit=="PC"&isced11=="TOTAL"&time=="2014-01-01"&sex=="T"&age=="TOTAL"&
       hlth_pb%in%c("ASTHMA", "HBLPR", "DIAB", "CHRT_ANGPEC"), .(geo, hlth_pb, values)],
     geo ~ hlth_pb, value.var = "values"),
   as.data.table(eurostat::get_eurostat("hlth_sha11_hf"))[
-    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01", .(geo, healthexpenditure = values)],
+    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01",
+    .(geo, healthexpenditure = values)],
   as.data.table(eurostat::get_eurostat("hlth_rs_prsns"))[
-  unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
-  .(geo, nurses = values)]))
+    unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
+    .(geo, nurses = values)]))
 names(RawData) <- tolower(names(RawData))
 
 write.csv2(RawData, "RawData.csv", row.names = FALSE)
@@ -287,17 +303,17 @@ rgl::plot3d(RawData$gdp, RawData$nurses, RawData$cumexcessperpop,
             # xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
             # ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
             # zlab = "Összesített többlethalálozás [fő/1M fő]")
-rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95, 0.30,
-                                  0, 0, 0, 0, 1), nc = 4))
+rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95,
+                                  0.30, 0, 0, 0, 0, 1), nc = 4))
 rgl::segments3d(rbind(RawData$gdp, RawData$gdp),
                 rbind(RawData$nurses, RawData$nurses),
                 rbind(RawData$cumexcessperpop, predict(fit)),
                 alpha = 0.4, col = "red")
 rgl::surface3d(gdpgrid, nursegrid, predgrid, alpha = 0.4, front = "lines")
-rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2), c(predgrid[1], predgrid[10]),
-             col = "blue")
-rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]), c(predgrid[10], predgrid[100]),
-             col = "green")
+rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2),
+             c(predgrid[1], predgrid[10]), col = "blue")
+rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]),
+             c(predgrid[10], predgrid[100]), col = "green")
 ```
 
 Amit látunk, hogy a GDP--halálozás vetületben ferde a sík (nézzük a kék élet) -- ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás. Viszont a nővér--halálozás vetületben (zöld él) szinte vízszintes -- a GDP-t is figyelembe véve már nincs hatása a nővérek számának! Ez egy fontos megállapítás, vagy jobban mondva újabb elmondása a korábbi megállapításnak: _ha_ lerögzítjük a GDP-t, akkor a nővérek változtatása már nem számít. Ha rögzítjük a GDP értékét, azaz kiválasztunk egy pontot a kék él mentén, majd _adott, rögzített GDP mellett_ elkezdjük változtatni a nővérek számát, azaz a kiválasztott ponttól elindulunk a sík mentén a nővér él növekvő irányába, akkor szinte vízszintesen haladunk -- nem változik a halálozás.
@@ -327,15 +343,20 @@ Az egész kulcsa a „miközben a GDP értéke rögzített“ kitétel: a confou
 Mindezek eredményét mutatja a következő táblázat, a 'Becsült hatás' oszlop adja meg a fenti értelemben vett hatást:
 
 ```{r}
-sjPlot::tab_model(fit, string.pred = "Változó", string.est = "Becsült hatás",
-                  string.intercept = "Tengelymetszet", string.ci = "95% CI", digits = 3)
+knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit), 3),
+                        `95% CI` = apply(signif(confint(fit), 3), 1, paste,
+                                         collapse = " -- "),
+                        p = Hmisc::format.pval(summary(fit)$coefficients[,4], digits = 3,
+                                               eps = 0.001),
+                        check.names = FALSE, row.names = c("Tengelymetszet",
+                                                           names(coef(fit))[-1])))
 ```
 
-Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése: ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk ki, hogy a GDP nem változik vele együtt, azt állandóan tartjuk, de most ezt ügyesebben tesszük meg (pl. nem kell kategóriákra osztani a GDP-t, amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak egybe, ha túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül számszerű válsazt kapunk stb.).
+Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése: ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk ki, hogy a GDP nem változik vele együtt, azt állandóan tartjuk, de most ezt ügyesebben tesszük meg (pl. nem kell kategóriákra osztani a GDP-t, amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak egybe, ha túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül számszerű választ kapunk stb.).
 
 Természetesen annak, hogy a modell által becsült paraméterek tényleg jó választ adjanak, bizonyos feltételeknek meg kell felelniük. Hát persze: nem fordulhat elő például, hogy van egy _harmadik_ változó, amiről még mindig megfeledkeztünk! Hiszen honnan tudjuk, hogy csak a nővérek és a GDP számít? Mi van, ha valamit így is kihagytunk? Ami, ha hat a halálozásra, megint pont a confounding problémáját hozza be! Itt jutunk vissza ahhoz a tételmondathoz, amit már az elején is láttunk: megfigyeléses adatoknál mindig a fejünk felett lebeg, hogy mi van, ha egy confounding-ot okozó változóról megfeledkezünk. Pontosan ez tükröződik itt is vissza: ha egy lényeges változót kihagyunk, akkor baj lesz.
 
-Valójában nem ez az egyetlen feltétel. Mi van, ha a hatás nem lineáris, például eleinte nagyon számítanak a plusz nővérek, de később már egyre kevésbé? Mi van, ha a nővérek hatása függ a másik magyarázó változótól, a gazdasági fejlettségtől, például alacsony fejlettségnél jobban számít plusz egy nővér, mint magasnál? (Ez utóbbi esetben automatikusan igaz lesz az is, hogy a gazdasági fejlettség halálozásra gyakorolt hatása is függ a nővérek számától; ilyenkor szokták azt mondani, hogy interakcióban van a két változó.) Ezek a kérdések mindazonáltal jól vizsgálhatóak a regressziós keretrendszerben.
+Valójában nem ez az egyetlen feltevés, mi van például, ha a hatás nem lineáris? Ezek a kérdések mindazonáltal jól vizsgálhatóak a regressziós keretrendszerben; a linearitás kérdését hamarosan külön is meg fogjuk nézni.
 
 Az ilyen modellek becslésére rendelkezésre állnak jól bevált módszerek. Ezek milliónyi kérdése közül csak egyet emelnék ki: az így kapott számok bizonytalanságának ügyét. A probléma az, hogy ezek becsült értékek, melyekben van attól függő ingadozás, hogy épp milyen adatbázisból (mintából) becsüljük. Nagyon fontos, hogy most nem arról beszélek, hogy a mintát bármilyen értelemben is „hibásan“ vettük: a legtökéletesebben véletlen mintavétel esetén is lesz a becsült értékben ingadozás, pont úgy, ahogy a kihúzott lottószámok átlaga sem pont 45,5 minden héten. Pedig az összes számnak (1-től 90-ig) ennyi az átlaga, a mintavétel -- remélhetőleg -- itt aztán tökéletesen véletlen, és mégis, a mintának, tehát a kihúzott 5 számnak az átlaga néha kicsit kisebb mint 45,5, néha kicsit nagyobb. A dolog kétféleképp is megfogalmazható: ha tudom, hogy a valódi érték mondjuk 10, akkor a mintából becsült lehet 9 vagy épp 11 is, avagy fordítva: ha a mintában 20-at kaptam, attól még a valódi lehet 19 vagy 21 -- hiszen az előbbi azt mondja, hogy a 19 vagy a 21 is beingadozhat a 20-ba, pusztán a véletlen szeszélye folytán.
 
@@ -343,18 +364,66 @@ Ezt a bizonytalanságot ragadja meg a harmadik oszlopban feltüntetett úgynevez
 
 A regresszió kérdésköre ezen túlmenően is egy hatalmas, de érdekes, és nagyon sok területen -- így a biostatisztikában kiemelten -- fontos téma. Most szinte csak utalásszerűen tudtam megemlíteni pár fontos kérdését, de a részletek [előadásaimban](https://www.youtube.com/c/FerenciTam%C3%A1s) és [jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek (néhány adott témába vágót a szövegben is belinkelek a megfelelő helyen).
 
+### A függvényforma kérdése
+
+A fentiekben hangsúlyosan szerepelt a linearitás, mint a modellünk alapfeltevése. Érdemes erről egy picit bővebben is beszélni, azért is, mert egyúttal jó általános illusztráció az ilyen modellfeltevések szerepére, ellenőrzésére és feloldására is.
+
+Először is kezdjük azzal, hogy egyáltalán miért tételezzük fel, hogy a valóság lineárisan működik? Mi van, ha a hatás nem lineáris, például eleinte nagyon számítanak a plusz nővérek, de később már egyre kevésbé? Mi van, ha a nővérek hatása függ a másik magyarázó változótól, a gazdasági fejlettségtől, például alacsony fejlettségnél jobban számít plusz egy nővér, de magasnál már kevésbé? (Ez utóbbi esetben automatikusan igaz lesz az is, hogy a gazdasági fejlettség halálozásra gyakorolt hatása is függ a nővérek számától; ilyenkor szokták azt mondani, hogy interakcióban van a két változó.)
+
+Kezdjük ott, hogy igen, csakugyan, a valóság működése általában pont hogy nem lineáris. Mégis, jó okaink vannak ennek ellenére is a linearitás használatára, legalábbis első közelítésként. Az egyik, hogy a lineáris modellek kényelmesek: a kapott eredmények nagyon jól interpretálhatóak: egy változó hatása egyetlen szám, azzal a nagyon egyszerű értelmezéssel, hogy +1 egység növekedés minden mást változatlanul tartva hogyan hat a kimenetre. Az, hogy egyetlen számot kell becsülni, ráadásul statisztikailag is nagyon előnyös, kis mintánkon is ez működik a legjobban. Mindemellett a lineáris modellek jól használhatóak extrapolációra, azaz, ha a rendelkezésre álló adatok tartományán kívül eső területről kell nyilatkoznunk, akkor egyszerűen meghosszabbíthatjuk az egyenest minden matematikai nehézség nélkül.
+
+Persze a kényelem nem sokat ér, ha a valóság nem így működik! De itt jön a második előnyös vonás: az, hogy valóságban nem lineáris összefüggések is elég jól közelíthetőek lineárissal, ha kellően szűk tartományon dolgozunk. Vizuálisan ez úgy képzelhető el, hogy ha veszünk is egy akármilyen hepe-hupás függvényt, ha kellően jól ránagyítunk, akkor egy kis tartományban elég jól közelíthető lesz egyenessel. (Ez az ilyen, kissé ráolvasás jellegű érvelésen túl azért ez matematikilag is [alátámasztható](https://www.youtube.com/watch?v=NMvZbkoClb4).)
+
+Összességében véve arról van szó, hogy ha nincs kellő adatunk a mintából, akkor ezt az információhiányt valamilyen feltevéssel kell kipótolnunk, és erre a fenti okok miatt nagyon csábító a linearitás. Természetesen vannak alternatívái, de ezek között választani csak akkor fogunk tudni, ha van kellő információnk. Azt, hogy milyen függvényt használunk, szokták a függvényforma megválasztásának nevezni.
+
+Az egyik ilyen alternatíva a függvényformára, ha a magyarázó változó mellett annak négyzetet is felhasználjuk; ezzel egy egyenes helyett egy parabolát illesztünk:
+
+```{r}
+ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
+  labs(x = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+       y = "Összesített többlethalálozás [fő/1M fő]")
+```
+
+Ha például kilaposodó hatást feltételezünk, akkor ennek leírására ez alkalmas lehet. Ez ráadásul az érvényességi tartományok kérdésére is jó példa: a parabola ugyan kilaposodik, de egy ponton túl vissza is fordul, tehát fontos kérdés, hogy mely tartományban kell használnunk a modellt. De ugyanez a lineárisra is igaz: ahogy az előző megjegyzés is mutatta, lehet, hogy egy tartományban még jó közelítés, de máshol már nem (ezért kell az extrapolációval óvatosnak lenni!).
+
+A fenti függvény a potenciálisan jobb illeszkedésért cserében már nem ad olyan kézenfekvő és egyszerű értelmezést mint a lineáris modell (de továbbra is könnyen extrapolálható). Még egy dolog fontos: ez már két paraméter becslését igényli, így statisztikailag nehezebb dió, illusztrálva azt a korábbi megjegyzést, hogy ahhoz, hogy ilyen kérdéseket, tehát a nemlinearitás ügyét értelmesen vizsgálni tudjuk, nagyobb mintára lesz szükség.
+
+A fenti ábra nagyon egyértelműen mutatja, hogy túl nagy kilaposodó hatás ebben a halálozás--nővér összefüggésben nincsen: a görbe szemmel alig láthatóan tér el az egyenestől. Ennek vizsgálatára statisztikai tesztet is lehetne konstruálni. Ez egy példa a _modelldiagnosztikának_ nevezett nagyon fontos lépésre: ennek során vizsgáljuk, hogy a modellünk feltevései vajon teljesülnek-e abban a konkrét esetben, amit elemzünk.
+
+Ezzel pedig már kezd látszani egy lehetséges munkamódszer: próbálkozzunk különböző lehetséges függvényformákkal, és válasszuk ki, hogy melyik a legjobb a mi konkrét mintánkra! Ez első hallásra nagyon csábítóan hangzik, csak egy gond van: a függvényformák próbálgatása, pláne ha végiggondolatlanul történik, a túlilleszkedés nevű jelenséghez fog vezetni, amiről hamarosan sokat fogunk beszélni. Annyi megelőlegezhető, hogy csak néhány, nem túl nagy számú, előre eldöntött függvényforma kipróbálásának van értelme, annak is inkább csak akkor, ha van kellően nagy mintánk.
+
+Ha interakciót is feltételezni akarunk, akkor hatványozottan jelentkezik ez a probléma, hiszen abból aztán nagyon sok potenciális van: bármelyik változó lehet interakcióban bármelyikkel. A gyakorlatban az mondható, hogy -- ha csak nincs extrém nagy méretű mintánk -- legfeljebb nagyon kis számú, előzetesen, tehát nem az adatok által sugallt módon, hanem tárgyterületi ismeret alapján feltételezett interakció modellbe rakásának van értelme.
+
+Zárásként megjegyzem, hogy az összes fent tárgyalt modell az úgynevezett paraméteres modellek körébe tartozik. Ezek lényege, hogy a függvény formáját (egyenes, parabola stb.) mi határozzuk meg, előre, azt úgymond rákényszerítjük az adatokra. Az adatokból magukból pusztán néhány számot (az egyenes meredekségét, a parabola két együtthatóját stb.) becsüljük, de nem a függvény alakját. Épp innen jön a „paraméteres“ elnevezés: ekkor csak egy vagy több számszerű paramétert becslünk az adatokból. Ezek a modellek általában jól becsülhetőek statisztikailag, kisebb mintán is, valamilyen szintű tárgyterületi interpretációt kis szerencsével lehet adni a paramétereknek, és lehetővé teszik az extrapolációt. Csak épp ott van az a hátrányuk, hogy a függvényformát nem az adatok mondták meg, hanem mi -- de mi van, ha rosszat választunk? Elvégre egy hullámszerűen fel-le ingadozó pontfelőre is rá lehet húzni egy egyenest... (csak sok értelme nem lesz). A modelldiagnosztika enyhít ezen a problémán, hiszen kimutathatóvá teszi, hogy valamit rosszul csináltunk, és segíthet egy jobb megoldás megtalálásában is, azaz valamilyen értelemben mégis csak alakítja az adatok alapján a függvényformát, de mint volt róla szó, ennek is megvannak a hátrányai. Létezik azonban egy radikálisan más megközelítés, a nemparaméteres modellek: ezeknél egyáltalán nem kell semmilyen függvényformát feltételeznünk! Ami persze jó hír, mert ha nem kell függvényformát feltételeznünk, akkor nem fenyeget, hogy rosszat feltételezünk... Meglepő lehet, hogy ilyen létezik, és lehet regressziót csinálni így is, de a probléma megoldható. Lényegében arról van szó, hogy egyszerűen követjük az adatokat:
+
+```{r}
+ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
+  geom_smooth(method = stats::loess, formula = y ~ x, se = FALSE) +
+  labs(x = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+       y = "Összesített többlethalálozás [fő/1M fő]")
+```
+
+Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/). E modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami hatalmas fegyvertény, de cserében rosszabbul becsülhetőek, olyan értelemben, hogy nagyobb mintát igényelnek, paraméter híján nincs egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik (maximum kirajzolhatjuk a görbét), és extrapolálni sem lehet, vagy csak trükkökkel. A továbbiakban ilyen modellekkel nem foglalkozunk most.
+
 ### Több változó modellezése
 
-Látszólag tehát meg is vagyunk: kimutattuk mind a nővérek számának, mind a GDP-nek a hatását, immár korrekt módon -- legalábbis, ha az említett feltételek teljesülnek, például más változó nem játszik szerepet, ezek hatása tényleg lineáris. Kezdjük az első megjegyzéssel: ennél a kettőnél ugyanis jóval több -- potenciálisan -- a kimenetet befolyásoló változónk van, és ezt már szépen ábrázolni nem fogjuk tudni. De sebaj, ha elszakadunk az ábrázolástól, és áttérünk arra az értelmezésre, hogy egy lineáris kapcsolatot feltételezzük, és annak a paramétereit (amik „adott paraméter egységnyi növelésének a hatása a többit változatlanul tartva“ értelmük van) szeretnénk megbecsülni, akkor ez nem probléma. Márpedig ez az eljárás könnyedén kiterjeszthető tetszőleges számú változóra.
+Látszólag tehát meg is vagyunk: kimutattuk mind a nővérek számának, mind a GDP-nek a hatását, immár korrekt módon -- legalábbis, ha az említett feltételek teljesülnek, például más változó nem játszik szerepet, ezek hatása tényleg lineáris. Kezdjük az első megjegyzéssel: ennél a kettőnél ugyanis jóval több -- potenciálisan -- a kimenetet befolyásoló változónk van, és ezt már szépen ábrázolni nem fogjuk tudni. De sebaj, ha elszakadunk az ábrázolástól, és áttérünk arra az értelmezésre, hogy egy lineáris kapcsolatot feltételezzük, és annak a paramétereit (amiknek mind „adott paraméter egységnyi növelésének a hatása a többit változatlanul tartva“ értelmük van) szeretnénk megbecsülni, akkor ez nem probléma. Márpedig ez az eljárás könnyedén kiterjeszthető tetszőleges számú változóra! (A korábban említett lehetőségek a nemlineáris kapcsolatok vizsgálatára szintén átvihetőek többváltozós esetre, de ezzel most nem fogunk foglalkozni, részint mert nem jelent újdonságot -- a korábban látott módszerek alkalmazhatóak minden egyes változóra -- részint mert mindjárt látni fogjuk, hogy ennél most nagyobb problémáink lesznek...)
 
 Úgyhogy ezt használva bepakoljuk az összes változót egy nagy modellbe, és abból kiolvassuk az eredményt, azt is, hogy mi az ami befolyásolta a halálozást (és mennyire), és azt is, hogy mi az, ami nem:
 
 ```{r}
-fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + popold + obese +
-             smoke + alcohol + asthma + chrt_angpec + diab + hblpr + healthexpenditure + nurses,
-           data = RawData)
+fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + popold +
+             obese + smoke + alcohol + asthma + chrt_angpec + diab + hblpr +
+             healthexpenditure + nurses, data = RawData)
 
-sjPlot::tab_model(fit2)
+knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
+                        `95% CI` = apply(signif(confint(fit2), 3), 1, paste,
+                                         collapse = " -- "),
+                        p = Hmisc::format.pval(summary(fit2)$coefficients[,4], digits = 3,
+                                               eps = 0.001),
+                        check.names = FALSE, row.names = c("Tengelymetszet",
+                                                           names(coef(fit2))[-1])))
 ```
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
@@ -388,10 +457,12 @@ SimData$y <- 2*SimData$x^3 + rnorm(20, 0, 0.2)
 for(p in 0:18)
   print(ggplot(SimData, aes(x = x, y = y)) + geom_point() +
           geom_function(fun = ~ 2*(.x)^3, color = "red") + 
-          geom_smooth(method = "lm", formula = if(p==0) y ~ 1 else y ~ poly(x, p), se = FALSE, n = 500) +
+          geom_smooth(method = "lm", formula = if(p==0) y ~ 1 else y ~ poly(x, p),
+                      se = FALSE, n = 500) +
           labs(title = if(p<=1) paste0("Alulilleszkedés (p = ", p, ")") else
             if(p<=6) paste0("Nagyjából jó illeszkedés (p = ", p, ")") else
-              paste0("Túlilleszkedés (p = ", p, ")")) + coord_cartesian(ylim = c(-0.5, 1.5)))
+              paste0("Túlilleszkedés (p = ", p, ")")) +
+          coord_cartesian(ylim = c(-0.5, 1.5)))
 ```
 
 (Érdemes megnézni, hogy több modellre is a „nagyjából jó“ kifejezést használtam: bár a sokaság ismeretében meg lehetne mondani, hogy közülük konkrétan melyik a jó, de az ilyen kis mintanagyság nem teszi lehetővé, hogy ezeket a minta alapján elkülönítsük.)
@@ -399,6 +470,8 @@ for(p in 0:18)
 Azt hiszem a fenti illusztráció nem sok kommentárt igényel a tekintetben, hogy mit jelent a túlilleszkedés, az, hogy a túl komplex modell már a zajokat is megragadja, így bár a mintát egyre jobban leírja, a sokaságot meg egyre kevésbé.
 
 Bár a fenti animáció nem a magyarázó változók számának változtatásával oldotta meg a modell komplexitásának változtatását (hiszen az fixen 1 volt), de a helyzet az, hogy a több magyarázó változó is pontosan ugyanezt jelenti! A több magyarázó változó ugyanis több megbecsülendő paramétert jelent (ahogy a fenti táblázat is mutatja, mindegyiknek van egy saját hatása), a több szabad paraméter pedig komplexebb modellt jelent. Ha túl sok magyarázó változót pakolunk bele egy regressziós modellbe, akkor azt fogjuk _hinni_, hogy gyönyörű szép az illeszkedése (és ezt fogják a különböző számszerű jellemzők is, látszólag teljesen objektíven, mutatni), de valójában az történik, amit a fenti animáción látunk.
+
+Ugyanígy túlilleszkedéshez vezet bármi más is, ami a becsülendő paraméterek számát növeli, hiszen minden ilyen komplexebbé, plasztikusabbá, több információt felhasználni képessé teszi a modellt. Tehát például a több paramétert használó függvényforma is! Hiszen a parabola is két paramétert igényel, míg a lineáris csak egyet. Ha valaki harmadfokú függvényt akarna illeszteni, az -- bár még jobban tudná követni az adatokat -- természetesen még érzékenyebb lenne a túlilleszkedésre is, hiszen az már három paramétert igényel. Most már elárulhatom így utólag, hogy igazából pont ez van az animáción: a pontokra egyre magasabb fokú függvényeket illesztünk. Összességében tehát nem az az igazán fontos, hogy azért van két paraméterünk, mert két változót használunk lineárisan, vagy azért mert egyet, de azt másodfokúként modellbe helyezve, hanem a mintából becsülendő szabad paraméterek száma.
 
 A történet tanulsága tehát, hogy az értelmesen megbecsülhető paraméterek száma limitált attól függően, hogy mennyi adatunk van: van egy -- mintanagyságtól függő -- felső korlátja a modell komplexitásának, aminél még remélhetőleg nem lesz túlilleszkedett az eredmény. Ez azt is jelenti, hogy a modellezhető változók száma is limitált, függően a mintanagyságtól!
 
@@ -437,6 +510,8 @@ Ez egy nagyon nagy csapdája és nehézsége ennek az egész témakörnek: azt s
 
 Még egy kommentárt fűznék a fentiekhez. Gyakran hallani hivatkozást arra, hogy a modelleknek „egyszerűeknek“, „takarékosnak“ kell lenniük (néha erre mondják azt, hogy a parszimónia elve). Ami persze igaz is, ha a túlilleszkedés szempontjára gondolunk. De he ezzel indokolják az inszignifikáns változók elhagyását, vagy a stepwise módszerek alkalmazását, az a parszimónia elvének totális félreértéséről tanúskodik: a parszimónia nem egyszerűen az, hogy hány darab változó van benne a végső modellben! A takarékosság fogalmába ugyanúgy beletartozik az is, hogy hogyan jutottunk el ahhoz a modellhez. Ha a végső modellben csak három magyarázó változó van, de háromszáz lépésen keresztül barkácsoltuk, mire kijött, az a legkevésbé sem „takarékos“ -- csak ez nem látszik a végeredményből! A probléma _pont_ az, hogy a közbenső barkácsoló lépések mind-mind a modell (valódi) komplexitását növelik, csak épp ezzel sehol nem számolunk el, ha a végső modellt úgy prezentáljuk, mintha élből azt becsültük volna meg. Azaz a parszimónia elve rendben van, csak épp annak az állításnak, hogy e módszerek ezt segítik elő, épp az ellenkezője az igaz: ezek megsértik ezt az elvet, csak ezt _eldugják_ az útban, amíg eljutunk a végső modellig, ami persze még annál is rosszabb, mintha legalább látnánk, hogy mi a valódi helyzet.
 
+Kitérőként megjegyzem, hogy igazából ugyanez a helyzet a függvényforma megválasztásával is, nem csak a változószelekcióval: az, ha valaki a modellbe rak egy öt paraméteres függvényformát, nem tér el lényegesen attól, mintha egy egyparamétereset használna, csak épp előtte öt különböző lehetségeset próbált végig, és pusztán az adatok alapján választotta ki, hogy melyik a legjobb. Pedig az utolsó esetben könnyen lehet, hogy arra fog hivatkozni, hogy milyen szép takarékos a modell, a parszimónia elvének megfelelően...!
+
 A fentiek abba az irányba mutatnak, hogy lehetőleg egyetlen modellt találjunk ki, előre, azt becsüljük meg az adatokon, és bármi is jön ki, ne módosítsuk. (Különben túl fogunk illeszkedni.) Ahogy az iterációra vonatkozó megjegyzésemben is utaltam rá, ez azért túl radikális álláspont: ugyanúgy ahogy egy _kicsit_ a modell komplexitását is növelhetjük túlilleszkedés nélkül, mondjuk néhány változó hozzáadásával, _kicsit_ azért pofozgathatjuk is. (Amint láttuk, ez a kettő igazából ugyanaz: mindkettő a modell valódi komplexitását növeli.) Pár próbálkozást tehát tehetünk változó kihagyására vagy hozzávételére, összehasonlíthatjuk az eredeti modellünkkel ezeket, és kiválaszthatjuk, hogy melyik a legjobb. Ami fontos, hogy _néhány_ próbálkozást tegyünk, ne rengeteget, és hogy ezek _prespecifikáltak_ legyenek! (Tehát még az adatokkal való bármilyen munka előtt, előre döntsük el, szakmai megfontolások, tárgyterületi ismeretek alapján hogy melyik lesz az a néhány modellünk, amik közül adat-alapon majd választunk.) A túlilleszkedés szempontjából ugyanis az a legrosszabb, ha adatok által sugallt felvetéseket vizsgálunk meg.
 
 ### A kényelmetlen tudomány
@@ -457,12 +532,14 @@ Tehetünk okosan a változók számának csökkentése érdekében is. Már az o
 
 Talán ezek az utolsó gondolatok érzékeltették legjobban, hogy írásom célja nem egy „lezárt válasz“ közvetítése volt. Sőt, egyáltalán semmilyen választ nem adtam a kérdésre, és szándékosan: én most a módszertanra szerettem volna fókuszálni, ezen belül is különösen arra, hogy felhívjam a figyelmet a veszélyes (mert csábító) csapdákra.
 
-A területtel foglalkozó kutatók nem lesznek egyszerű helyzetben hazánkban. Ezt sajnos nem csak statisztikai okokból mondom: a kérdéskör átpolitizáltsága véleményem szerint rendkívül romboló a valódi tudományos kutatásokra nézve. Félreértés ne essék, a „politika“ szót nem egy szükségképp negatív töltetű értelemben használom, sőt, ez pont egy olyan téma, ahol fontos és hasznos is a politikával való kölcsönhatás, hiszen az ilyen vizsgálatokból levonhatóak olyan következtetések, amelyek az (egészség)politikát is vezethetik a magyar ellátórendszer, a prevenciós rendszer, a népegészségügyi programok javításának irányában. A gond ott kezdődik, amikor megjelenik a prekoncepciózus szemlélet, amikor minden intézkedésnek vagy teljesen, alapjában és menthetetlenül rossznak, vagy teljesen, tökéletesen és aggálytalanul jónak _kell_ lennie. (Pláne, ha vannak olyan szereplők, akik rá is tudják ezt kényszeríteni másokra, például mert elhallgattathatnak nekik nem tetsző véleményeket...) A probléma az, hogy az ilyen kutatások sajnos ennek nagyon kitettek, hiszen nehéz elkerülni, hogy a magyarázó változókat az ember összekösse a kormány tevékenységével: mi az, amire nincs érdemi ráhatása a releváns időhorizonton (pl. a korfa), mi az, amire van, de azért nem túl direkt és azonnali módon (pl. elhízottak aránya), és mi az, amire direkt és azonnali módon van (pl. tesztelési stratégia). Minden oldali szereplőnek meg kellene értenie, hogy az ország érdekét csak az szolgálja, ha e kérdéseket olyan légkörben lehet megbeszélni, ami nem a pillanatnyi politikai haszon kinyerésének lehetőségét nézi az eredményekből.
+A tárgyalásunk lezárásához érve talán érdemes egy lépést tenni hátrafelé. Valójában ugyanis minden amiről beszéltünk, csak a szakpolitikai intézkedések értékelésének egyik lehetséges útját jelentik, amit eredmény-szempontú értékelésnek szoktak hívni. Van egy másik lehetséges megközelítés, az eljárás helyességén alapuló értékelés. (Egészségügyi területen erre hozható egy analógia: a [Donabedian-modell](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0009.2005.00397.x), a jól ismert „struktúra--folyamat--eredmény“ hívószavaival.) Mint a fentiekből is kiderült, az eredmény-alapú értékelésnek komoly nehézségei vannak jelen esetben, és a kapott válasz múlhat az alkalmazott feltevéseken. Azonban látni kell, hogy ettől a jellegzetességtől az eljárás-helyesség értékelése sem mentes, legfeljebb ott ez máshol jelenik meg: az egy _értékválasztás_ folyománya lesz, hogy milyen procedúrát tekintünk helyesnek, olyat, ahol a döntéseket transzparens módon, szakmai integritással rendelkező szervetek véleményének figyelembevételével, nyilvánosan hozzáférhető adatokra alapozva hozzák meg, vagy olyat, ahol az adatok titokban tartása mellett politikai vezetők belátásán, nem transzparensen dolgozó szervezetek véleményén, a választópolgárok rövid távú kívánságainak való megfelelésen alapulnak a szakpolitikai döntések. A kettő közötti preferencia jellemzően nem pusztán egy-egy vezető személyén múlik, hanem történelmi és társadalmi hatások alapján jön létre, adott országban és adott időpontban.
+
+A területtel foglalkozó kutatók attól tartok nem lesznek egyszerű helyzetben hazánkban. Ezt sajnos nem csak statisztikai okokból mondom: a kérdéskör átpolitizáltsága véleményem szerint rendkívül romboló a valódi tudományos kutatásokra nézve. Félreértés ne essék, a „politika“ szót nem egy szükségképp negatív töltetű értelemben használom, sőt, ez pont egy olyan téma, ahol fontos és hasznos is a politikával való kölcsönhatás, hiszen az ilyen vizsgálatokból levonhatóak következtetések, amelyek az (egészség)politikát is vezethetik a magyar ellátórendszer, a prevenciós rendszer, a népegészségügyi programok javításának irányában. A gond ott kezdődik, amikor megjelenik a prekoncepciózus szemlélet, amikor minden intézkedésnek vagy teljesen, alapjában és menthetetlenül rossznak, vagy teljesen, tökéletesen és aggálytalanul jónak _kell_ lennie. (Pláne, ha vannak olyan szereplők, akik rá is tudják ezt kényszeríteni másokra, például mert elhallgattathatnak nekik nem tetsző véleményeket...) A probléma az, hogy az ilyen kutatások sajnos ennek nagyon kitettek, hiszen nehéz elkerülni, hogy a magyarázó változókat az ember összekösse a kormány tevékenységével: mi az, amire nincs érdemi ráhatása a releváns időhorizonton (pl. a korfa), mi az, amire van, de azért nem túl direkt és azonnali módon (pl. elhízottak aránya), és mi az, amire direkt és azonnali módon van (pl. tesztelési stratégia). Minden oldali szereplőnek meg kellene értenie, hogy az ország érdekét csak az szolgálja, ha e kérdéseket olyan légkörben lehet megbeszélni, ami nem a pillanatnyi politikai haszon kinyerésének lehetőségét nézi az eredményekből.
 
 A fentiekből minden bizonnyal kiderült, hogy miért gondolom, hogy nehéz ezt a lantot kézbe venni. Ezzel azonban senkit nem elriasztani szeretnék, épp ellenkezőleg, remélem azt is meg tudtam mutatni, hogy a nehézségei egyúttal a terület szépségét is jelentik, valamint, hogy ha valaki kellő óvatossággal, alapossággal és persze elszántsággal vág bele, akkor az egész ország számára értékes eredményekre lehet jutni ebben a témában. Remélem írásom, ha csak gondolatébresztés erejéig is, de segítséget jelent ebben.
 
 ---
 
-(Az írás a 2022. március 20-án érvényes magyar állapotokat tükrözi.)
+(Az írás a 2022. március 21-én érvényes magyar állapotokat tükrözi.)
 
 A [szerző](http://www.medstat.hu/) klinikai biostatisztikus, orvosbiológiai mérnök. A fent leírtak teljes egészében a magánvéleményét képviselik.

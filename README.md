@@ -15,6 +15,7 @@ Ferenci Tamás
     -   [A confounding problémája](#a-confounding-problémája)
     -   [Kihagyott változós torzítás](#kihagyott-változós-torzítás)
     -   [A regresszió eszköze](#a-regresszió-eszköze)
+    -   [A függvényforma kérdése](#a-függvényforma-kérdése)
     -   [Több változó modellezése](#több-változó-modellezése)
     -   [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
     -   [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
@@ -23,7 +24,7 @@ Ferenci Tamás
 *“Ne fogjon senki könnyelműen*  
 *A húrok pengetésihez!*  
 *Nagy munkát vállal az magára,*  
-*Ki most kezébe lantot vesz.*
+*Ki most kezébe lantot vesz.”*
 
 *(Petőfi Sándor: A XIX. század költői)*
 
@@ -71,8 +72,8 @@ kérdéseket. Gyakori vita tárgya ennek pontos szerepe, ám e kérdésben –
 mind tudományosan, mind a közvélemény előtt – a legmegbízhatóbb
 módszerként tűnik fel az empirikus kutatás.
 
-Előre megmondom, hogy az írásomnak nem az a célja, hogy „végeredményt
-hirdessen“. Sokkal inkább a módszerekre akarok fókuszálni, helyesekre és
+Előre mondom, hogy az írásomnak nem az a célja, hogy „végeredményt
+hirdessen“. Én most a módszerekre akarok fókuszálni, helyesekre és
 hibásakra egyaránt, bemutatva a megfelelő eljásárokat, és – különös
 hangsúllyal – a tipikus csapdákat és buktatókat is. Remélem, hogy ezzel
 hozzá tudok járulni a már most is zajló, és – az előbb említett
@@ -141,7 +142,7 @@ kiolvashatjuk, hogy mi a helyzet a járvány kezelésének a jósága kapcsán.
 Ezért mondtam, hogy elég erről a kérdésről beszélni, és ez mindkettőt
 megválaszolja.
 
-A probléma, hogy itt *pontosan ugyanabba* a problémába futunk bele, mint
+A probléma, hogy itt *pontosan ugyanabba* a helyzetbe futunk bele, mint
 az előbb. Amennyiben tudnánk egyetlen és csakis egyetlen tényezőt
 változtatni, majd megnézni úgy a járvány áldozatainak a számát, akkor
 meg tudnánk mondani, hogy az a tényező hat-e rá, és ha igen, milyen
@@ -307,12 +308,14 @@ indikátort nagy késleltetéssel közlik, így sokat visszamegyünk, hogy a
 lehető legtöbb országra legyen adatunk):
 
 ``` r
-RawData <- fread("https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
-                 dec = ",")[time=="2021W52"&nuts_level==0]
+RawData <- fread(
+  "https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
+  dec = ",")[time=="2021W52"&nuts_level==0]
 RawData$cumexcessperpop <- RawData$cumexcess/RawData$meanpopulation*1e6
 ggplot(RawData[order(cumexcessperpop)],
        aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo=="HU")) +
-  geom_col() + guides(fill = "none") + labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
+  geom_col() + guides(fill = "none") +
+  labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
@@ -463,24 +466,27 @@ RawData <- Reduce(function(...) merge(..., by = "geo"), list(
   as.data.table(eurostat::get_eurostat("nama_10_pc"))[
     unit=="CP_PPS_HAB"&na_item=="B1GQ"&time=="2019-01-01",.(geo, gdp = values)],
   as.data.table(eurostat::get_eurostat("demo_pjan"))[
-    sex=="T"&time=="2019-01-01",.(popold = sum(values[age%in%c(paste0("Y", 65:99),
-                                                               "Y_OPEN")])/values[age=="TOTAL"]*100),
-    .(geo)],
+    sex=="T"&time=="2019-01-01",
+    .(popold = sum(values[age%in%c(paste0("Y", 65:99),
+                                   "Y_OPEN")])/values[age=="TOTAL"]*100), .(geo)],
   as.data.table(eurostat::get_eurostat("sdg_02_10"))[
     bmi=="BMI_GE30"&time=="2019-01-01", .(geo, obese = values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_sk1i"))[
-    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01", .(geo, smoke = 100-values)],
+    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    .(geo, smoke = 100-values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_al1i"))[
-    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01", .(geo, alcohol = values)],
+    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    .(geo, alcohol = values)],
   dcast(as.data.table(eurostat::get_eurostat("hlth_ehis_cd1e"))[
     unit=="PC"&isced11=="TOTAL"&time=="2014-01-01"&sex=="T"&age=="TOTAL"&
       hlth_pb%in%c("ASTHMA", "HBLPR", "DIAB", "CHRT_ANGPEC"), .(geo, hlth_pb, values)],
     geo ~ hlth_pb, value.var = "values"),
   as.data.table(eurostat::get_eurostat("hlth_sha11_hf"))[
-    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01", .(geo, healthexpenditure = values)],
+    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01",
+    .(geo, healthexpenditure = values)],
   as.data.table(eurostat::get_eurostat("hlth_rs_prsns"))[
-  unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
-  .(geo, nurses = values)]))
+    unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
+    .(geo, nurses = values)]))
 names(RawData) <- tolower(names(RawData))
 
 write.csv2(RawData, "RawData.csv", row.names = FALSE)
@@ -676,20 +682,18 @@ rgl::plot3d(RawData$gdp, RawData$nurses, RawData$cumexcessperpop,
             # xlab = "Egy főre jutó bruttó hazai termék [PPS, folyó áron]",
             # ylab = "Ezer főre jutó nővérek száma [fő/ezer fő]",
             # zlab = "Összesített többlethalálozás [fő/1M fő]")
-rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95, 0.30,
-                                  0, 0, 0, 0, 1), nc = 4))
+rgl::view3d(userMatrix = matrix(c(0.74, -0.18, 0.44, 0, 0.67, 0.23, -0.70, 0, -0.02, 0.95,
+                                  0.30, 0, 0, 0, 0, 1), nc = 4))
 rgl::segments3d(rbind(RawData$gdp, RawData$gdp),
                 rbind(RawData$nurses, RawData$nurses),
                 rbind(RawData$cumexcessperpop, predict(fit)),
                 alpha = 0.4, col = "red")
 rgl::surface3d(gdpgrid, nursegrid, predgrid, alpha = 0.4, front = "lines")
-rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2), c(predgrid[1], predgrid[10]),
-             col = "blue")
-rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]), c(predgrid[10], predgrid[100]),
-             col = "green")
+rgl::lines3d(c(gdpgrid[1], gdpgrid[10]), rep(nursegrid[1], 2),
+             c(predgrid[1], predgrid[10]), col = "blue")
+rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]),
+             c(predgrid[10], predgrid[100]), col = "green")
 ```
-
-![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Amit látunk, hogy a GDP–halálozás vetületben ferde a sík (nézzük a kék
 élet) – ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás.
@@ -810,92 +814,20 @@ Mindezek eredményét mutatja a következő táblázat, a ‘Becsült hatás’
 oszlop adja meg a fenti értelemben vett hatást:
 
 ``` r
-sjPlot::tab_model(fit, string.pred = "Változó", string.est = "Becsült hatás",
-                  string.intercept = "Tengelymetszet", string.ci = "95% CI", digits = 3)
+knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit), 3),
+                        `95% CI` = apply(signif(confint(fit), 3), 1, paste,
+                                         collapse = " -- "),
+                        p = Hmisc::format.pval(summary(fit)$coefficients[,4], digits = 3,
+                                               eps = 0.001),
+                        check.names = FALSE, row.names = c("Tengelymetszet",
+                                                           names(coef(fit))[-1])))
 ```
 
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-cumexcessperpop
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Változó
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Becsült hatás
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-95% CI
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-Tengelymetszet
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5969.405
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-3983.953 – 7954.857
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>\<0.001</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-gdp
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.072
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.142 – -0.003
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.042</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-nurses
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.148
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--3.889 – 1.593
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.392
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-22
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-R<sup>2</sup> / R<sup>2</sup> adjusted
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.426 / 0.366
-</td>
-</tr>
-</table>
+|                | Becsült hatás | 95% CI            | p       |
+|:---------------|--------------:|:------------------|:--------|
+| Tengelymetszet |     5970.0000 | 3980 – 7950       | \<0.001 |
+| gdp            |       -0.0725 | -0.142 – -0.00275 | 0.042   |
+| nurses         |       -1.1500 | -3.89 – 1.59      | 0.392   |
 
 Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
 ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk
@@ -903,7 +835,7 @@ ki, hogy a GDP nem változik vele együtt, azt állandóan tartjuk, de most
 ezt ügyesebben tesszük meg (pl. nem kell kategóriákra osztani a GDP-t,
 amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak egybe, ha
 túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül számszerű
-válsazt kapunk stb.).
+választ kapunk stb.).
 
 Természetesen annak, hogy a modell által becsült paraméterek tényleg jó
 választ adjanak, bizonyos feltételeknek meg kell felelniük. Hát persze:
@@ -917,15 +849,10 @@ egy confounding-ot okozó változóról megfeledkezünk. Pontosan ez
 tükröződik itt is vissza: ha egy lényeges változót kihagyunk, akkor baj
 lesz.
 
-Valójában nem ez az egyetlen feltétel. Mi van, ha a hatás nem lineáris,
-például eleinte nagyon számítanak a plusz nővérek, de később már egyre
-kevésbé? Mi van, ha a nővérek hatása függ a másik magyarázó változótól,
-a gazdasági fejlettségtől, például alacsony fejlettségnél jobban számít
-plusz egy nővér, mint magasnál? (Ez utóbbi esetben automatikusan igaz
-lesz az is, hogy a gazdasági fejlettség halálozásra gyakorolt hatása is
-függ a nővérek számától; ilyenkor szokták azt mondani, hogy
-interakcióban van a két változó.) Ezek a kérdések mindazonáltal jól
-vizsgálhatóak a regressziós keretrendszerben.
+Valójában nem ez az egyetlen feltevés, mi van például, ha a hatás nem
+lineáris? Ezek a kérdések mindazonáltal jól vizsgálhatóak a regressziós
+keretrendszerben; a linearitás kérdését hamarosan külön is meg fogjuk
+nézni.
 
 Az ilyen modellek becslésére rendelkezésre állnak jól bevált módszerek.
 Ezek milliónyi kérdése közül csak egyet emelnék ki: az így kapott számok
@@ -969,6 +896,150 @@ de a részletek
 [jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek (néhány
 adott témába vágót a szövegben is belinkelek a megfelelő helyen).
 
+### A függvényforma kérdése
+
+A fentiekben hangsúlyosan szerepelt a linearitás, mint a modellünk
+alapfeltevése. Érdemes erről egy picit bővebben is beszélni, azért is,
+mert egyúttal jó általános illusztráció az ilyen modellfeltevések
+szerepére, ellenőrzésére és feloldására is.
+
+Először is kezdjük azzal, hogy egyáltalán miért tételezzük fel, hogy a
+valóság lineárisan működik? Mi van, ha a hatás nem lineáris, például
+eleinte nagyon számítanak a plusz nővérek, de később már egyre kevésbé?
+Mi van, ha a nővérek hatása függ a másik magyarázó változótól, a
+gazdasági fejlettségtől, például alacsony fejlettségnél jobban számít
+plusz egy nővér, de magasnál már kevésbé? (Ez utóbbi esetben
+automatikusan igaz lesz az is, hogy a gazdasági fejlettség halálozásra
+gyakorolt hatása is függ a nővérek számától; ilyenkor szokták azt
+mondani, hogy interakcióban van a két változó.)
+
+Kezdjük ott, hogy igen, csakugyan, a valóság működése általában pont
+hogy nem lineáris. Mégis, jó okaink vannak ennek ellenére is a
+linearitás használatára, legalábbis első közelítésként. Az egyik, hogy a
+lineáris modellek kényelmesek: a kapott eredmények nagyon jól
+interpretálhatóak: egy változó hatása egyetlen szám, azzal a nagyon
+egyszerű értelmezéssel, hogy +1 egység növekedés minden mást
+változatlanul tartva hogyan hat a kimenetre. Az, hogy egyetlen számot
+kell becsülni, ráadásul statisztikailag is nagyon előnyös, kis mintánkon
+is ez működik a legjobban. Mindemellett a lineáris modellek jól
+használhatóak extrapolációra, azaz, ha a rendelkezésre álló adatok
+tartományán kívül eső területről kell nyilatkoznunk, akkor egyszerűen
+meghosszabbíthatjuk az egyenest minden matematikai nehézség nélkül.
+
+Persze a kényelem nem sokat ér, ha a valóság nem így működik! De itt jön
+a második előnyös vonás: az, hogy valóságban nem lineáris összefüggések
+is elég jól közelíthetőek lineárissal, ha kellően szűk tartományon
+dolgozunk. Vizuálisan ez úgy képzelhető el, hogy ha veszünk is egy
+akármilyen hepe-hupás függvényt, ha kellően jól ránagyítunk, akkor egy
+kis tartományban elég jól közelíthető lesz egyenessel. (Ez az ilyen,
+kissé ráolvasás jellegű érvelésen túl azért ez matematikilag is
+[alátámasztható](https://www.youtube.com/watch?v=NMvZbkoClb4).)
+
+Összességében véve arról van szó, hogy ha nincs kellő adatunk a
+mintából, akkor ezt az információhiányt valamilyen feltevéssel kell
+kipótolnunk, és erre a fenti okok miatt nagyon csábító a linearitás.
+Természetesen vannak alternatívái, de ezek között választani csak akkor
+fogunk tudni, ha van kellő információnk. Azt, hogy milyen függvényt
+használunk, szokták a függvényforma megválasztásának nevezni.
+
+Az egyik ilyen alternatíva a függvényformára, ha a magyarázó változó
+mellett annak négyzetet is felhasználjuk; ezzel egy egyenes helyett egy
+parabolát illesztünk:
+
+``` r
+ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
+  labs(x = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+       y = "Összesített többlethalálozás [fő/1M fő]")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+Ha például kilaposodó hatást feltételezünk, akkor ennek leírására ez
+alkalmas lehet. Ez ráadásul az érvényességi tartományok kérdésére is jó
+példa: a parabola ugyan kilaposodik, de egy ponton túl vissza is fordul,
+tehát fontos kérdés, hogy mely tartományban kell használnunk a modellt.
+De ugyanez a lineárisra is igaz: ahogy az előző megjegyzés is mutatta,
+lehet, hogy egy tartományban még jó közelítés, de máshol már nem (ezért
+kell az extrapolációval óvatosnak lenni!).
+
+A fenti függvény a potenciálisan jobb illeszkedésért cserében már nem ad
+olyan kézenfekvő és egyszerű értelmezést mint a lineáris modell (de
+továbbra is könnyen extrapolálható). Még egy dolog fontos: ez már két
+paraméter becslését igényli, így statisztikailag nehezebb dió,
+illusztrálva azt a korábbi megjegyzést, hogy ahhoz, hogy ilyen
+kérdéseket, tehát a nemlinearitás ügyét értelmesen vizsgálni tudjuk,
+nagyobb mintára lesz szükség.
+
+A fenti ábra nagyon egyértelműen mutatja, hogy túl nagy kilaposodó hatás
+ebben a halálozás–nővér összefüggésben nincsen: a görbe szemmel alig
+láthatóan tér el az egyenestől. Ennek vizsgálatára statisztikai tesztet
+is lehetne konstruálni. Ez egy példa a *modelldiagnosztikának* nevezett
+nagyon fontos lépésre: ennek során vizsgáljuk, hogy a modellünk
+feltevései vajon teljesülnek-e abban a konkrét esetben, amit elemzünk.
+
+Ezzel pedig már kezd látszani egy lehetséges munkamódszer: próbálkozzunk
+különböző lehetséges függvényformákkal, és válasszuk ki, hogy melyik a
+legjobb a mi konkrét mintánkra! Ez első hallásra nagyon csábítóan
+hangzik, csak egy gond van: a függvényformák próbálgatása, pláne ha
+végiggondolatlanul történik, a túlilleszkedés nevű jelenséghez fog
+vezetni, amiről hamarosan sokat fogunk beszélni. Annyi megelőlegezhető,
+hogy csak néhány, nem túl nagy számú, előre eldöntött függvényforma
+kipróbálásának van értelme, annak is inkább csak akkor, ha van kellően
+nagy mintánk.
+
+Ha interakciót is feltételezni akarunk, akkor hatványozottan jelentkezik
+ez a probléma, hiszen abból aztán nagyon sok potenciális van: bármelyik
+változó lehet interakcióban bármelyikkel. A gyakorlatban az mondható,
+hogy – ha csak nincs extrém nagy méretű mintánk – legfeljebb nagyon kis
+számú, előzetesen, tehát nem az adatok által sugallt módon, hanem
+tárgyterületi ismeret alapján feltételezett interakció modellbe
+rakásának van értelme.
+
+Zárásként megjegyzem, hogy az összes fent tárgyalt modell az úgynevezett
+paraméteres modellek körébe tartozik. Ezek lényege, hogy a függvény
+formáját (egyenes, parabola stb.) mi határozzuk meg, előre, azt úgymond
+rákényszerítjük az adatokra. Az adatokból magukból pusztán néhány számot
+(az egyenes meredekségét, a parabola két együtthatóját stb.) becsüljük,
+de nem a függvény alakját. Épp innen jön a „paraméteres“ elnevezés:
+ekkor csak egy vagy több számszerű paramétert becslünk az adatokból.
+Ezek a modellek általában jól becsülhetőek statisztikailag, kisebb
+mintán is, valamilyen szintű tárgyterületi interpretációt kis
+szerencsével lehet adni a paramétereknek, és lehetővé teszik az
+extrapolációt. Csak épp ott van az a hátrányuk, hogy a függvényformát
+nem az adatok mondták meg, hanem mi – de mi van, ha rosszat választunk?
+Elvégre egy hullámszerűen fel-le ingadozó pontfelőre is rá lehet húzni
+egy egyenest… (csak sok értelme nem lesz). A modelldiagnosztika enyhít
+ezen a problémán, hiszen kimutathatóvá teszi, hogy valamit rosszul
+csináltunk, és segíthet egy jobb megoldás megtalálásában is, azaz
+valamilyen értelemben mégis csak alakítja az adatok alapján a
+függvényformát, de mint volt róla szó, ennek is megvannak a hátrányai.
+Létezik azonban egy radikálisan más megközelítés, a nemparaméteres
+modellek: ezeknél egyáltalán nem kell semmilyen függvényformát
+feltételeznünk! Ami persze jó hír, mert ha nem kell függvényformát
+feltételeznünk, akkor nem fenyeget, hogy rosszat feltételezünk… Meglepő
+lehet, hogy ilyen létezik, és lehet regressziót csinálni így is, de a
+probléma megoldható. Lényegében arról van szó, hogy egyszerűen követjük
+az adatokat:
+
+``` r
+ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
+  geom_smooth(method = stats::loess, formula = y ~ x, se = FALSE) +
+  labs(x = "Ezer főre jutó nővérek száma [fő/ezer fő]",
+       y = "Összesített többlethalálozás [fő/1M fő]")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van
+irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/).
+E modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami
+hatalmas fegyvertény, de cserében rosszabbul becsülhetőek, olyan
+értelemben, hogy nagyobb mintát igényelnek, paraméter híján nincs
+egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik
+(maximum kirajzolhatjuk a görbét), és extrapolálni sem lehet, vagy csak
+trükkökkel. A továbbiakban ilyen modellekkel nem foglalkozunk most.
+
 ### Több változó modellezése
 
 Látszólag tehát meg is vagyunk: kimutattuk mind a nővérek számának, mind
@@ -978,273 +1049,52 @@ hatása tényleg lineáris. Kezdjük az első megjegyzéssel: ennél a kettőné
 ugyanis jóval több – potenciálisan – a kimenetet befolyásoló változónk
 van, és ezt már szépen ábrázolni nem fogjuk tudni. De sebaj, ha
 elszakadunk az ábrázolástól, és áttérünk arra az értelmezésre, hogy egy
-lineáris kapcsolatot feltételezzük, és annak a paramétereit (amik „adott
-paraméter egységnyi növelésének a hatása a többit változatlanul tartva“
-értelmük van) szeretnénk megbecsülni, akkor ez nem probléma. Márpedig ez
-az eljárás könnyedén kiterjeszthető tetszőleges számú változóra.
+lineáris kapcsolatot feltételezzük, és annak a paramétereit (amiknek
+mind „adott paraméter egységnyi növelésének a hatása a többit
+változatlanul tartva“ értelmük van) szeretnénk megbecsülni, akkor ez nem
+probléma. Márpedig ez az eljárás könnyedén kiterjeszthető tetszőleges
+számú változóra! (A korábban említett lehetőségek a nemlineáris
+kapcsolatok vizsgálatára szintén átvihetőek többváltozós esetre, de
+ezzel most nem fogunk foglalkozni, részint mert nem jelent újdonságot –
+a korábban látott módszerek alkalmazhatóak minden egyes változóra –
+részint mert mindjárt látni fogjuk, hogy ennél most nagyobb problémáink
+lesznek…)
 
 Úgyhogy ezt használva bepakoljuk az összes változót egy nagy modellbe,
 és abból kiolvassuk az eredményt, azt is, hogy mi az ami befolyásolta a
 halálozást (és mennyire), és azt is, hogy mi az, ami nem:
 
 ``` r
-fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + popold + obese +
-             smoke + alcohol + asthma + chrt_angpec + diab + hblpr + healthexpenditure + nurses,
-           data = RawData)
+fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + popold +
+             obese + smoke + alcohol + asthma + chrt_angpec + diab + hblpr +
+             healthexpenditure + nurses, data = RawData)
 
-sjPlot::tab_model(fit2)
+knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
+                        `95% CI` = apply(signif(confint(fit2), 3), 1, paste,
+                                         collapse = " -- "),
+                        p = Hmisc::format.pval(summary(fit2)$coefficients[,4], digits = 3,
+                                               eps = 0.001),
+                        check.names = FALSE, row.names = c("Tengelymetszet",
+                                                           names(coef(fit2))[-1])))
 ```
 
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-cumexcessperpop
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Predictors
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Estimates
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-(Intercept)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-8593.20
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--5967.44 – 23153.83
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.206
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-popdensity
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.35
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--6.64 – 5.94
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.899
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-overcrowding
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-36.77
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--64.16 – 137.70
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.418
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-urbanization
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--4.91
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--95.22 – 85.40
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.901
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-gdp
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.14 – 0.07
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.439
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-popold
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--187.95
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--880.95 – 505.04
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.542
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-obese
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--245.32
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--548.34 – 57.69
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.097
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-smoke
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--37.66
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--379.32 – 303.99
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.802
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-alcohol
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-109.46
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--105.57 – 324.48
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.268
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-asthma
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--310.45
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1666.98 – 1046.09
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.605
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-chrt angpec
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-292.37
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--247.49 – 832.23
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.241
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-diab
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--18.78
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1179.77 – 1142.21
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.971
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-hblpr
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-123.88
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--284.40 – 532.16
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.496
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-healthexpenditure
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.25
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.66 – 1.15
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.686
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-nurses
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.61
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--2.03 – 5.26
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.330
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-22
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-R<sup>2</sup> / R<sup>2</sup> adjusted
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.909 / 0.727
-</td>
-</tr>
-</table>
+|                   | Becsült hatás | 95% CI          | p     |
+|:------------------|--------------:|:----------------|:------|
+| Tengelymetszet    |      8590.000 | -5970 – 23200   | 0.206 |
+| popdensity        |        -0.350 | -6.64 – 5.94    | 0.899 |
+| overcrowding      |        36.800 | -64.2 – 138     | 0.418 |
+| urbanization      |        -4.910 | -95.2 – 85.4    | 0.901 |
+| gdp               |        -0.035 | -0.136 – 0.0658 | 0.439 |
+| popold            |      -188.000 | -881 – 505      | 0.542 |
+| obese             |      -245.000 | -548 – 57.7     | 0.097 |
+| smoke             |       -37.700 | -379 – 304      | 0.802 |
+| alcohol           |       109.000 | -106 – 324      | 0.268 |
+| asthma            |      -310.000 | -1670 – 1050    | 0.605 |
+| chrt_angpec       |       292.000 | -247 – 832      | 0.241 |
+| diab              |       -18.800 | -1180 – 1140    | 0.971 |
+| hblpr             |       124.000 | -284 – 532      | 0.496 |
+| healthexpenditure |        -0.251 | -1.66 – 1.15    | 0.686 |
+| nurses            |         1.610 | -2.03 – 5.26    | 0.330 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
@@ -1355,13 +1205,15 @@ SimData$y <- 2*SimData$x^3 + rnorm(20, 0, 0.2)
 for(p in 0:18)
   print(ggplot(SimData, aes(x = x, y = y)) + geom_point() +
           geom_function(fun = ~ 2*(.x)^3, color = "red") + 
-          geom_smooth(method = "lm", formula = if(p==0) y ~ 1 else y ~ poly(x, p), se = FALSE, n = 500) +
+          geom_smooth(method = "lm", formula = if(p==0) y ~ 1 else y ~ poly(x, p),
+                      se = FALSE, n = 500) +
           labs(title = if(p<=1) paste0("Alulilleszkedés (p = ", p, ")") else
             if(p<=6) paste0("Nagyjából jó illeszkedés (p = ", p, ")") else
-              paste0("Túlilleszkedés (p = ", p, ")")) + coord_cartesian(ylim = c(-0.5, 1.5)))
+              paste0("Túlilleszkedés (p = ", p, ")")) +
+          coord_cartesian(ylim = c(-0.5, 1.5)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-.gif)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-.gif)<!-- -->
 
 (Érdemes megnézni, hogy több modellre is a „nagyjából jó“ kifejezést
 használtam: bár a sokaság ismeretében meg lehetne mondani, hogy közülük
@@ -1384,6 +1236,21 @@ modellbe, akkor azt fogjuk *hinni*, hogy gyönyörű szép az illeszkedése
 (és ezt fogják a különböző számszerű jellemzők is, látszólag teljesen
 objektíven, mutatni), de valójában az történik, amit a fenti animáción
 látunk.
+
+Ugyanígy túlilleszkedéshez vezet bármi más is, ami a becsülendő
+paraméterek számát növeli, hiszen minden ilyen komplexebbé,
+plasztikusabbá, több információt felhasználni képessé teszi a modellt.
+Tehát például a több paramétert használó függvényforma is! Hiszen a
+parabola is két paramétert igényel, míg a lineáris csak egyet. Ha valaki
+harmadfokú függvényt akarna illeszteni, az – bár még jobban tudná
+követni az adatokat – természetesen még érzékenyebb lenne a
+túlilleszkedésre is, hiszen az már három paramétert igényel. Most már
+elárulhatom így utólag, hogy igazából pont ez van az animáción: a
+pontokra egyre magasabb fokú függvényeket illesztünk. Összességében
+tehát nem az az igazán fontos, hogy azért van két paraméterünk, mert két
+változót használunk lineárisan, vagy azért mert egyet, de azt
+másodfokúként modellbe helyezve, hanem a mintából becsülendő szabad
+paraméterek száma.
 
 A történet tanulsága tehát, hogy az értelmesen megbecsülhető paraméterek
 száma limitált attól függően, hogy mennyi adatunk van: van egy –
@@ -1541,6 +1408,15 @@ csak ezt *eldugják* az útban, amíg eljutunk a végső modellig, ami persze
 még annál is rosszabb, mintha legalább látnánk, hogy mi a valódi
 helyzet.
 
+Kitérőként megjegyzem, hogy igazából ugyanez a helyzet a függvényforma
+megválasztásával is, nem csak a változószelekcióval: az, ha valaki a
+modellbe rak egy öt paraméteres függvényformát, nem tér el lényegesen
+attól, mintha egy egyparamétereset használna, csak épp előtte öt
+különböző lehetségeset próbált végig, és pusztán az adatok alapján
+választotta ki, hogy melyik a legjobb. Pedig az utolsó esetben könnyen
+lehet, hogy arra fog hivatkozni, hogy milyen szép takarékos a modell, a
+parszimónia elvének megfelelően…!
+
 A fentiek abba az irányba mutatnak, hogy lehetőleg egyetlen modellt
 találjunk ki, előre, azt becsüljük meg az adatokon, és bármi is jön ki,
 ne módosítsuk. (Különben túl fogunk illeszkedni.) Ahogy az iterációra
@@ -1624,30 +1500,52 @@ semmilyen választ nem adtam a kérdésre, és szándékosan: én most a
 módszertanra szerettem volna fókuszálni, ezen belül is különösen arra,
 hogy felhívjam a figyelmet a veszélyes (mert csábító) csapdákra.
 
-A területtel foglalkozó kutatók nem lesznek egyszerű helyzetben
-hazánkban. Ezt sajnos nem csak statisztikai okokból mondom: a kérdéskör
-átpolitizáltsága véleményem szerint rendkívül romboló a valódi
+A tárgyalásunk lezárásához érve talán érdemes egy lépést tenni
+hátrafelé. Valójában ugyanis minden amiről beszéltünk, csak a
+szakpolitikai intézkedések értékelésének egyik lehetséges útját
+jelentik, amit eredmény-szempontú értékelésnek szoktak hívni. Van egy
+másik lehetséges megközelítés, az eljárás helyességén alapuló értékelés.
+(Egészségügyi területen erre hozható egy analógia: a
+[Donabedian-modell](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0009.2005.00397.x),
+a jól ismert „struktúra–folyamat–eredmény“ hívószavaival.) Mint a
+fentiekből is kiderült, az eredmény-alapú értékelésnek komoly nehézségei
+vannak jelen esetben, és a kapott válasz múlhat az alkalmazott
+feltevéseken. Azonban látni kell, hogy ettől a jellegzetességtől az
+eljárás-helyesség értékelése sem mentes, legfeljebb ott ez máshol
+jelenik meg: az egy *értékválasztás* folyománya lesz, hogy milyen
+procedúrát tekintünk helyesnek, olyat, ahol a döntéseket transzparens
+módon, szakmai integritással rendelkező szervetek véleményének
+figyelembevételével, nyilvánosan hozzáférhető adatokra alapozva hozzák
+meg, vagy olyat, ahol az adatok titokban tartása mellett politikai
+vezetők belátásán, nem transzparensen dolgozó szervezetek véleményén, a
+választópolgárok rövid távú kívánságainak való megfelelésen alapulnak a
+szakpolitikai döntések. A kettő közötti preferencia jellemzően nem
+pusztán egy-egy vezető személyén múlik, hanem történelmi és társadalmi
+hatások alapján jön létre, adott országban és adott időpontban.
+
+A területtel foglalkozó kutatók attól tartok nem lesznek egyszerű
+helyzetben hazánkban. Ezt sajnos nem csak statisztikai okokból mondom: a
+kérdéskör átpolitizáltsága véleményem szerint rendkívül romboló a valódi
 tudományos kutatásokra nézve. Félreértés ne essék, a „politika“ szót nem
 egy szükségképp negatív töltetű értelemben használom, sőt, ez pont egy
 olyan téma, ahol fontos és hasznos is a politikával való kölcsönhatás,
-hiszen az ilyen vizsgálatokból levonhatóak olyan következtetések,
-amelyek az (egészség)politikát is vezethetik a magyar ellátórendszer, a
-prevenciós rendszer, a népegészségügyi programok javításának irányában.
-A gond ott kezdődik, amikor megjelenik a prekoncepciózus szemlélet,
-amikor minden intézkedésnek vagy teljesen, alapjában és menthetetlenül
-rossznak, vagy teljesen, tökéletesen és aggálytalanul jónak *kell*
-lennie. (Pláne, ha vannak olyan szereplők, akik rá is tudják ezt
-kényszeríteni másokra, például mert elhallgattathatnak nekik nem tetsző
-véleményeket…) A probléma az, hogy az ilyen kutatások sajnos ennek
-nagyon kitettek, hiszen nehéz elkerülni, hogy a magyarázó változókat az
-ember összekösse a kormány tevékenységével: mi az, amire nincs érdemi
-ráhatása a releváns időhorizonton (pl. a korfa), mi az, amire van, de
-azért nem túl direkt és azonnali módon (pl. elhízottak aránya), és mi
-az, amire direkt és azonnali módon van (pl. tesztelési stratégia).
-Minden oldali szereplőnek meg kellene értenie, hogy az ország érdekét
-csak az szolgálja, ha e kérdéseket olyan légkörben lehet megbeszélni,
-ami nem a pillanatnyi politikai haszon kinyerésének lehetőségét nézi az
-eredményekből.
+hiszen az ilyen vizsgálatokból levonhatóak következtetések, amelyek az
+(egészség)politikát is vezethetik a magyar ellátórendszer, a prevenciós
+rendszer, a népegészségügyi programok javításának irányában. A gond ott
+kezdődik, amikor megjelenik a prekoncepciózus szemlélet, amikor minden
+intézkedésnek vagy teljesen, alapjában és menthetetlenül rossznak, vagy
+teljesen, tökéletesen és aggálytalanul jónak *kell* lennie. (Pláne, ha
+vannak olyan szereplők, akik rá is tudják ezt kényszeríteni másokra,
+például mert elhallgattathatnak nekik nem tetsző véleményeket…) A
+probléma az, hogy az ilyen kutatások sajnos ennek nagyon kitettek,
+hiszen nehéz elkerülni, hogy a magyarázó változókat az ember összekösse
+a kormány tevékenységével: mi az, amire nincs érdemi ráhatása a releváns
+időhorizonton (pl. a korfa), mi az, amire van, de azért nem túl direkt
+és azonnali módon (pl. elhízottak aránya), és mi az, amire direkt és
+azonnali módon van (pl. tesztelési stratégia). Minden oldali szereplőnek
+meg kellene értenie, hogy az ország érdekét csak az szolgálja, ha e
+kérdéseket olyan légkörben lehet megbeszélni, ami nem a pillanatnyi
+politikai haszon kinyerésének lehetőségét nézi az eredményekből.
 
 A fentiekből minden bizonnyal kiderült, hogy miért gondolom, hogy nehéz
 ezt a lantot kézbe venni. Ezzel azonban senkit nem elriasztani
@@ -1660,7 +1558,7 @@ de segítséget jelent ebben.
 
 ------------------------------------------------------------------------
 
-(Az írás a 2022. március 20-án érvényes magyar állapotokat tükrözi.)
+(Az írás a 2022. március 21-én érvényes magyar állapotokat tükrözi.)
 
 A [szerző](http://www.medstat.hu/) klinikai biostatisztikus,
 orvosbiológiai mérnök. A fent leírtak teljes egészében a magánvéleményét
