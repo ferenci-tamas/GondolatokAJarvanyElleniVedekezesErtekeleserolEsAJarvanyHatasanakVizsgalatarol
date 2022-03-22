@@ -4,12 +4,12 @@ title: Gondolatok a járvány elleni védekezés értékeléséről, és a járv
 author: "Ferenci Tamás"
 lang: hu
 output:
-  bookdown::epub_book:
-    toc: true
-    toc_depth: 3
   pdf_document:
     extra_dependencies: ["animate"]
     latex_engine: lualatex
+    toc: true
+    toc_depth: 3
+  bookdown::epub_book:
     toc: true
     toc_depth: 3
   github_document:
@@ -18,7 +18,7 @@ output:
     math_method: null
 editor_options:
   chunk_output_type: console
-knit: (function(input, ...) rmarkdown::render(input, ..., output_format = "all"))
+# knit: (function(input, ...) rmarkdown::render(input, ..., output_format = "all"))
 ---
 
 _"Ne fogjon senki könnyelműen_  
@@ -99,7 +99,7 @@ ggplot(RawData[order(cumexcessperpop)],
   labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-Az rögtön látszik, hogy Magyaroszág az utolsó harmad elején található; arról persze ez még nem nyilatkozik, hogy ennek mi az oka -- pontosan ezt próbáljuk most felderíteni.
+Az rögtön látszik, hogy Magyaroszág az _utolsó harmad elején_ található; az persze ebből még nem derül ki, hogy ennek mi az oka -- pontosan ezt próbáljuk most felderíteni.
 
 ## Az elméleti megalapozás: kauzális diagram egy járvány hatására
 
@@ -115,7 +115,7 @@ Menjünk tovább. Eggyel lejjebb haladva az 'A' megint két tényezőtől függ:
 
 A 'B' tényező megint csak két részre bontható: függ az alanyok olyan jellemzőitől, amik befolyásolják a prognózist egyrészt, másrészt az ellátásuk hatékonyságától. Az előbbi megint rengeteg tényezőre bontható tovább: mindenekelőtt számít az életkori összetétel, tehát a korfa, de ott van az elhízás, a dohányzás prevalenciája, az alkoholfogyasztás mennyisége, a releváns társbetegségek -- ez önmagában több tucat -- prevalenciája, ami szintén eltérhet országok között. A medikális beavatkozás megint kettéválik: egyik oldalról számít az oltási program (az oltóanyag portfólió összetétele és az átoltottság), másik oldalról a kezelési oldal. A gyógyszerek elérhetősége, felhasználása, orvosok, nővérek, szakdolgozók tudása, de -- mindenekelőtt -- a túlterhelődésük. Az, hogy az ellátás mennyire zajlik egységes irányelvek mentén, milyen a minőségbiztosítás és a teljesítménymérés (régi vesszőparipám). Stb. stb. stb. És akkor még nem említettem, hogy számíthat az összes felsorolt tényező országon belüli egyenlőtlensége, ami szintén nem biztos, hogy ugyanaz minden országban.
 
-Láthatjuk, hogy a cél az ilyen végiggondolásnál nem is feltétlenül az, hogy minden egyes tényezőt számbavagyünk az utolsó szálig, hanem sokkal inkább, hogy a probléma _struktúráját_ megértsük.
+Láthatjuk, hogy a cél az ilyen végiggondolásnál nem is feltétlenül az, hogy minden egyes tényezőt számba vagyünk az utolsó szálig, hanem sokkal inkább, hogy a probléma _struktúráját_ megértsük.
 
 Amit a fentiekben verbálisan igyekeztem körülírni, az lényegében egy egyszerűsített változata annak, amit kauzális diagramnak szoktak nevezni:
 

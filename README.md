@@ -326,8 +326,8 @@ ggplot(RawData[order(cumexcessperpop)],
 
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-Az rögtön látszik, hogy Magyaroszág az utolsó harmad elején található;
-arról persze ez még nem nyilatkozik, hogy ennek mi az oka – pontosan ezt
+Az rögtön látszik, hogy Magyaroszág az *utolsó harmad elején* található;
+az persze ebből még nem derül ki, hogy ennek mi az oka – pontosan ezt
 próbáljuk most felderíteni.
 
 ## Az elméleti megalapozás: kauzális diagram egy járvány hatására
@@ -392,7 +392,7 @@ tényező országon belüli egyenlőtlensége, ami szintén nem biztos, hogy
 ugyanaz minden országban.
 
 Láthatjuk, hogy a cél az ilyen végiggondolásnál nem is feltétlenül az,
-hogy minden egyes tényezőt számbavagyünk az utolsó szálig, hanem sokkal
+hogy minden egyes tényezőt számba vagyünk az utolsó szálig, hanem sokkal
 inkább, hogy a probléma *struktúráját* megértsük.
 
 Amit a fentiekben verbálisan igyekeztem körülírni, az lényegében egy
@@ -516,28 +516,28 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 
 | geo | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |   gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure | nurses |
 |:----|:------------|----------------:|-----------:|-------------:|-------------:|------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|-------:|
-| AT  | Austria     |          1802.4 |      107.6 |         15.1 |         31.0 | 40350 |   18.8 |  17.1 |  26.2 |     5.7 |    4.4 |         2.2 |  4.9 |  21.1 |            4671.6 |  685.0 |
+| AT  | Austria     |          1804.9 |      107.6 |         15.1 |         31.0 | 40350 |   18.8 |  17.1 |  26.2 |     5.7 |    4.4 |         2.2 |  4.9 |  21.1 |            4671.6 |  685.0 |
 | BE  | Belgium     |          2009.9 |      377.3 |          5.7 |         29.5 | 37690 |   18.9 |  16.3 |  19.4 |     9.7 |    4.3 |         1.5 |  5.3 |  16.5 |            4418.1 | 1122.4 |
 | BG  | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 17010 |   21.3 |  13.6 |  36.2 |    10.2 |    2.7 |         9.1 |  6.4 |  29.6 |             625.6 |  437.5 |
-| CY  | Cyprus      |           855.1 |       95.7 |          2.2 |         51.8 | 29400 |   16.1 |  15.2 |  25.5 |     4.0 |    4.3 |         1.6 |  6.1 |  17.3 |            1771.2 |  538.1 |
+| CY  | Cyprus      |           851.3 |       95.7 |          2.2 |         51.8 | 29400 |   16.1 |  15.2 |  25.5 |     4.0 |    4.3 |         1.6 |  6.1 |  17.3 |            1771.2 |  538.1 |
 | CZ  | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29760 |   19.6 |  19.8 |  26.4 |     7.8 |    4.5 |         4.3 |  7.7 |  23.7 |            1644.1 |  850.1 |
 | DE  | Germany     |           932.0 |      235.2 |          7.8 |         36.3 | 38650 |   21.5 |  19.0 |  28.3 |     7.5 |    6.1 |         3.9 |  7.2 |  28.5 |            4855.3 | 1312.7 |
 | DK  | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 40750 |   19.6 |  16.5 |  20.0 |     9.6 |    6.5 |         1.9 |  4.6 |  17.7 |            5355.1 | 1003.0 |
 | EE  | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 26330 |   19.8 |  21.8 |  24.8 |     1.3 |    3.1 |         5.6 |  5.5 |  22.9 |            1426.0 |  619.2 |
 | EL  | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 21080 |   22.0 |  16.7 |  28.6 |     5.9 |    4.4 |         3.4 |  9.2 |  20.9 |            1340.8 |  330.9 |
-| ES  | Spain       |          1799.7 |       93.8 |          5.9 |         49.6 | 28980 |   19.4 |  16.0 |  22.1 |    13.0 |    4.5 |         0.8 |  6.8 |  18.7 |            2411.7 |  573.6 |
+| ES  | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28980 |   19.4 |  16.0 |  22.1 |    13.0 |    4.5 |         0.8 |  6.8 |  18.7 |            2411.7 |  573.6 |
 | HR  | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 21200 |   20.6 |  23.0 |  25.7 |    10.2 |    3.0 |         5.1 |  7.1 |  24.6 |             930.6 |  656.0 |
-| HU  | Hungary     |          3534.0 |      107.1 |         20.3 |         32.8 | 23280 |   19.3 |  24.5 |  27.2 |     6.3 |    4.9 |         4.9 |  8.1 |  31.9 |             949.4 |  651.2 |
+| HU  | Hungary     |          3543.4 |      107.1 |         20.3 |         32.8 | 23280 |   19.3 |  24.5 |  27.2 |     6.3 |    4.9 |         4.9 |  8.1 |  31.9 |             949.4 |  651.2 |
 | IT  | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30820 |   22.9 |  11.7 |  22.4 |    12.1 |    4.8 |         2.5 |  6.7 |  20.6 |            2599.2 |  579.8 |
 | LT  | Lithuania   |          4772.7 |       44.6 |         22.9 |         43.2 | 26770 |   19.8 |  18.9 |  23.7 |     0.8 |    2.7 |         7.5 |  4.4 |  28.1 |            1223.8 |  770.8 |
 | LU  | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 81300 |   14.4 |  16.5 |  18.2 |     8.9 |    6.8 |         2.5 |  5.6 |  16.5 |            5502.1 | 1172.5 |
-| LV  | Latvia      |          3108.7 |       30.2 |         42.2 |         43.8 | 22150 |   20.3 |  23.0 |  26.8 |     1.2 |    3.5 |         6.6 |  4.7 |  29.4 |            1045.6 |  456.8 |
+| LV  | Latvia      |          3136.4 |       30.2 |         42.2 |         43.8 | 22150 |   20.3 |  23.0 |  26.8 |     1.2 |    3.5 |         6.6 |  4.7 |  29.4 |            1045.6 |  456.8 |
 | NL  | Netherlands |          1595.6 |      507.3 |          4.8 |         56.2 | 40980 |   19.2 |  14.7 |  21.1 |     8.3 |    5.5 |         1.9 |  5.4 |  16.8 |            4748.7 | 1093.6 |
-| NO  | Norway      |           514.0 |       17.3 |          6.1 |         28.9 | 46390 |   17.2 |  14.1 |  18.1 |     1.4 |    6.7 |         1.7 |  4.2 |  12.7 |            7126.7 | 1766.2 |
+| NO  | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 46390 |   17.2 |  14.1 |  18.1 |     1.4 |    6.7 |         1.7 |  4.2 |  12.7 |            7126.7 | 1766.2 |
 | PL  | Poland      |          4352.6 |      123.6 |         37.6 |         35.0 | 23220 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         9.0 |  6.6 |  23.1 |             906.1 |  510.1 |
-| RO  | Romania     |          5967.9 |       82.7 |         45.8 |         28.8 | 22130 |   18.5 |  10.9 |  27.3 |     2.9 |    2.0 |         3.4 |  4.8 |  17.1 |             661.3 |  696.7 |
-| SE  | Sweden      |          1457.1 |       25.2 |         15.6 |         40.3 | 37920 |   19.9 |  15.3 |  12.6 |     1.8 |    7.6 |         1.5 |  4.8 |  16.2 |            5041.8 | 1089.4 |
-| SI  | Slovenia    |          2218.2 |      103.7 |         11.6 |         19.5 | 28240 |   19.8 |  19.9 |  23.2 |     6.6 |    5.0 |         3.2 |  6.9 |  24.8 |            1975.2 |  992.3 |
+| RO  | Romania     |          6120.8 |       82.7 |         45.8 |         28.8 | 22130 |   18.5 |  10.9 |  27.3 |     2.9 |    2.0 |         3.4 |  4.8 |  17.1 |             661.3 |  696.7 |
+| SE  | Sweden      |          1468.7 |       25.2 |         15.6 |         40.3 | 37920 |   19.9 |  15.3 |  12.6 |     1.8 |    7.6 |         1.5 |  4.8 |  16.2 |            5041.8 | 1089.4 |
+| SI  | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 28240 |   19.8 |  19.9 |  23.2 |     6.6 |    5.0 |         3.2 |  6.9 |  24.8 |            1975.2 |  992.3 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -701,6 +701,8 @@ rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]),
              c(predgrid[10], predgrid[100]), col = "green")
 ```
 
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 Amit látunk, hogy a GDP–halálozás vetületben ferde a sík (nézzük a kék
 élet) – ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás.
 Viszont a nővér–halálozás vetületben (zöld él) szinte vízszintes – a
@@ -831,9 +833,9 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit), 3),
 
 |                | Becsült hatás | 95% CI            | p       |
 |:---------------|--------------:|:------------------|:--------|
-| Tengelymetszet |     5970.0000 | 3980 – 7950       | \<0.001 |
-| gdp            |       -0.0725 | -0.142 – -0.00275 | 0.042   |
-| nurses         |       -1.1500 | -3.89 – 1.59      | 0.392   |
+| Tengelymetszet |      5990.000 | 3990 – 7990       | \<0.001 |
+| gdp            |        -0.073 | -0.143 – -0.00272 | 0.043   |
+| nurses         |        -1.150 | -3.91 – 1.61      | 0.396   |
 
 Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
 ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk
@@ -1086,21 +1088,21 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
 
 |                   | Becsült hatás | 95% CI          | p     |
 |:------------------|--------------:|:----------------|:------|
-| Tengelymetszet    |      8590.000 | -5970 – 23200   | 0.206 |
-| popdensity        |        -0.350 | -6.64 – 5.94    | 0.899 |
-| overcrowding      |        36.800 | -64.2 – 138     | 0.418 |
-| urbanization      |        -4.910 | -95.2 – 85.4    | 0.901 |
-| gdp               |        -0.035 | -0.136 – 0.0658 | 0.439 |
-| popold            |      -188.000 | -881 – 505      | 0.542 |
-| obese             |      -245.000 | -548 – 57.7     | 0.097 |
-| smoke             |       -37.700 | -379 – 304      | 0.802 |
-| alcohol           |       109.000 | -106 – 324      | 0.268 |
-| asthma            |      -310.000 | -1670 – 1050    | 0.605 |
-| chrt_angpec       |       292.000 | -247 – 832      | 0.241 |
-| diab              |       -18.800 | -1180 – 1140    | 0.971 |
-| hblpr             |       124.000 | -284 – 532      | 0.496 |
-| healthexpenditure |        -0.251 | -1.66 – 1.15    | 0.686 |
-| nurses            |         1.610 | -2.03 – 5.26    | 0.330 |
+| Tengelymetszet    |     8660.0000 | -5970 – 23300   | 0.204 |
+| popdensity        |       -0.3130 | -6.63 – 6.01    | 0.910 |
+| overcrowding      |       39.3000 | -62.1 – 141     | 0.389 |
+| urbanization      |       -4.4200 | -95.1 – 86.3    | 0.912 |
+| gdp               |       -0.0346 | -0.136 – 0.0668 | 0.447 |
+| popold            |     -193.0000 | -889 – 504      | 0.534 |
+| obese             |     -248.0000 | -552 – 56.6     | 0.096 |
+| smoke             |      -36.2000 | -379 – 307      | 0.810 |
+| alcohol           |      107.0000 | -109 – 323      | 0.280 |
+| asthma            |     -312.0000 | -1670 – 1050    | 0.605 |
+| chrt_angpec       |      276.0000 | -266 – 819      | 0.267 |
+| diab              |      -23.2000 | -1190 – 1140    | 0.964 |
+| hblpr             |      126.0000 | -284 – 536      | 0.491 |
+| healthexpenditure |       -0.2650 | -1.68 – 1.15    | 0.671 |
+| nurses            |        1.6800 | -1.98 – 5.34    | 0.314 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
