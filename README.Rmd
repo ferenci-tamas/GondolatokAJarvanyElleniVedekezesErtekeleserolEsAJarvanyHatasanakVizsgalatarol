@@ -4,6 +4,10 @@ title: Gondolatok a járvány elleni védekezés értékeléséről, és a járv
 author: "Ferenci Tamás"
 lang: hu
 output:
+  github_document:
+    toc: yes
+    toc_depth: 3
+    math_method: null
   pdf_document:
     extra_dependencies: ["animate"]
     latex_engine: lualatex
@@ -12,13 +16,9 @@ output:
   bookdown::epub_book:
     toc: true
     toc_depth: 3
-  github_document:
-    toc: yes
-    toc_depth: 3
-    math_method: null
 editor_options:
   chunk_output_type: console
-# knit: (function(input, ...) rmarkdown::render(input, ..., output_format = "all"))
+knit: (function(...) rmarkdown::render(..., output_format = "all"))
 ---
 
 _"Ne fogjon senki könnyelműen_  
@@ -34,7 +34,7 @@ _(Petőfi Sándor: A XIX. század költői)_
 knitr::opts_chunk$set(echo = TRUE, fig.width = 12, dpi = 300, dev = "ragg_png")
 Sys.setenv(CHROMOTE_CHROME = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe")
 options(rgl.useNULL = TRUE, max.print = 10000)
-rgl::setupKnitr()
+rgl::setupKnitr(autoprint = TRUE)
 library(data.table)
 library(ggplot2)
 ```
@@ -190,7 +190,8 @@ RawData <- Reduce(function(...) merge(..., by = "geo"), list(
     incgrp=="TOTAL"&building=="TOTAL"&deg_urb=="DEG1"&time=="2019-01-01",
     .(geo, urbanization = values)],
   as.data.table(eurostat::get_eurostat("nama_10_pc"))[
-    unit=="CP_PPS_HAB"&na_item=="B1GQ"&time=="2019-01-01",.(geo, gdp = values)],
+    unit=="CP_PPS_EU27_2020_HAB"&na_item=="B1GQ"&time=="2019-01-01",
+    .(geo, gdp = values)],
   as.data.table(eurostat::get_eurostat("demo_pjan"))[
     sex=="T"&time=="2019-01-01",
     .(popold = sum(values[age%in%c(paste0("Y", 65:99),
@@ -293,7 +294,7 @@ Ez itt egy nagyon fontos általános gondolat: hogy egy változó hatását úgy
 
 Egy pillanatra még érdemes elidőzni az ábrázolásoknál. Ez keményebb dió lesz az eddigieknél, de kiegészítő pontként nem felesleges: egy utolsó vizualizációt mutatok, ami az előbbieknél jobb térlátást igényel, de megéri, ha az ember becsukja a szemét, és igyekszik meglátni maga előtt a helyzetet, mert segíti, hogy mélyebben megértse a confounding mibenlétét. Készítsünk egy három dimenziós ábrát! Itt természetesen nem egyenest, hanem egy síkot illesztünk a pontjainkra (a függőleges piros vonalak csak a síktól vett eltérést mutatják):
 
-```{r, rgl = TRUE, fig.width = 3, fig.height = 2}
+```{r, fig.width = 4, fig.height = 3}
 fit <- lm(cumexcessperpop ~ gdp + nurses, data = RawData)
 
 gdpgrid <- seq(min(RawData$gdp), max(RawData$gdp), length = 10)
