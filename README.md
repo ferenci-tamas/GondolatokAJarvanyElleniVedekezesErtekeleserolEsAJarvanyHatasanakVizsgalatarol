@@ -19,6 +19,8 @@ Ferenci Tamás
     -   [Több változó modellezése](#több-változó-modellezése)
     -   [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
     -   [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
+    -   [A korszerű statisztika megoldási
+        lehetőségei](#a-korszerű-statisztika-megoldási-lehetőségei)
 -   [Záró gondolatok](#záró-gondolatok)
 -   [Ajánlott olvasmányok](#ajánlott-olvasmányok)
 
@@ -312,7 +314,8 @@ adatait fogja egybevetni, így fontos, hogy országok között robusztusan
 
 Ennek az értékei így néznek ki a 2021. 52. heti állapot szerint (ezt az
 indikátort nagy késleltetéssel közlik, így sokat visszamegyünk, hogy a
-lehető legtöbb országra legyen adatunk):
+lehető legtöbb országra legyen adatunk, és a reprodukálhatóság kedvéért
+ezt a dátumot most lerögzítjük):
 
 ``` r
 RawData <- fread(
@@ -437,7 +440,9 @@ A potenciális magyarázó adatok forrása az egységesség és az egyszerűség
 kedvéért mindenhol az [Eurostat](https://ec.europa.eu/eurostat) volt. A
 következő adatokat gyűjtöttem le (nem feltétlenül fogom kivétel nélkül
 mindegyiket használni a későbbiekben, de az adatbázisban rendelkezésre
-áll, ha valaki szeretne tovább kísérletezni a témában):
+áll, ha valaki szeretne tovább kísérletezni a témában); igyekeztem
+mindenhol a legkésőbbi, a járvány időpontjához legközelebbi adatokat
+használni:
 
 | Változó                            | Eurostat azonosító | Év   | Mértékegység    |
 |------------------------------------|--------------------|------|-----------------|
@@ -487,7 +492,7 @@ RawData <- Reduce(function(...) merge(..., by = "geo"), list(
     frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
     .(geo, alcohol = values)],
   dcast(as.data.table(eurostat::get_eurostat("hlth_ehis_cd1e"))[
-    unit=="PC"&isced11=="TOTAL"&time=="2014-01-01"&sex=="T"&age=="TOTAL"&
+    unit=="PC"&isced11=="TOTAL"&time=="2019-01-01"&sex=="T"&age=="TOTAL"&
       hlth_pb%in%c("ASTHMA", "HBLPR", "DIAB", "CHRT_ANGPEC"), .(geo, hlth_pb, values)],
     geo ~ hlth_pb, value.var = "values"),
   as.data.table(eurostat::get_eurostat("hlth_sha11_hf"))[
@@ -519,28 +524,28 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 
 | geo | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure |
 |:----|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|
-| AT  |          0 | Austria     |          1799.1 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.4 |         2.2 |  4.9 |  21.1 |            4671.6 |
-| BE  |          0 | Belgium     |          2017.0 |      377.3 |          5.7 |         29.5 | 36919.2 |   18.9 |  16.3 |  19.4 |     9.7 |    4.3 |         1.5 |  5.3 |  16.5 |            4418.1 |
-| BG  |          0 | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.7 |         9.1 |  6.4 |  29.6 |             625.6 |
-| CY  |          0 | Cyprus      |           851.3 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.3 |         1.6 |  6.1 |  17.3 |            1771.2 |
-| CZ  |          0 | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.5 |         4.3 |  7.7 |  23.7 |            1644.1 |
-| DE  |          0 | Germany     |           938.3 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    6.1 |         3.9 |  7.2 |  28.5 |            4855.3 |
-| DK  |          0 | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    6.5 |         1.9 |  4.6 |  17.7 |            5355.1 |
-| EE  |          0 | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    3.1 |         5.6 |  5.5 |  22.9 |            1426.0 |
-| EL  |          0 | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    4.4 |         3.4 |  9.2 |  20.9 |            1340.8 |
-| ES  |          0 | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.5 |         0.8 |  6.8 |  18.7 |            2411.7 |
-| HR  |          0 | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    3.0 |         5.1 |  7.1 |  24.6 |             930.6 |
-| HU  |          0 | Hungary     |          3534.6 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    4.9 |         4.9 |  8.1 |  31.9 |             949.4 |
-| IT  |          0 | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.8 |         2.5 |  6.7 |  20.6 |            2599.2 |
-| LT  |          0 | Lithuania   |          4763.1 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.7 |         7.5 |  4.4 |  28.1 |            1223.8 |
-| LU  |          0 | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.8 |         2.5 |  5.6 |  16.5 |            5502.1 |
-| LV  |          0 | Latvia      |          3123.4 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.5 |         6.6 |  4.7 |  29.4 |            1045.6 |
-| NL  |          0 | Netherlands |          1579.9 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    5.5 |         1.9 |  5.4 |  16.8 |            4748.7 |
-| NO  |          0 | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    6.7 |         1.7 |  4.2 |  12.7 |            7126.7 |
-| PL  |          0 | Poland      |          4347.8 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         9.0 |  6.6 |  23.1 |             906.1 |
-| RO  |          0 | Romania     |          6120.8 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    2.0 |         3.4 |  4.8 |  17.1 |             661.3 |
-| SE  |          0 | Sweden      |          1464.3 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.6 |         1.5 |  4.8 |  16.2 |            5041.8 |
-| SI  |          0 | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    5.0 |         3.2 |  6.9 |  24.8 |            1975.2 |
+| AT  |          0 | Austria     |          1799.1 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
+| BE  |          0 | Belgium     |          2017.0 |      377.3 |          5.7 |         29.5 | 36919.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
+| BG  |          0 | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
+| CY  |          0 | Cyprus      |           851.3 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
+| CZ  |          0 | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
+| DE  |          0 | Germany     |           938.3 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
+| DK  |          0 | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
+| EE  |          0 | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
+| EL  |          0 | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
+| ES  |          0 | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
+| HR  |          0 | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
+| HU  |          0 | Hungary     |          3534.6 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
+| IT  |          0 | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
+| LT  |          0 | Lithuania   |          4763.1 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
+| LU  |          0 | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
+| LV  |          0 | Latvia      |          3123.4 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
+| NL  |          0 | Netherlands |          1579.9 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
+| NO  |          0 | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
+| PL  |          0 | Poland      |          4347.8 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
+| RO  |          0 | Romania     |          6120.8 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
+| SE  |          0 | Sweden      |          1464.3 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
+| SI  |          0 | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -866,38 +871,172 @@ keretrendszerben; a linearitás kérdését hamarosan külön is meg fogjuk
 nézni.
 
 Az ilyen modellek becslésére rendelkezésre állnak jól bevált módszerek.
-Ezek milliónyi kérdése közül csak egyet emelnék ki: az így kapott számok
-bizonytalanságának ügyét. A probléma az, hogy ezek becsült értékek,
-melyekben van attól függő ingadozás, hogy épp milyen adatbázisból
-(mintából) becsüljük. Nagyon fontos, hogy most nem arról beszélek, hogy
-a mintát bármilyen értelemben is „hibásan“ vettük: a legtökéletesebben
-véletlen mintavétel esetén is lesz a becsült értékben ingadozás, pont
-úgy, ahogy a kihúzott lottószámok átlaga sem pont 45,5 minden héten.
-Pedig az összes számnak (1-től 90-ig) ennyi az átlaga, a mintavétel –
-remélhetőleg – itt aztán tökéletesen véletlen, és mégis, a mintának,
-tehát a kihúzott 5 számnak az átlaga néha kicsit kisebb mint 45,5, néha
-kicsit nagyobb. A dolog kétféleképp is megfogalmazható: ha tudom, hogy a
-valódi érték mondjuk 10, akkor a mintából becsült lehet 9 vagy épp 11
-is, avagy fordítva: ha a mintában 20-at kaptam, attól még a valódi lehet
-19 vagy 21 – hiszen az előbbi azt mondja, hogy a 19 vagy a 21 is
-beingadozhat a 20-ba, pusztán a véletlen szeszélye folytán.
+Ezek milliónyi kérdése közül csak egyet emelnék most itt ki: az így
+kapott számok bizonytalanságának ügyét. A probléma az, hogy ezek becsült
+értékek, melyekben van attól függő ingadozás, hogy éppen milyen
+adatbázisból (mintából) becsültük, pusztán a véletlen szeszélye folytán:
+ha pontosan ugyanabból a valódi összefüggésből pontosan ugyanúgy
+véletlen mintát veszünk, akkor sem mindig ugyanazt kapjuk. A kapott
+becslés mintáról-mintára ingadozik, amiből persze egyúttal az is
+következik, hogy nem kaphatjuk meg mindig a valódi értéket. Nagyon
+fontos tehát, hogy most nem arról beszélek, hogy a mintát bármilyen
+értelemben is „hibásan“ vettük: a legtökéletesebben véletlen mintavétel
+esetén is lesz a becsült értékben ingadozás, pont úgy, ahogy a kihúzott
+lottószámok átlaga sem pont 45,5 minden héten. Pedig az összes számnak
+(1-től 90-ig) ennyi az átlaga, a mintavétel – remélhetőleg – itt aztán
+tökéletesen véletlen, és mégis, a mintának, tehát a kihúzott 5 számnak
+az átlaga néha kicsit kisebb mint 45,5, néha kicsit nagyobb! Ezt hívjuk
+mintavételi ingadozásnak.
 
-Ezt a bizonytalanságot ragadja meg a harmadik oszlopban feltüntetett
-úgynevezett konfidenciaintervallum (CI). Ez tartalmazza azokat az
-értékeket, amikre igaz, hogy ha az lenne a valódi, akkor könnyen
-beingadozhatnának abba, amit ténylegesen kaptunk is: a -0,142 és a
--0,003 közti valódi értékekből könnyen kaphatnánk, pusztán a véletlen
-ingadozás miatt, -0,072-t. (A fejlécben feltüntett 95% szabályozza azt,
-hogy mit értünk „könnyen“ alatt.) Úgy is szokták mondani, hogy ilyen
-valódi értékek esetén a tényleges érték attól való eltérése betudható a
-véletlen ingadozásnak, szép szóval: nem *szignifikáns* az eltérés. Ha a
-konfidenciaintervallum tartalmazza a nullát (ami ugye azt jelenti, hogy
-a kérdéses változónak valójában nincs hatása az eredményre!), az
-magyarra lefordítva azt jelenti, hogy nincs okunk feltételezni, hogy a
-változónak van hatása: ha nem lenne, akkor is kényelmesen kijöhetett
-volna az, ami ki is jött. Ilyenkor mondjuk azt, hogy a változó hatása
-nem szignifikáns. A táblázatban vastag betűtípus jelöli a szignifikáns
-változókat.
+Nézzük meg ezt egy konkrét példán! Sajnos az adatbázisunk erre a célra
+nem használható, hiszen az csak egyetlen minta, és mi magunk sem
+tudhatjuk, hogy mi a háttérben lévő valóság. Ezért egy más eszközhöz
+nyúlunk: *szimulálni* fogunk, azaz fogunk egy valódi összefüggést, abból
+veszünk egy véletlen mintát, és az alapján becsüljük a regressziót.
+Ilyen módon egyrészt mi is tudjuk mi a valóság, másrészt a mintavételt
+akárhányszor meg tudjuk számítógépen ismételni, és megvizsgálhatjuk a
+kapott eredményeket. Nézzünk is egy egyszerű példát, ahol a változó
+hatása – a fentiekben bemutatott értelemben – 2; a fekete pontok
+jelentik az újabb és újabb szimulációkat, a kék görbék az egyes
+szimulált esetekből becsült regressziót, a piros a valódi összefüggés:
+
+``` r
+n <- 20
+nSim <- 20
+SimData <- data.table(sim = rep(1:nSim, each = n), x = runif(n*nSim))
+SimData$y <- 1 + 2*SimData$x + rnorm(n*nSim, 0, 0.5)
+fits <- lapply(1:nSim, function(i) lm(y ~ x, data = SimData[sim==i]))
+for(i in 1:nSim)
+  print(ggplot(SimData[sim<=i], aes(x = x, y = y,  alpha = 1 - 0.5*(sim < i) )) +
+          geom_point() +  coord_cartesian(xlim = c(-0.1, 1.1), ylim = c(0, 4)) +
+          geom_abline(intercept = coef(fits[[i]])["(Intercept)"],
+                      slope = coef(fits[[i]])["x"], color = "blue") +
+          labs(title = paste0("Valódi hatás: 2, mintából becsült hatás: ",
+                              round(coef(fits[[i]])["x"], 1), " (", i, ". szimuláció)")) +
+          guides(alpha = "none") +
+          {if(i>1) lapply(1:(i-1), function(j)
+            geom_abline(intercept = coef(fits[[j]])["(Intercept)"],
+                        slope = coef(fits[[j]])["x"], color = "blue", alpha = 0.2))} +
+          geom_segment(aes(x = x, xend = xend, y = y, yend = yend),
+                       data.frame(x = -0.2, xend = 1.2, y = 1 + 2*(-0.2),
+                                  yend = 1 + 2*(1.2)), inherit.aes = FALSE, color = "red",
+                       size = 1.2))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-11-.gif)<!-- -->
+
+Ezekből az ábrákból egy dolog látható és egy dolog sejthető. Ami
+látható, az a mintavételi ingadozás: ahogy megbeszéltük, hiába adott,
+állandó, rögzített értékű a valódi összefüggés (piros vonal), hiába
+teljesen véletlen a mintavétel, a mintából becsült hatás ingadozik
+mintáról-mintára, pusztán a mintavétel szeszélye miatt tehát. Ez
+elkerülhetetlen. De az ábrák sugallanak is valamit: hogy van ugyan
+ingadozás, de azt remélhetjük, hogy ennek kellemes tulajdonságai
+lesznek! Az ábrákból ugyanis eléggé az látszik, mintha a becsült érték
+ingadozna ugyan, de *átlagosan* jó lenne, mert a jó érték *körül*
+ingadozik. Vajon igaz ez?
+
+Futassuk most ne 20-szor a szimulációt, hanem 10 ezerszer, jegyezzük fel
+minden egyes futtatásnál a becsült hatást, majd nézzük meg ezek
+eloszlását:
+
+``` r
+simbeta <- as.data.table(replicate(1e5, {
+  x <- runif(20)
+  lm.fit(cbind(1, x), 1 + 2*x + rnorm(20, 0, 0.5))$coefficients[2]
+}))
+ggplot(simbeta, aes(x = V1)) + geom_density() +
+  geom_vline(xintercept = 2, color = "red") + labs(x = "Becsült hatás", y = "")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+A piros jelzi a valódi értéket, a fekete pedig a mintából kapott
+becslések eloszlását. Csakugyan beigazolódott a sejtésünk, és valami
+megnyugtató dolgot látunk: ingadozik ugyan a becslés (amint láttuk, ez
+elkerülhetetlen), de átlagosan jó az értéke! A statisztikában ezt a
+tulajdonságot hívjuk torzítatlanságnak. A fentiből úgy tűnik tehát (nem
+akarom azt mondani, hogy „bizonyítottuk“, hiszen ez csak egy
+szimuláció), hogy a változó hatásának értékére kapott becslés
+torzítatlan. Megfelelő matematikai eszközökkel bizonyítani [is
+lehetne](https://www.youtube.com/playlist?list=PLqdN24UCw5hlIrdfErPUgnoIQC4U6cxiL),
+hogy valóban torzítatlan az így kapott becslés.
+
+De álljunk meg egy pillanatra: korábban kihagyott változó okozta
+*torzítást* emlegettünk! Elég gyanús egybeesés, hogy itt is pont a
+torzítás szó került elő, és elárulhatom, hogy a dolog nem véletlen.
+Készítsünk most egy újabb szimulációt: a valóságban most a kimenetre két
+– összefüggő – változó hat, csak épp az egyiket kihagyjuk a
+regresszióból. Például a GDP és a nővérek száma hat a halálozásra, de mi
+mégis csak a nővérek hatását vizsgáljuk. Mi történik ilyenkor a
+regresszióban bent maradt változó kimutatott hatásával, példánkban a
+nővérekre kimutatott hatással? A piros vonal továbbra is a valódi
+(általunk a szimulációban beállított) értéket jelöli, a fekete görbe
+pedig ugyanúgy a mintákból kapott becslések eloszlása:
+
+``` r
+simbeta <- as.data.table(replicate(1e5, {
+  x1 <- runif(20)
+  x2 <- 1 + 2*x1 + rnorm(20)
+  lm.fit(cbind(1, x1), 1 + 2*x1 + 3*x2 + rnorm(20, 0, 0.5))$coefficients[2]
+}))
+ggplot(simbeta, aes(x = V1)) + geom_density() +
+  geom_vline(xintercept = 2, color = "red") + labs(x = "Becsült hatás", y = "")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+Baj van! A becslések továbbra is ingadoznak, van mintavételi ingadozás
+(ez eddig nem meglepő, láttuk, hogy ez elkerülhetetlen) – csak épp most
+már *egy rossz érték körül*! Átlagosan sem jó az értékük, szép szóval
+élve: torzított a becslésünk. Hát ezért hívtuk ezt „kihagyott változó
+okzota torzításnak“…!
+
+Valaki megkérdezheti, hogy ez hogyan lehet, hiszen az előbb még azt
+mondtam, hogy „matematikai eszközökkel bebizonyítható“, hogy a kapott
+becslések torzítatlanok. A válasz az, hogy igen, bebizonyítható, *ha*
+bizonyos feltételek teljesülnek. Rögtön el is árulhatom tehát, hogy a
+confounding, a lényeges változó kihagyása épp e feltételek egyikét fogja
+megsérteni. Ezért nem fog ebben az esetben működni ez a bizonyítás, és
+ezért lesz ilyenkor torzított a kapott eredmény.
+
+A fentiek a mintavételi ingadozást úgy fogalmazták meg, hogy ha tudom,
+hogy a valódi érték mondjuk 10, akkor a mintából becsült lehet 9 vagy
+épp 11 is. A dolognak azonban van egy ezzel egyenértékű, de a mi
+szempontunkból fontosabb megfogalmazása: ha a mintában 20-at kaptam,
+attól még a valódi lehet 19 vagy 21 – egyenértékű, hiszen az előbbi
+megfogalmazás azt mondja, hogy a 19 vagy a 21 is beingadozhat a 20-ba,
+pusztán a véletlen szeszélye folytán. Azért mondtam, hogy a mi
+szempontunkból ez utóbbi megfogalmazás a fontosabb, mert mi az utóbbi
+helyzetben vagyunk ténylegesen, a gyakorlatban (azaz ha épp nem
+szimulációs vizsgálatot csinálunk): ekkor ugyanis mi sem tudhatjuk, hogy
+mi a valóság, csak azt látjuk, hogy 20-at kaptunk a mintából
+becslésként. Ez a megfogalmazás tehát egy nagyon fontos üzenettel bír
+számunkra: vigyázat, ettől még nem biztos, hogy 20 a valódi érték! És
+most nem a confoundingról vagy hasonló gikszerről beszélek, ha minden
+ilyet elkerültünk, és mindent tökéletesen csináltunk, ez *akkor is* igaz
+lesz, pusztán a véletlen ingadozás miatt. Nem biztos, hogy 20 a valódi
+érték, ebben bizonytalanság van, lehet éppenséggel 19 vagy 21 is. De
+lehet 18 vagy 22 is? 15 vagy 25 is? Lehet 0 is…? (Ez utóbbi pláne
+fontos, mert az azt jelentené, hogy a változónak igazából nincs is
+hatása!)
+
+A kérdésre biztos válasz nincs, de valószínűségi választ adhatunk. Ezt
+teszi meg a harmadik oszlopban feltüntetett úgynevezett
+konfidenciaintervallum (CI). Ez tartalmazza azokat az értékeket, amikre
+igaz, hogy ha az lenne a valódi, akkor könnyen beingadozhatnának abba,
+amit ténylegesen kaptunk is: a -0,142 és a -0,003 közti valódi
+értékekből könnyen kaphatnánk, pusztán a véletlen ingadozás miatt,
+-0,072-t. (A fejlécben feltüntett 95% szabályozza azt, hogy mit értünk
+„könnyen“ alatt.) Úgy is szokták mondani, hogy ilyen valódi értékek
+esetén a tényleges érték attól való eltérése betudható a véletlen
+ingadozásnak, szép szóval: nem *szignifikáns* az eltérés. Ha a
+konfidenciaintervallum tartalmazza a nullát (ami ugye, ahogy az előbb is
+mondtuk, azt jelenti, hogy a kérdéses változónak valójában nincs hatása
+az eredményre!), az magyarra lefordítva azt jelenti, hogy nincs okunk
+feltételezni, hogy a változónak van hatása, mert ha nem lenne, akkor is
+kényelmesen kijöhetett volna az, ami ki is jött. Ilyenkor mondjuk azt,
+hogy a változó hatása nem szignifikáns.
 
 A regresszió kérdésköre ezen túlmenően is egy hatalmas, de érdekes, és
 nagyon sok területen – így a biostatisztikában kiemelten – fontos téma.
@@ -964,7 +1103,7 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
        y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 Ha például kilaposodó hatást feltételezünk, akkor ennek leírására ez
 alkalmas lehet. Ez ráadásul az érvényességi tartományok kérdésére is jó
@@ -1040,7 +1179,7 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
        y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van
 irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/).
@@ -1089,23 +1228,23 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
                                                            names(coef(fit2))[-1])))
 ```
 
-|                   | Becsült hatás | 95% CI         | p     |
-|:------------------|--------------:|:---------------|:------|
-| Tengelymetszet    |     8650.0000 | -5950 – 23200  | 0.204 |
-| popdensity        |       -0.3340 | -6.64 – 5.97   | 0.904 |
-| overcrowding      |       39.1000 | -62.1 – 140    | 0.392 |
-| urbanization      |       -4.6200 | -95.2 – 85.9   | 0.907 |
-| gdp               |       -0.0352 | -0.139 – 0.068 | 0.446 |
-| popold            |     -191.0000 | -886 – 503     | 0.536 |
-| obese             |     -248.0000 | -552 – 56.1    | 0.095 |
-| smoke             |      -35.8000 | -378 – 307     | 0.812 |
-| alcohol           |      108.0000 | -108 – 323     | 0.277 |
-| asthma            |     -313.0000 | -1670 – 1050   | 0.603 |
-| chrt_angpec       |      278.0000 | -264 – 819     | 0.265 |
-| diab              |      -22.4000 | -1190 – 1140   | 0.965 |
-| hblpr             |      125.0000 | -284 – 534     | 0.494 |
-| healthexpenditure |       -0.2650 | -1.67 – 1.14   | 0.670 |
-| nurses            |        1.6800 | -1.97 – 5.34   | 0.312 |
+|                   | Becsült hatás | 95% CI          | p     |
+|:------------------|--------------:|:----------------|:------|
+| Tengelymetszet    |     3720.0000 | -11800 – 19200  | 0.589 |
+| popdensity        |        1.4700 | -5.88 – 8.83    | 0.650 |
+| overcrowding      |       56.2000 | -46.7 – 159     | 0.237 |
+| urbanization      |       15.0000 | -83.7 – 114     | 0.731 |
+| gdp               |       -0.0212 | -0.139 – 0.0967 | 0.684 |
+| popold            |     -103.0000 | -640 – 435      | 0.665 |
+| obese             |     -194.0000 | -594 – 206      | 0.290 |
+| smoke             |       24.4000 | -175 – 224      | 0.781 |
+| alcohol           |       56.0000 | -250 – 362      | 0.678 |
+| asthma            |     -492.0000 | -1840 – 856     | 0.417 |
+| chrt_angpec       |      -27.7000 | -809 – 754      | 0.936 |
+| diab              |     -105.0000 | -921 – 711      | 0.770 |
+| hblpr             |      166.0000 | -210 – 542      | 0.331 |
+| healthexpenditure |       -0.2840 | -1.58 – 1.01    | 0.619 |
+| nurses            |        2.9700 | -1.55 – 7.5     | 0.164 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
@@ -1182,32 +1321,35 @@ adja vissza becsült értékként, ami mellett a modellünk a legjobban
 leírja a mintát). Igen ám, de közben persze valójában nem magát a mintát
 akarjuk jól leírni (ha ennyi lenne a célunk, akkor nincs is szükség
 regresszióra, ott a minta, az teljesen pontosan leírja a mintát, és
-kész), hanem következtetni a minta alapján a háttérben lévő valóságra
-(statisztikus nyelven úgy szokták mondani: a sokaságra). Ehhez
+kész), hanem következtetni a minta alapján a háttérben lévő valóságra,
+statisztikus nyelven úgy szokták mondani: a sokaságra. Ehhez
 természetesen fel kell használnunk a mintabeli információt, és ha olyan
 modellt alkalmazunk, ami nem tud elég információt felhasználni –
 nevezzük ezt alulilleszkedésnek – akkor természetesen nem várható, hogy
 a sokaságról helyesen tudunk nyilatkozni. Ez eddig elég logikus, de itt
 jön a csavar, mert az előbbiből úgy tűnhet, hogy minél több információt
 felhasználni képes, azaz minél komplexebb modellt vetünk be, annál jobb
-lesz a helyzet. Csakhogy meglepő módon ennek egy ponton túl épp az
+lesz a helyzet. Csakhogy meglepő módon ennek egy ponton túl ennek az
 ellenkezője lesz az igaz: egyre komplexebb modelleket használva nem
 egyszerűen nem javul a sokaság leírása, hanem elkezd kifejezett romlani!
-Ezt hívjuk túlilleszkedésnek.
+Ezt a jelenséget hívjuk túlilleszkedésnek.
 
-A probléma úgy fogalmazható meg, hogy a túl komplex modell egy ponton
-túl már az adatbázisban lévő véletlen zajokat is képes lesz leírni,
-márpedig ha képes lesz rá, akkor meg is fogja tenni, hiszen a becslési
-módszernek ugyebár épp az a célja, hogy a mintát minél jobban leírja –
-azt pedig a véletlen zajok leírása is javítja. Csakhogy a sokaság
-leírását ez nem hogy nem javítja, de kimondottan lerontja, hiszen abban
-nem lesznek benne ezek a véletlen zajok.
+A probléma úgy fogalmazható meg, hogy a túl komplex, azaz túl sok
+információt felhasználni képes modell egy ponton túl már az adatbázisban
+lévő véletlen zajokat is képes lesz leírni, márpedig ha képes lesz rá,
+akkor meg is fogja tenni, hiszen a becslési módszernek ugyebár az a
+célja, hogy a mintát minél jobban leírja – azt pedig a véletlen zajok
+leírása is javítja. Csakhogy a sokaság leírását ez nem hogy nem javítja,
+de kimondottan lerontja, hiszen abban nincsenek benne ezek a véletlen
+zajok.
 
 Ezt szemléletesen mutatja az alábbi animáció, ahol egy magyarázó
 változónk van, a piros görbe mutatja a valódi összefüggését az
-eredményváltozóval, ebből generáltuk véletlenszerűen a fekete pontokat,
-majd azokra egyre komplexebb és komplexebb regressziós modelleket
-illesztünk; ezeket a kék görbék mutatják:
+eredményváltozóval. Ismét a szimuláció eszközével élünk: ebből az
+összefüggésből generáljuk a 20 darab fekete pontot úgy, hogy azok
+véletlenszerűen szóródjanak a valódi görbe körül, majd a pontokra egyre
+komplexebb és komplexebb, a mintából egyre több információt felhasználni
+képes regressziós modelleket illesztünk; ezeket a kék görbék mutatják:
 
 ``` r
 set.seed(1)
@@ -1224,7 +1366,7 @@ for(p in 0:18)
           coord_cartesian(ylim = c(-0.5, 1.5)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-.gif)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-17-.gif)<!-- -->
 
 (Érdemes megnézni, hogy több modellre is a „nagyjából jó“ kifejezést
 használtam: bár a sokaság ismeretében meg lehetne mondani, hogy közülük
@@ -1235,6 +1377,25 @@ Azt hiszem a fenti illusztráció nem sok kommentárt igényel a
 tekintetben, hogy mit jelent a túlilleszkedés, az, hogy a túl komplex
 modell már a zajokat is megragadja, így bár a mintát egyre jobban
 leírja, a sokaságot meg egyre kevésbé.
+
+A jelenséget úgy is meg szokták fogalmazni, hogy az általánosítóképesség
+romlik: ez a kifejezés jelenti azt, hogy a modellnek a mintában látott
+konkrét dolgokból általánosítania kell a sokaság általános
+viselkedésére. Ha azonban már az adott konkrét minta zajait is elkezdi
+leírni, akkor épp ez sérül.
+
+A túlilleszkedés abban jelenik (jelenne) meg, hogy bár a modell az
+*adott, konkrét* mintát jól leírja, ha vennénk egy másik, új mintát,
+amit a modell korábban nem látott (értsd: amit a megbecsléséhez nem
+használtunk fel), akkor azon már rosszul teljesítene. El lehet képzelni,
+hogy ha kisorsoltunk volna, szintén teljesen véletlenszerűen, *másik* 20
+pontot a piros görbe körül, akkor a nagyjából jól illeszkedő modellek
+azokat is szépen leírták volna, de a túlilleszkedőek teljesen rosszul,
+hiába is írták le a fenti 20 pontot jobban, és hiába is ugyanazon görbe
+körül sorsoltuk. Ez persze ilyen formában csak gondolatkísérlet, hiszen
+a valóságban csak egyetlen mintánk van, de ezen a nyomon el lehet
+indulni úgy, hogy nagyon hasznos eredményekhez jussunk, de erről picit
+később.
 
 Bár a fenti animáció nem a magyarázó változók számának változtatásával
 oldotta meg a modell komplexitásának változtatását (hiszen az fixen 1
@@ -1261,7 +1422,11 @@ pontokra egyre magasabb fokú függvényeket illesztünk. Összességében
 tehát nem az az igazán fontos, hogy azért van két paraméterünk, mert két
 változót használunk lineárisan, vagy azért mert egyet, de azt
 másodfokúként modellbe helyezve, hanem a mintából becsülendő szabad
-paraméterek száma.
+paraméterek száma. Szokták néha a modell komplexitása helyett azt a
+kifejezést is használni, hogy a modell kapacitása, ami ugyanúgy a
+fentieket fejezi ki: mennyi információt tud magába fogadni, leírni a
+modell, jelen esetben, hogy mennyi szabad paramétere van, amit mintából
+becsülünk meg.
 
 A történet tanulsága tehát, hogy az értelmesen megbecsülhető paraméterek
 száma limitált attól függően, hogy mennyi adatunk van: van egy –
@@ -1504,6 +1669,10 @@ a *dinamika* is fontos lehet, így egy finomabb vizsgálat – sajnos
 azonban, legyünk őszinték, komoly módszertani kihívások és adatszerzésre
 vonatkozó nehézségek árán – megpróbálkozhat ezt is figyelembe venni.
 
+### A korszerű statisztika megoldási lehetőségei
+
+De
+
 Tehetünk okosan a változók számának csökkentése érdekében is. Már az
 ottani pont végén is említettem ennek egy lehetőségét, a néhány,
 prespecifikált modell összehasonlítását. A korszerű statisztika további
@@ -1619,8 +1788,6 @@ iránt mélyebben érdeklődőeknek:
     belőle általában a regressziós modellezésre nézve.
 
 ------------------------------------------------------------------------
-
-(Az írás a 2022. március 31-én érvényes magyar állapotokat tükrözi.)
 
 A [szerző](http://www.medstat.hu/) klinikai biostatisztikus,
 orvosbiológiai mérnök. A fent leírtak teljes egészében a magánvéleményét
