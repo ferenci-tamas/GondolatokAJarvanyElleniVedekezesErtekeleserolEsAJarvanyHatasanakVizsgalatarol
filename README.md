@@ -15,12 +15,13 @@ Ferenci Tamás
     -   [A confounding problémája](#a-confounding-problémája)
     -   [Kihagyott változós torzítás](#kihagyott-változós-torzítás)
     -   [A regresszió eszköze](#a-regresszió-eszköze)
+    -   [A mintavételi ingadozás és a torzítás
+        fogalma](#a-mintavételi-ingadozás-és-a-torzítás-fogalma)
     -   [A függvényforma kérdése](#a-függvényforma-kérdése)
     -   [Több változó modellezése](#több-változó-modellezése)
+    -   [A torzítás-variancia dilemma](#a-torzítás-variancia-dilemma)
     -   [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
     -   [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
-    -   [A korszerű statisztika megoldási
-        lehetőségei](#a-korszerű-statisztika-megoldási-lehetőségei)
 -   [Záró gondolatok](#záró-gondolatok)
 -   [Ajánlott olvasmányok](#ajánlott-olvasmányok)
 
@@ -417,12 +418,17 @@ strukturálást és így a jobb megértést.
 A következő pontban az empirikus számításoknál az azokat megvalósító
 konkrét kódokat is közölni fogom. Ennek célja az, hogy az ez után
 érdeklődők azt is lássák, hogy mi történik a háttérben, milyen kódokkal
-lehet kivitelezni ténylegesen ezeket a vizsgálatokat. Az ebből való
-tanuláson túl az ilyen kódok közlését elvileg is fontosnak tartom, a
-reprodukálhatóság és a nyílt tudomány jegyében, hogy az esetleges hibáim
-könnyebben kiderüljenek, és elősegítsem továbbfejlesztési lehetőségek
-megfogalmazását. Ha valakit ez a része nem érdekel a kérdésnek, bátran
-ugorja át a szürke hátterű kódokat és e fejezet hátralevő részét.
+lehet kivitelezni ténylegesen ezeket a vizsgálatokat. Több esetben elő
+fog fordulni, hogy módszertani részleteket nem írok le, hogy az ez iránt
+nem érdeklődő olvasót ne terheljem ilyenekkel, de azok a kódból
+könnyedén kiolvashatóak lesznek.
+
+Az ebből való tanuláson túl az ilyen kódok közlését elvileg is fontosnak
+tartom, a reprodukálhatóság és a nyílt tudomány jegyében, hogy az
+esetleges hibáim könnyebben kiderüljenek, és elősegítsem
+továbbfejlesztési lehetőségek megfogalmazását. Ha valakit ez a része nem
+érdekel a kérdésnek, bátran ugorja át a szürke hátterű kódokat és e
+fejezet hátralevő részét.
 
 A számítások `R` statisztikai programnyelven készültek, 4.1.2-es verziót
 használva. Felhasználtam a `data.table` (1.14.2-es verzió) és `ggplot2`
@@ -525,26 +531,26 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 | geo | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure |
 |:----|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|
 | AT  |          0 | Austria     |          1799.1 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
-| BE  |          0 | Belgium     |          2017.0 |      377.3 |          5.7 |         29.5 | 36919.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
-| BG  |          0 | Bulgaria    |          8374.1 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
+| BE  |          0 | Belgium     |          2027.9 |      377.3 |          5.7 |         29.5 | 36919.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
+| BG  |          0 | Bulgaria    |          8377.7 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
 | CY  |          0 | Cyprus      |           851.3 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
 | CZ  |          0 | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
 | DE  |          0 | Germany     |           938.3 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
-| DK  |          0 | Denmark     |           322.1 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
-| EE  |          0 | Estonia     |          2219.3 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
+| DK  |          0 | Denmark     |           312.3 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
+| EE  |          0 | Estonia     |          2213.6 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
 | EL  |          0 | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
 | ES  |          0 | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
 | HR  |          0 | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
 | HU  |          0 | Hungary     |          3534.6 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
-| IT  |          0 | Italy       |          2735.8 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
-| LT  |          0 | Lithuania   |          4763.1 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
+| IT  |          0 | Italy       |          2736.0 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
+| LT  |          0 | Lithuania   |          4776.0 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
 | LU  |          0 | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
 | LV  |          0 | Latvia      |          3123.4 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
 | NL  |          0 | Netherlands |          1579.9 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
-| NO  |          0 | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
+| NO  |          0 | Norway      |           512.8 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
 | PL  |          0 | Poland      |          4347.8 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
 | RO  |          0 | Romania     |          6120.8 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
-| SE  |          0 | Sweden      |          1464.3 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
+| SE  |          0 | Sweden      |          1458.6 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
 | SI  |          0 | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
@@ -839,11 +845,11 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit), 3),
                                                            names(coef(fit))[-1])))
 ```
 
-|                | Becsült hatás | 95% CI           | p       |
-|:---------------|--------------:|:-----------------|:--------|
-| Tengelymetszet |     5990.0000 | 3990 – 7990      | \<0.001 |
-| gdp            |       -0.0745 | -0.146 – -0.0028 | 0.042   |
-| nurses         |       -1.1400 | -3.9 – 1.62      | 0.397   |
+|                | Becsült hatás | 95% CI            | p       |
+|:---------------|--------------:|:------------------|:--------|
+| Tengelymetszet |     5990.0000 | 3990 – 7990       | \<0.001 |
+| gdp            |       -0.0746 | -0.146 – -0.00277 | 0.043   |
+| nurses         |       -1.1400 | -3.91 – 1.62      | 0.398   |
 
 Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
 ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk
@@ -869,6 +875,8 @@ Valójában nem ez az egyetlen feltevés, mi van például, ha a hatás nem
 lineáris? Ezek a kérdések mindazonáltal jól vizsgálhatóak a regressziós
 keretrendszerben; a linearitás kérdését hamarosan külön is meg fogjuk
 nézni.
+
+### A mintavételi ingadozás és a torzítás fogalma
 
 Az ilyen modellek becslésére rendelkezésre állnak jól bevált módszerek.
 Ezek milliónyi kérdése közül csak egyet emelnék most itt ki: az így
@@ -908,7 +916,8 @@ SimData$y <- 1 + 2*SimData$x + rnorm(n*nSim, 0, 0.5)
 fits <- lapply(1:nSim, function(i) lm(y ~ x, data = SimData[sim==i]))
 for(i in 1:nSim)
   print(ggplot(SimData[sim<=i], aes(x = x, y = y,  alpha = 1 - 0.5*(sim < i) )) +
-          geom_point() +  coord_cartesian(xlim = c(-0.1, 1.1), ylim = c(0, 4)) +
+          geom_point(color = "blue") +
+          coord_cartesian(xlim = c(-0.1, 1.1), ylim = c(0, 4)) +
           geom_abline(intercept = coef(fits[[i]])["(Intercept)"],
                       slope = coef(fits[[i]])["x"], color = "blue") +
           labs(title = paste0("Valódi hatás: 2, mintából becsült hatás: ",
@@ -955,10 +964,13 @@ A piros jelzi a valódi értéket, a fekete pedig a mintából kapott
 becslések eloszlását. Csakugyan beigazolódott a sejtésünk, és valami
 megnyugtató dolgot látunk: ingadozik ugyan a becslés (amint láttuk, ez
 elkerülhetetlen), de átlagosan jó az értéke! A statisztikában ezt a
-tulajdonságot hívjuk torzítatlanságnak. A fentiből úgy tűnik tehát (nem
-akarom azt mondani, hogy „bizonyítottuk“, hiszen ez csak egy
-szimuláció), hogy a változó hatásának értékére kapott becslés
-torzítatlan. Megfelelő matematikai eszközökkel bizonyítani [is
+tulajdonságot hívjuk torzítatlanságnak. Ha nem teljesül, tehát a
+becsléseknek az átlaga sem egyezik a valódi értékkel, akkor azt mondjuk,
+hogy torzított a becslés (és a torzítás az átlag és a valódi érték
+eltérése). A fentiből úgy tűnik tehát (nem akarom azt mondani, hogy
+„bizonyítottuk“, hiszen ez csak egy szimuláció), hogy a változó
+hatásának értékére kapott becslés torzítatlan. Megfelelő matematikai
+eszközökkel bizonyítani [is
 lehetne](https://www.youtube.com/playlist?list=PLqdN24UCw5hlIrdfErPUgnoIQC4U6cxiL),
 hogy valóban torzítatlan az így kapott becslés.
 
@@ -1230,21 +1242,21 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
 
 |                   | Becsült hatás | 95% CI          | p     |
 |:------------------|--------------:|:----------------|:------|
-| Tengelymetszet    |     3720.0000 | -11800 – 19200  | 0.589 |
-| popdensity        |        1.4700 | -5.88 – 8.83    | 0.650 |
-| overcrowding      |       56.2000 | -46.7 – 159     | 0.237 |
-| urbanization      |       15.0000 | -83.7 – 114     | 0.731 |
-| gdp               |       -0.0212 | -0.139 – 0.0967 | 0.684 |
-| popold            |     -103.0000 | -640 – 435      | 0.665 |
-| obese             |     -194.0000 | -594 – 206      | 0.290 |
-| smoke             |       24.4000 | -175 – 224      | 0.781 |
-| alcohol           |       56.0000 | -250 – 362      | 0.678 |
-| asthma            |     -492.0000 | -1840 – 856     | 0.417 |
-| chrt_angpec       |      -27.7000 | -809 – 754      | 0.936 |
+| Tengelymetszet    |     3730.0000 | -11800 – 19300  | 0.587 |
+| popdensity        |        1.5000 | -5.85 – 8.85    | 0.645 |
+| overcrowding      |       56.0000 | -46.9 – 159     | 0.239 |
+| urbanization      |       14.9000 | -83.8 – 114     | 0.732 |
+| gdp               |       -0.0213 | -0.139 – 0.0967 | 0.683 |
+| popold            |     -102.0000 | -640 – 435      | 0.666 |
+| obese             |     -195.0000 | -595 – 206      | 0.288 |
+| smoke             |       24.0000 | -176 – 224      | 0.784 |
+| alcohol           |       55.6000 | -250 – 361      | 0.680 |
+| asthma            |     -496.0000 | -1840 – 852     | 0.413 |
+| chrt_angpec       |      -27.6000 | -809 – 754      | 0.936 |
 | diab              |     -105.0000 | -921 – 711      | 0.770 |
-| hblpr             |      166.0000 | -210 – 542      | 0.331 |
-| healthexpenditure |       -0.2840 | -1.58 – 1.01    | 0.619 |
-| nurses            |        2.9700 | -1.55 – 7.5     | 0.164 |
+| hblpr             |      167.0000 | -209 – 543      | 0.329 |
+| healthexpenditure |       -0.2830 | -1.57 – 1.01    | 0.621 |
+| nurses            |        2.9800 | -1.55 – 7.51    | 0.164 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
@@ -1353,17 +1365,17 @@ képes regressziós modelleket illesztünk; ezeket a kék görbék mutatják:
 
 ``` r
 set.seed(1)
-SimData <- data.frame(x = runif(20))
-SimData$y <- 2*SimData$x^3 + rnorm(20, 0, 0.2)
+SimData <- data.frame(x = runif(20, 0, 10))
+SimData$y <- 1 + 2*sin(SimData$x) + 0.05*SimData$x^2 + rnorm(20, 0, 1)
 for(p in 0:18)
   print(ggplot(SimData, aes(x = x, y = y)) + geom_point() +
-          geom_function(fun = ~ 2*(.x)^3, color = "red") + 
+          geom_function(fun = ~ 1 + 2*sin(.x) + 0.05*.x^2, color = "red") + 
           geom_smooth(method = "lm", formula = if(p==0) y ~ 1 else y ~ poly(x, p),
                       se = FALSE, n = 500) +
-          labs(title = if(p<=1) paste0("Alulilleszkedés (p = ", p, ")") else
-            if(p<=6) paste0("Nagyjából jó illeszkedés (p = ", p, ")") else
+          labs(title = if(p<=3) paste0("Alulilleszkedés (p = ", p, ")") else
+            if(p<=8) paste0("Nagyjából jó illeszkedés (p = ", p, ")") else
               paste0("Túlilleszkedés (p = ", p, ")")) +
-          coord_cartesian(ylim = c(-0.5, 1.5)))
+          coord_cartesian(ylim = c(-0.5, 8)))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-17-.gif)<!-- -->
@@ -1390,7 +1402,7 @@ amit a modell korábban nem látott (értsd: amit a megbecsléséhez nem
 használtunk fel), akkor azon már rosszul teljesítene. El lehet képzelni,
 hogy ha kisorsoltunk volna, szintén teljesen véletlenszerűen, *másik* 20
 pontot a piros görbe körül, akkor a nagyjából jól illeszkedő modellek
-azokat is szépen leírták volna, de a túlilleszkedőek teljesen rosszul,
+azokat is szépen leírták volna, de a túlilleszkedőek teljesen rosszul –
 hiába is írták le a fenti 20 pontot jobban, és hiába is ugyanazon görbe
 körül sorsoltuk. Ez persze ilyen formában csak gondolatkísérlet, hiszen
 a valóságban csak egyetlen mintánk van, de ezen a nyomon el lehet
@@ -1428,19 +1440,155 @@ fentieket fejezi ki: mennyi információt tud magába fogadni, leírni a
 modell, jelen esetben, hogy mennyi szabad paramétere van, amit mintából
 becsülünk meg.
 
-A történet tanulsága tehát, hogy az értelmesen megbecsülhető paraméterek
-száma limitált attól függően, hogy mennyi adatunk van: van egy –
-mintanagyságtól függő – felső korlátja a modell komplexitásának, aminél
-még remélhetőleg nem lesz túlilleszkedett az eredmény. Ez azt is
-jelenti, hogy a modellezhető változók száma is limitált, függően a
-mintanagyságtól!
+### A torzítás-variancia dilemma
+
+Tegyünk egy rövid, de tanulságos kitérőt ezen a ponton. Ennek
+kiindulópontja legyen egy első látásra talán meglepő állítás: a fenti
+túlilleszkedéses példában, bár az utolsó görbék már nagyon-nagyon
+csúnyán néznek ki, de – bármilyen meghökkentő is – *torzítás* nem lép
+fel! (Torzítás abban az értelemben, ahogy korábban pontosan is
+definiáltuk.) Tehát ingadoznak ugyan a becsült értékek, de átlagosan
+jók.
+
+De akkor mégis mi történt, hogy ilyen csúnya lett az eredmény? Az, hogy
+bár *átlagosan* jók vagyunk, de elképesztően nagy lett a mintavételi
+ingadozás! Így egy konkrét eredmény sajnos nagyon messze is tud lenni a
+valóságtól.
+
+Egy rövid megjegyzés: a mintavételi ingadozás háttérében igazából
+egyszerűen a multikollinearitás van, semmi egyéb varázslat nem történik.
+Hipotetikusan, ha nem multikollineáris változókból (tehát olyanokból,
+amik egyáltalán nem függenek össze a többi változóval) raknánk be
+újabbakat és újabbakat, akkor nem nőne a mintavételi ingadozás.
+
+Sok változó hozzáadása jót tesz torzítás szempontjából (kevésbé
+valószínű, hogy kihagyunk lényeges változót), hasonlóképp a sok
+paraméterű függvényforma is jót tesz torzítás szempontjából (kevésbé
+valószínű, hogy a valóságot nem tudja leírni a függvényformánk), viszont
+a jelek szerint mindkettő rosszat tesz a mintavételi ingadozás
+szempontjából. Fordítva megfogalmazva, ha csökkentjük a változók számát,
+ha egyszerűsítjük a függvényformát, akkor javítjuk a mintavételi
+ingadozást, de torzítást okozhatunk.
+
+És az izgalmas az, hogy ez nem véletlenül volt így, csak pont ebben az
+esetben, hanem egy *általában is* fennálló jelenség: e két tulajdonság
+csak egymás rovására javítható. A mintanagyság növelése az egyetlen, ami
+a torzítás befolyásolása nélkül csökkenti a mintavételi ingadozást, de
+rögzített mintanagyság mellett csak abban dönthetünk, hogy melyik
+ujjunkba harapjunk: ha javítjuk az egyik szempontot, akkor
+*automatikusan* rontjuk a másikat. E szomorú, de másrészt rendkívül
+érdekes jelenség neve: torzítás-variancia dilemma (angolosabban
+torzítás-variancia trade-off, azaz átváltás, utalva arra, hogy egyiket
+csak lecserélhetjük a másikra). A variancia szó itt azt jelenti, hogy
+mekkora a mintavételi ingadozás mértéke, mérve azzal, hogy a kapott
+becslések mennyire ingadoznak a saját átlaguk körül (ami vagy egybeesik
+a valódi értékkel vagy nem – ugye ez a torzítatlanság kérdése).
+
+Nézzük meg mindezeket egy szimulált példán! Az előbbi példát folytatjuk,
+ahol egyre magasabb fokú függvényeket illesztünk. Csak épp most nem
+egyszer tesszük meg, hanem nagyon sokszor, és így ki tudjuk számolni a
+torzítást és a varianciát is, minden komplexitás mellett. Ezt kapjuk:
+
+``` r
+if(!file.exists("BiasVarianceSimRes.rds")) {
+  set.seed(1)
+  cl <- parallel::makeCluster(parallel::detectCores()-1)
+  
+  x <- runif(20, 0, 10)
+  parallel::clusterExport(cl, "x")
+  
+  SimRes <- parallel::parSapply(cl, 0:9, function(p) replicate(1e6, {
+    y <- 1 + 2*sin(x) + 0.05*x^2 + rnorm(20, 0, 3)
+    if(p==0) mean(y) else lm.fit(cbind(1, poly(x, p, raw = TRUE)),
+                                 y)$coefficients%*%c(1, poly(5, p, raw = TRUE))
+  }))
+  
+  parallel::stopCluster(cl)
+  
+  SimRes <- data.table(p = 0:9,
+                       `Torzítás` = apply(SimRes, 2,
+                                          function(x) (mean(x)-(1 + 2*sin(5) + 0.05*5^2))^2),
+                       `Variancia` = apply(SimRes, 2, function(x) mean((x-mean(x))^2)))
+  
+  
+  saveRDS(SimRes, "BiasVarianceSimRes.rds")
+} else SimRes <- readRDS("BiasVarianceSimRes.rds")
+
+ggplot(melt(SimRes, id.vars = "p"),
+       aes(x = p, y = value, group = variable, color = variable)) + geom_point() +
+  geom_line() + scale_x_continuous(breaks = 0:9) +
+  labs(x = "p (a modell komplexitása)", y = "Hiba", color = "") +
+  theme(legend.position = "bottom")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+Szépen látszik, hogy valóban trade-off áll fenn: ahogy az egyik hiba
+javul, a másik romlik. Ennél ráadásul némileg több is leolvasható: a
+dolog a a komplexitáson múlik, a nagyobb komplexitás a torzítást
+csökkenti, de a varianciát növeli, kisebb komplexitás mellett a
+variancia kisebb, de a torzítás nagyobb.
+
+Egy lépéssel tovább is mehetünk: definiáljuk *általában* azt, hogy mit
+értünk hiba alatt! Tehát ne egy-egy szempontról beszélünk, hanem
+összességében, a teljes hibáról. Egy elég kézenfekvő választás: hiba az,
+hogy a becsült érték milyen messze van a valóditól. Az érdekes az, hogy
+ez visszavezethető a fenti két tényezőre, ami végülis azért annyira nem
+meglepő, ha arra gondolunk, hogy a variancia az, hogy a becsült milyen
+messze van az átlagától, a torzítás meg az, hogy ez az átlag milyen
+messze van a valódi értéktől. A pontos számítás ennyire azért nem
+nyilvánvaló, nem lehet egyszerűen összeadni a két tényezőt, de aránylag
+könnyen elvégezhető, csak a „milyen messze van“ mérésére kell
+elfogadnunk egy – kézenfekvő, és máshol is alkalmazott – konvenciót. Ezt
+használva a következőt kapjuk:
+
+``` r
+SimRes$`Összesített` <- SimRes$`Torzítás` + SimRes$`Variancia`
+
+ggplot(melt(SimRes, id.vars = "p"),
+       aes(x = p, y = value, group = variable, color = variable)) + geom_point() +
+  geom_line() + scale_x_continuous(breaks = 0:9) +
+  labs(x = "p (a modell komplexitása)", y = "Hiba", color = "") +
+  theme(legend.position = "bottom")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+Így már határozottan érdekes a dolog! Úgy tűnik, hogy az egyik
+hibaforrás úgy romlik miközben a másik javul, hogy a kettő között van
+egy optimum! Ebben a példában olyan 4-5 körüli *p*-nél. Természetesen
+itt sem nulla a hiba, valamennyi része a hibának megszüntethetetlen, de
+ez a legjobb választás, amivel élhetünk.
+
+De hogy találjuk meg ezt az optimumot? Ugyanis vigyázat: a fenti ábra
+egy *szimuláció*, amit úgy kaptunk, hogy *ismertük* a sokaságot! Ezzel
+csak szemléltetni lehetett a jelenséget, de a valódi helyzetben csak
+egyetlen mintánk van, nem tudjuk mi a sokaság, így mi magunk sem
+tudhatjuk, hogy egy adott modell hol van a fenti skálán. (A dolog ott
+jelent meg, hogy amikor a fenti ábrákhoz számoltam a hibák értékeit,
+akkor ahhoz a számításhoz *felhasználtam*, hogy mi a *valódi*
+összefüggés – amit persze a valóságban nem fogunk ismerni.) El kell
+kezdenünk tehát boncolgatni kérdést, hogy ilyen körülmények között, a
+valódi helyzetben hogyan tudjuk megválasztani helyesen a
+modell-komplexitást.
 
 ### A változószelekció kérdésköre
 
-Egészében véve mindkét fenti problémakör végén hasonló konklúzióra
-jutottunk: jó lenne vagy a mintanagyságot növelni, vagy a változók
-számát csökkenteni. Fókuszáljunk most ez utóbbira! A túlilleszkedéssel
-kapcsolatos irodalom a mintanagyság és a modellezhető változók számának
+Általánosságban véve a torzítás a nehezebben kézben tartható hibaforrás,
+és a variancia írható le jobban: bár ez is függ a multikollinearitástól
+(azaz a változók egymás közötti összefüggéseitől), a szóródásoktól, de
+azért összességében jól jellemzi egyszerűen a felhasznált magyarázó
+változók száma. (Pontosabban szólva, ha nem csak egyszerű
+függvényformákat használnánk: a becsült paraméterek száma.) Azt is
+láttuk, hogy a torzítás-variancia dilemmában egyedül a mintanagyság
+növelése jelent univerzális javítást. E két tényt összerakva nem
+meglepő, hogy a gondolkodás merre indult el: mivel a varianciát jól
+jellemzi a magyarázó változók száma, ezért azt, mint jobban leírható
+hibaforrást limitáljuk – azaz korlátozzuk a magyarázó változók számát.
+De az előbbiek miatt nem akárhogy: a mintanagyság függvényében! Ha
+nagyobb a mintánk több változót (becsült paramétert) is merhetünk
+használni, ha kisebb, akkor sajnos csak kevesebb vizsgálható értelmesen.
+Az irodalom a mintanagyság és a modellezhető változók számának
 összefüggéséről [nagyon sok
 eredményre](https://onlinelibrary.wiley.com/doi/10.1002/sim.7993)
 jutott, egészen számszerű formában is; egy gyakori mondás például, hogy
@@ -1506,9 +1654,9 @@ visszatérek később.)
 
 Nézzünk most néhány rossz módszert:
 
--   Megnézni, hogy melyik függ össze önmagában az eredményváltozóval, és
-    csak azokat belerakni a többváltozós modellbe. Ez a módszer
-    [teljesen
+-   Megnézni, hogy melyik potenciális magyarázó változó függ össze
+    *önmagában* (kétváltozósan) az eredményváltozóval, és csak azokat
+    belerakni a többváltozós modellbe. Ez a módszer [teljesen
     hibás](https://www.jclinepi.com/article/0895-4356(96)00025-X/pdf).
     Az még csak hagyján, hogy az előzetes szűrés is egy statisztikai
     teszttel történik, ami nem tökéletes (a valóságban az
@@ -1521,8 +1669,8 @@ Nézzünk most néhány rossz módszert:
     változókat. Ez a módszer [szintén
     hibás](https://www.tandfonline.com/doi/abs/10.1080/00031305.1983.10482729).
     A helyzet ugyanaz pepitában: egyrészt az, hogy „inszignifikáns“, nem
-    ugyanaz, mint hogy biztosan 0 a hatása: az inszignifikanciát is egy
-    statisztikai teszttel ítéljük meg. Ha ez téved, márpedig ez
+    ugyanaz, mint hogy biztosan nulla a hatása: az inszignifikanciát is
+    egy statisztikai teszttel ítéljük meg. Ha ez téved, márpedig ez
     előfordulhat, és lényeges változót hagyunk el, akkor épp a kihagyott
     változó okozta torzítást fogjuk előhozni! Épp emiatt a dolog
     ráadásul filozófiailag is érthetetlen, hiszen attól még, mert egy
@@ -1543,8 +1691,8 @@ Nézzünk most néhány rossz módszert:
 
 Ha valaki nem hiszi el a fentieket nekem (nagyon jól teszi!), akkor
 statisztikai programnyelven maga is leszimulálhatja, és saját kezűleg
-kipróbálhatja; ilyen módon, tehát szimulációval a többség könnyen
-leellenőrizhető.
+kipróbálhatja; ilyen módon, tehát szimulációval a fenti jellegű
+állítások könnyen leellenőrizhetőek.
 
 Érdemes kiemelni és mélyebben végiggondolni azt a megjegyzést, hogy az
 utóbbi módszerek túlilleszkedéshez vezetnek. Ez egyfelől végülis nem
@@ -1568,8 +1716,13 @@ Ez egy nagyon nagy csapdája és nehézsége ennek az egész témakörnek: azt
 szoktuk mondani, hogy a regressziós modellépítés egy „iteratív folyamat“
 (azaz a modellt ellenőrizni kell, ha nem jó, akkor visszamenni,
 módosítani, újra ellenőrizni, és így tovább), ami persze igaz is, csak
-közben a *túl sok* iteráció ugyanúgy hiba forrása lehet! Ebben igazi
-feladat megtalálni az egyensúlyt.
+közben a *túl sok* iteráció ugyanúgy hiba forrása lehet! A dolognak még
+mélyebb megértését nyerhetjük, ha a torzítás-variancia dilemmára
+gondolunk: a modellépítés iterációi lényegében a modell komplexitását
+növelik (és most a valós komplexitásról beszélek, amiben a modellhez
+vezető út is benne van!), ami nem feltétlenül baj, sőt, nem csak, hogy
+nem baj, de egy pontig szükséges is: az sem jó, ha túl kicsi a modell
+komplexitása. Ebben igazi feladat megtalálni az egyensúlyt.
 
 Még egy, de nagyon fontos kommentárt fűznék a fentiekhez. Gyakran
 hallani hivatkozást arra, hogy a modelleknek „egyszerűeknek“,
@@ -1584,13 +1737,14 @@ Ha a végső modellben csak három magyarázó változó van, de háromszáz
 lépésen keresztül barkácsoltuk, mire kijött, az a legkevésbé sem
 „takarékos“ – csak ez nem látszik a végeredményből! A probléma *pont*
 az, hogy a közbenső barkácsoló lépések mind-mind a modell (valódi)
-komplexitását növelik, csak épp ezzel sehol nem számolunk el, ha a végső
-modellt úgy prezentáljuk, mintha élből azt becsültük volna meg. Azaz a
-parszimónia elve teljesen rendben van, csak épp annak az állításnak,
-hogy e módszerek ezt segítik elő, épp az ellenkezője az igaz: ezek
-megsértik ezt az elvet, csak ezt megsértést *eldugják* az útban, amíg
-eljutunk a végső modellig – ami persze még annál is rosszabb, mintha
-legalább látnánk, hogy mi a valódi helyzet.
+komplexitását növelik, teszik azt nem „egyszerűvé“ és nem „takarékossá“,
+csak épp ezzel sehol nem számolunk el, ha a végső modellt úgy
+prezentáljuk, mintha élből azt becsültük volna meg. Azaz a parszimónia
+elve teljesen rendben van, csak épp annak az állításnak, hogy e
+módszerek ezt segítik elő, épp az ellenkezője az igaz: ezek megsértik
+ezt az elvet, csak ezt megsértést *eldugják* az útban, amíg eljutunk a
+végső modellig – ami persze még annál is rosszabb, mintha legalább
+látnánk, hogy mi a valódi helyzet.
 
 Kitérőként megjegyzem, hogy igazából ugyanez a helyzet a függvényforma
 megválasztásával is, nem csak a változószelekcióval: az, ha valaki a
@@ -1605,11 +1759,17 @@ A fentiek abba az irányba mutatnak, hogy lehetőleg egyetlen modellt
 találjunk ki, előre, azt becsüljük meg az adatokon, és bármi is jön ki,
 ne módosítsuk. (Különben túl fogunk illeszkedni.) Ahogy az iterációra
 vonatkozó megjegyzésemben is utaltam rá, ez azért túl radikális
-álláspont: ugyanúgy ahogy egy *kicsit* a modell komplexitását is
+álláspont: ugyanúgy, ahogy egy *kicsit* a modell komplexitását is
 növelhetjük túlilleszkedés nélkül, mondjuk néhány változó hozzáadásával,
-*kicsit* azért pofozgathatjuk is. (Amint láttuk, ez a kettő igazából
-ugyanaz: mindkettő a modell valódi komplexitását növeli.) Pár
-próbálkozást tehát tehetünk változó kihagyására vagy hozzávételére,
+sőt, az még jót is tehet, *kicsit* azért pofozgathatjuk is. (Amint
+láttuk, ez a kettő igazából ugyanaz: mindkettő a modell valódi
+komplexitását növeli.) Újfent utalnék a torzítás-variancia dilemmára,
+illetve az ott látott grafikonra: a pofozgatás jobbra tolja a modellt,
+ami nem feltétlenül baj, sőt, direkt jó is, ha még a grafikon bal szélén
+vagyunk, de nagyon óvatosnak kell lenni, hogy ne fussunk túl az optimum
+pontján.
+
+Pár próbálkozást tehát tehetünk változó kihagyására vagy hozzávételére,
 összehasonlíthatjuk az eredeti modellünkkel ezeket, és kiválaszthatjuk,
 hogy melyik a legjobb. Két dolog fontos, hogy *néhány* próbálkozást
 tegyünk, ne rengeteget, és hogy ezek *prespecifikáltak* legyenek! (Tehát
@@ -1668,10 +1828,6 @@ lehet, hogy jelentősége van a végeredmény alakításában. Szép szóval él
 a *dinamika* is fontos lehet, így egy finomabb vizsgálat – sajnos
 azonban, legyünk őszinték, komoly módszertani kihívások és adatszerzésre
 vonatkozó nehézségek árán – megpróbálkozhat ezt is figyelembe venni.
-
-### A korszerű statisztika megoldási lehetőségei
-
-De
 
 Tehetünk okosan a változók számának csökkentése érdekében is. Már az
 ottani pont végén is említettem ennek egy lehetőségét, a néhány,
