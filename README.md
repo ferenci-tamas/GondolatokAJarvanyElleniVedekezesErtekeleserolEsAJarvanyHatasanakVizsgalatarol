@@ -10,15 +10,17 @@ Ferenci Tamás
 -   [Az elméleti megalapozás: kauzális diagram egy járvány
     hatására](#az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására)
 -   [Technikai részletek](#technikai-részletek)
--   [Az empirikus vizsgálat lehetőségei és
-    nehézségei](#az-empirikus-vizsgálat-lehetőségei-és-nehézségei)
-    -   [A confounding problémája](#a-confounding-problémája)
-    -   [Kihagyott változós torzítás](#kihagyott-változós-torzítás)
-    -   [A regresszió eszköze](#a-regresszió-eszköze)
-    -   [A mintavételi ingadozás és a torzítás
-        fogalma](#a-mintavételi-ingadozás-és-a-torzítás-fogalma)
+-   [Az empirikus vizsgálat lehetőségei és nehézségei: a confounding
+    problémája](#az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája)
+-   [A regresszió eszköze](#a-regresszió-eszköze)
+    -   [A mintavételi ingadozás
+        fogalma](#a-mintavételi-ingadozás-fogalma)
     -   [A függvényforma kérdése](#a-függvényforma-kérdése)
-    -   [Több változó modellezése](#több-változó-modellezése)
+    -   [A kihagyott változós torzítás](#a-kihagyott-változós-torzítás)
+-   [A modellezés stratégiája](#a-modellezés-stratégiája)
+    -   [A multikollinearitás
+        problémája](#a-multikollinearitás-problémája)
+    -   [A túlilleszkedés problémája](#a-túlilleszkedés-problémája)
     -   [A torzítás-variancia dilemma](#a-torzítás-variancia-dilemma)
     -   [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
     -   [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
@@ -530,27 +532,27 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 
 | geo | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure |
 |:----|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|
-| AT  |          0 | Austria     |          1799.1 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
-| BE  |          0 | Belgium     |          2027.9 |      377.3 |          5.7 |         29.5 | 36919.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
-| BG  |          0 | Bulgaria    |          8377.7 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
-| CY  |          0 | Cyprus      |           851.3 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
-| CZ  |          0 | Czechia     |          3851.9 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
-| DE  |          0 | Germany     |           938.3 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
-| DK  |          0 | Denmark     |           312.3 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
-| EE  |          0 | Estonia     |          2213.6 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
-| EL  |          0 | Greece      |          2309.8 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
+| AT  |          0 | Austria     |          1799.4 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
+| BE  |          0 | Belgium     |          2040.6 |      377.3 |          5.7 |         29.5 | 36925.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
+| BG  |          0 | Bulgaria    |          8373.6 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
+| CY  |          0 | Cyprus      |           852.5 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
+| CZ  |          0 | Czechia     |          3848.5 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
+| DE  |          0 | Germany     |           946.1 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
+| DK  |          0 | Denmark     |           319.0 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
+| EE  |          0 | Estonia     |          2218.2 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
+| EL  |          0 | Greece      |          2307.6 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
 | ES  |          0 | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
-| HR  |          0 | Croatia     |          3808.6 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
-| HU  |          0 | Hungary     |          3534.6 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
+| HR  |          0 | Croatia     |          3794.2 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
+| HU  |          0 | Hungary     |          3400.3 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
 | IT  |          0 | Italy       |          2736.0 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
-| LT  |          0 | Lithuania   |          4776.0 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
-| LU  |          0 | Luxembourg  |           458.4 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
-| LV  |          0 | Latvia      |          3123.4 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
-| NL  |          0 | Netherlands |          1579.9 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
-| NO  |          0 | Norway      |           512.8 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
-| PL  |          0 | Poland      |          4347.8 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
-| RO  |          0 | Romania     |          6120.8 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
-| SE  |          0 | Sweden      |          1458.6 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
+| LT  |          0 | Lithuania   |          4769.5 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
+| LU  |          0 | Luxembourg  |           458.8 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
+| LV  |          0 | Latvia      |          3137.5 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
+| NL  |          0 | Netherlands |          1591.7 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
+| NO  |          0 | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
+| PL  |          0 | Poland      |          4346.1 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
+| RO  |          0 | Romania     |          6111.2 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
+| SE  |          0 | Sweden      |          1471.9 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
 | SI  |          0 | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
@@ -559,13 +561,11 @@ lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
 nagyságrendi különbségek vannak a népsűrűségben, az
 alkoholfogyasztásban, de még az egészségügyre fordított kiadásokban is.
 
-## Az empirikus vizsgálat lehetőségei és nehézségei
+## Az empirikus vizsgálat lehetőségei és nehézségei: a confounding problémája
 
 Miután nagyon alaposan végiggondoltuk a háttérben lévő elméleti modellt,
 elkezdhetünk foglalkozni azzal a kérdésből, hogy ebből mit és hogyan
 tudunk empirikus adatok alapján megbecsülni (illetve mit nem).
-
-### A confounding problémája
 
 Először, hogy benyomást kapjunk az elemzési lehetőségekről, és azok
 problémáiról, kezdjünk néhány egyszerű vizsgálattal.
@@ -599,10 +599,10 @@ van, ha a nővérek száma összefügg valamilyen más változóval, ami a
 *valódi* oka a kedvezőbb adatoknak…?
 
 Például eszünkbe jut, hogy a jobb gazdasági állapotú országokban több az
-ezer főre jutó nővér. (Megengedhetik maguknak? Más az ottani felfogás a
-nővérek szerepére vonatkozóan? – ez most, ilyen szempontból, mindegy
-is.) Ellenőrizzük is ezt gyorsan le, a gazdasági fejlettség mérésére a
-GDP-t használva:
+ezer főre jutó nővér. (Mert megengedhetik maguknak? Mert más az ottani
+felfogás a nővérek szerepére vonatkozóan? – ez most, ilyen szempontból,
+mindegy is.) Ellenőrizzük is ezt gyorsan le, a gazdasági fejlettség
+mérésére a GDP-t használva:
 
 ``` r
 ggplot(RawData, aes(x = nurses, y = gdp)) + geom_point() +
@@ -756,144 +756,125 @@ Tudom, hogy mindez elég agyzsibbasztó, és valószínűleg kell rá aludni
 egyet (többet), ha valaki először látja, de e kép megértése sokat segít
 a confounding átlátásában és a megoldás megtalálásában is.
 
-### Kihagyott változós torzítás
+## A regresszió eszköze
 
-Valamit nagyon fontos megérteni részleteiben is a confounding problémája
-kapcsán: ha kihagyunk egy lényeges változót, tehát olyat, aminek
-*valójában* van hatása a kimenetre, akkor annak a hatását a bentmaradt
-változók veszik át. (Attól a gyakorlatban nem túl izgalmas esettől
-eltekintve, ha egyik vizsgált változóval sem függ össze a kihagyott.)
-Ezt szokták kihagyott változó okozta torzításnak nevezni.
-
-Ha meggondoljuk, akkor ez a fenti, két magyarázó változót tartalmazó
-példán is tökéletesen elmondható: ha kihagyjuk a GDP-t, akkor a nővér
-változó valójában már nem *csak* a nővérek hatását fogja mutatni, hanem
-a nővérek *és* a GDP együttes hatását. A nővér változó, legalábbis
-részben, *átvette* a GDP szerepét is! Általánosan megfogalmazva: a
-vizsgált változóinkra kimutatott hatások – sajnos – a nem vizsgált
-változók hatásait (is) tartalmazzák, ha nem vizsgáltunk olyat, ami
-valójában lényeges.
-
-Bár tényleg csak átfogalmazásról van szó, azért fontos külön is
-említeni, mert egy gyakori tévedés, ha egy nem vizsgált változóról
-automatikusan kijelentjük, hogy nincs hatása. Ez nem csak hogy nem igaz,
-de a helyzet rosszabb: ezt a hatást, ha van neki, sajnos a vizsgált
-változókra szétosztva fogjuk kimutatni…! Ha a társadalmi
-távolságtartásra vonatkozó szokásokra nincs adatunk (hogy mondjak egy
-csakugyan nehezen mérhető változót), akkor nem mondhatjuk, hogy annak
-nincs hatása, de ez még hagyján, az igazi baj, hogy a hatását, ha van
-neki, a többi változóban fogjuk elszámolni, mert azok *átveszik* a
-kimaradt változó hatását. Ha például a déli országokban szorosabbak a
-szociális kontaktusok mint az északiakban, *és* a déliek és az északiak
-között GDP-ben is van eltérés, akkor a szociális távolság hatását
-vidáman ki fogjuk mutatni GDP címszó alatt!
-
-A kihagyott változó okozta problémák legegyszerűbb kezelési megoldása
-elég kézenfekvő: ne hagyjunk ki lényeges változót… A dolog azonban nem
-ilyen egyszerű, két okból sem. Az egyik, kézenfekvő probléma, hogy mi
-van, ha nincs információnk a lényeges változóról? Akár azért, mert nem
-tudtuk begyűjteni az információt, akár azért, mert nem is gondoltunk rá,
-hogy be kellene gyűjteni! (Ugye ez a kísérletes vizsgálatok nagy
-előnye.) Megjegyzem, jelen esetben az információ begyűjtése sem
-feltétlenül nyilvánvaló; lehetnek változók amiről nincs megfelelő
-nemzetközi adatgyűjtés, vagy – mint az előző bekezdés példája is mutatja
-– az is előfordulhat, hogy nem is könnyű mérni, számszerűsíteni a
-tulajdonságot. Ilyenkor szoktak néha úgynevezett proxy változót
-használni, azaz olyat, ami – remélhetőleg szoros – kapcsolatban van a
-vizsgálni kívánt változóval, de szemben azzal, mérhető. Egyébként a GDP
-nagyon sok változónak lehet a proxy-ja (a probléma inkább pont az, hogy
-sok minden keveredik benne). A másik probléma, hogy még ha ismerjük is a
-lényeges változókat, baj származhat abból, ha nagyon sok van belőlük (a
-minta nagyságához képest). Ezt a kérdéskört fogjuk hamarosan körbejárni.
-
-### A regresszió eszköze
-
-A háromdimenziós ábrával már nagyon közel kerültünk a confounding
-problémájának egy lehetséges kezeléséhez. (A „megoldásához“ szó
-használata talán túlzás lenne, hiszen megfigyeléses adatból igazán
-bombabiztosan soha nem tudunk okozati hatásra következtetni. De az ezzel
-kapcsolatos problémákat enyhíthetjük.) Ez lesz az egyenes – és később a
-sík – behúzásának igazi értelme: nem a görbeillesztés a lényeg, hanem,
-hogy feltételezünk egy modellt, és annak paramétereit becsüljük meg a
-begyűjtött tényadatok alapján. Az egyenes és a sík épp egy ilyen modell
-megjelenése; ezt a modellt hívjuk lineáris regressziónak. Ebben a
-modellben annak a hatása, ha az ezer lakosra jutó nővérek száma eggyel
-nagyobb miközben a GDP értéke rögzített, nem függ sem attól, hogy milyen
-értéken rögzített a GDP, sem attól, hogy honnan indulva növeljük meg
-eggyel a nővérek számát.
+Az előző fejezetben látott háromdimenziós ábrával már nagyon közel
+kerültünk a confounding problémájának egy lehetséges kezeléséhez. (A
+„megoldásához“ szó használata talán túlzás lenne, hiszen megfigyeléses
+adatból igazán bombabiztosan soha nem tudunk okozati hatásra
+következtetni. De az ezzel kapcsolatos problémákat enyhíthetjük.)
+Hiszen, ha egyszer megvan ez a síkunk, akkor leolvashatjuk belőle, hogy
+hogyan változ*na* a halálozás, ha *csak* a nővérek számát
+változtat*nánk*, miközben a GDP értéke rögzített, állandó. Egyszerűen
+azt kell nézni, hogy ha eggyel nagyobb nővérszámra lépünk át, de úgy,
+hogy közben a GDP értéke állandó marad (a fenti perspektívában:
+jobbra-felfelé teszünk egy egységnyi lépést), akkor mennyivel megy
+lejjebb a sík. Ez lesz *önmagában* a nővér-szám változásának a hatása.
+Az *adatok* nyersen nem tesznek lehetővé ilyen vizsgálatot, mert ott az
+eggyel több nővér egyúttal nagyobb GDP-t is jelent, de a *sík* igen! És
+ezzel egy iszonyatosan fontos eszközt kaptunk a kezünkbe, amit
+regressziónak fogunk majd hívni.
 
 Az egész kulcsa a „miközben a GDP értéke rögzített“ kitétel: a
 confounding problémája *épp* az volt, hogy a nővérek számának
-növelésével a GDP is változik közben, de most mit látunk? Hogy a modell
-ezen paramétere azt jelenti, hogy mennyi a hatás *akkor* ha a GDP nem
-változik! Ilyen értelemben meg tudtuk azt tenni, hogy bár az adataink
-megfigyelésesek voltak, confounding-gal terhelve, mi mégis, *pusztán
-matematikai úton* kiszedtük belőle a confounding-tól tisztított értéket!
-Úgy szokták szép szóval mondani: kimutattuk a nővérek hatását úgy, hogy
-*kontrolláltunk* a GDP-re.
+növelésével a GDP is változik közben, de most mit látunk? Hogy a fenti
+módon leírt érték, szép szóval a sík meredeksége, azt jelenti, hogy
+mennyi a hatás *akkor* ha a GDP *nem* változik! Ilyen értelemben meg
+tudtuk azt tenni, hogy bár az adataink megfigyelésesek voltak,
+confounding-gal terhelve, mi mégis, *pusztán matematikai úton* kiszedtük
+belőle a confounding-tól tisztított értéket! Úgy szokták mondani:
+kimutattuk a nővérek hatását úgy, hogy *kontrolláltunk* a GDP-re.
+Természetesen a dolog fordítva is működik: ha leolvassuk a sík
+meredekségét a másik irányban (állandó nővér-szám mellett a GDP-t
+növeljük, balra-felfelé lépünk egy egységnyit), akkor megkapjuk, hogy
+önmagában – azaz kontrollálva a nővér-számra – a GDP hogyan hat a
+halálozásra.
 
-Mindezek eredményét mutatja a következő táblázat, a ‘Becsült hatás’
-oszlop adja meg a fenti értelemben vett hatást:
+Vegyük észre, hogy ilyen szempontból annak, hogy épp síkot (és nem más
+alakú felületet) illesztettünk az adatokra, van egy nagyon kellemes
+tulajdonsága: az, hogy a nővér-szám szerinti meredekség nem függ sem
+attól, hogy mi a választott GDP-szint, amit rögzítetten tartunk, sem
+attól, hogy milyen nővér-számról indulva növeljük a nővérek számát egy
+egységgel! Akármilyen értéken is rögzítjük a GDP-t, azaz akárhol is
+vagyunk a bal oldali tengelyen, és akárhonnan indulva növeljük a
+nővér-számot, azaz akárhonnan vagyunk a jobb oldalin, ahonnan egyet
+jobbra-felfelé lépünk, a sík *mindenképp* ugyanannyit megy lejjebb. Azaz
+ezt a meredekséget használhatjuk, egyetlen számként, a nővérek hatásának
+leírására. Ezt a tulajdonságot fogjuk később úgy hívni, hogy linearitás.
 
-``` r
-knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit), 3),
-                        `95% CI` = apply(signif(confint(fit), 3), 1, paste,
-                                         collapse = " -- "),
-                        p = Hmisc::format.pval(summary(fit)$coefficients[,4], digits = 3,
-                                               eps = 0.001),
-                        check.names = FALSE, row.names = c("Tengelymetszet",
-                                                           names(coef(fit))[-1])))
-```
+Ez lesz a sík behúzásának igazi értelme: nem a görbeillesztés a lényeg,
+hanem, hogy feltételezünk egy modellt (ami a sík matematikai leírása
+lesz), és annak a paramétereit, ezeket a bizonyos meredekségeket
+becsüljük meg a begyűjtött tényadatok alapján. Ezt hívjuk regressziónak.
+A regresszió kérdésköre egy hatalmas, de érdekes, és nagyon sok
+területen – így a biostatisztikában kiemelten – fontos téma. Most szinte
+csak utalásszerűen tudom megemlíteni pár fontos kérdését, de a részletek
+[előadásaimban](https://www.youtube.com/c/FerenciTam%C3%A1s) és
+[jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek; néhány
+adott témába vágót a szövegben is belinkelek a megfelelő helyen.
 
-|                | Becsült hatás | 95% CI            | p       |
-|:---------------|--------------:|:------------------|:--------|
-| Tengelymetszet |     5990.0000 | 3990 – 7990       | \<0.001 |
-| gdp            |       -0.0746 | -0.146 – -0.00277 | 0.043   |
-| nurses         |       -1.1400 | -3.91 – 1.62      | 0.398   |
-
-Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
+(Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
 ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk
 ki, hogy a GDP nem változik vele együtt, azt állandóan tartjuk, de most
-ezt ügyesebben tesszük meg (pl. nem kell kategóriákra osztani a GDP-t,
-amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak egybe, ha
-túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül számszerű
-választ kapunk stb.).
+ezt ügyesebben tesszük meg: például nem kell kategóriákra osztani a
+GDP-t, amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak
+egybe, ha túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül
+számszerű választ kapunk, jobban kiterjeszthető lesz majd az eredmény
+több változóra is stb.)
 
-Természetesen annak, hogy a modell által becsült paraméterek tényleg jó
-választ adjanak, bizonyos feltételeknek meg kell felelniük. Hát persze:
-nem fordulhat elő például, hogy van egy *harmadik* változó, amiről még
-mindig megfeledkeztünk! Hiszen honnan tudjuk, hogy csak a nővérek és a
-GDP számít? Mi van, ha valamit így is kihagytunk? Ami, ha hat a
-halálozásra, megint pont a confounding problémáját hozza be! Itt jutunk
-vissza ahhoz a tételmondathoz, amit már az elején is láttunk:
-megfigyeléses adatoknál mindig a fejünk felett lebeg, hogy mi van, ha
-egy confounding-ot okozó változóról megfeledkezünk. Pontosan ez
-tükröződik itt is vissza: ha egy lényeges változót kihagyunk, akkor baj
-lesz.
+Mindezek eredményét mutatja a következő táblázat, a ‘Becsült hatás’
+oszlop adja meg a meredekségeket, azaz fenti értelemben vett hatást:
 
-Valójában nem ez az egyetlen feltevés, mi van például, ha a hatás nem
-lineáris? Ezek a kérdések mindazonáltal jól vizsgálhatóak a regressziós
-keretrendszerben; a linearitás kérdését hamarosan külön is meg fogjuk
-nézni.
+``` r
+knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit)[-1], 3),
+                        `95% CI` = apply(signif(confint(fit)[-1,], 3), 1, paste,
+                                         collapse = " -- "),
+                        p = Hmisc::format.pval(summary(fit)$coefficients[-1,4],
+                                               digits = 3, eps = 0.001),
+                        check.names = FALSE, row.names = names(coef(fit))[-1]))
+```
 
-### A mintavételi ingadozás és a torzítás fogalma
+|        | Becsült hatás | 95% CI            | p     |
+|:-------|--------------:|:------------------|:------|
+| gdp    |       -0.0742 | -0.146 – -0.00251 | 0.043 |
+| nurses |       -1.1400 | -3.9 – 1.62       | 0.400 |
 
-Az ilyen modellek becslésére rendelkezésre állnak jól bevált módszerek.
-Ezek milliónyi kérdése közül csak egyet emelnék most itt ki: az így
-kapott számok bizonytalanságának ügyét. A probléma az, hogy ezek becsült
-értékek, melyekben van attól függő ingadozás, hogy éppen milyen
-adatbázisból (mintából) becsültük, pusztán a véletlen szeszélye folytán:
-ha pontosan ugyanabból a valódi összefüggésből pontosan ugyanúgy
-véletlen mintát veszünk, akkor sem mindig ugyanazt kapjuk. A kapott
-becslés mintáról-mintára ingadozik, amiből persze egyúttal az is
-következik, hogy nem kaphatjuk meg mindig a valódi értéket. Nagyon
-fontos tehát, hogy most nem arról beszélek, hogy a mintát bármilyen
-értelemben is „hibásan“ vettük: a legtökéletesebben véletlen mintavétel
-esetén is lesz a becsült értékben ingadozás, pont úgy, ahogy a kihúzott
-lottószámok átlaga sem pont 45,5 minden héten. Pedig az összes számnak
-(1-től 90-ig) ennyi az átlaga, a mintavétel – remélhetőleg – itt aztán
-tökéletesen véletlen, és mégis, a mintának, tehát a kihúzott 5 számnak
-az átlaga néha kicsit kisebb mint 45,5, néha kicsit nagyobb! Ezt hívjuk
+Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy,
+hogy a nővérek száma közben nem változik, akkor 0,0742-vel megy lejjebb
+a halálozás. Ha a nővérek számát növeljük eggyel miközben a GDP-t
+változatlanul tartjuk, akkor 1,14-gyel csökken a halálozás. Elértük a
+célunkat, ezek a confounding-tól tisztított értékek: az 1,14 a
+nővér-szám tisztított hatása, amiben megszabadultunk a GDP miatti
+confounding-tól! Noha csak megfigyeléses adataink voltak, mégis meg
+tudtuk határozni a nővérek számának *valódi* hatását a halálozásra.
+
+Annak, hogy a nővérek hatásának számértéke nagyobb mint a GDP-é, nincsen
+jelentősége, hiszen ez az érték függ a mértékegységtől (egy *egységgel*
+növeltük, ahol az egység az, amiben a kérdéses változót mérjük),
+márpedig a nővérek számának és a GDP-nek teljesen más a mértékegysége.
+Az viszont mindenképpen meglepő lehet, hogy akkor most mégis van hatása
+a nővér-számnak? Hiszen korábban még azt állapítottuk meg, hogy
+nincsen…!
+
+A helyzet az, hogy tényleg nincsen, és ennek nem mond ellent a fenti
+-1,14, de ennek megértéséhez meg kell egy új kérdéskörrel ismerkednünk.
+
+### A mintavételi ingadozás fogalma
+
+A probléma az, hogy ezek a számok becsült értékek. Nem kőbe vésett
+számok, hanem függenek a véletlen szeszélyétől is, azáltal, hogy épp
+milyen adatbázisból (mintából) becsültük őket: ha pontosan ugyanabból a
+valódi összefüggésből pontosan ugyanúgy véletlen mintát veszünk, akkor
+sem mindig ugyanazt kapjuk becsült értékként. A kapott becslés
+mintáról-mintára ingadozik, amiből persze egyúttal az is következik,
+hogy nem kaphatjuk meg mindig a valódi értéket. Nagyon fontos tehát,
+hogy most nem arról beszélek, hogy a mintát bármilyen értelemben is
+„hibásan“ vettük: a legtökéletesebben véletlen mintavétel esetén is lesz
+a becsült értékben ingadozás, pont úgy, ahogy a kihúzott lottószámok
+átlaga sem pont 45,5 minden héten. Pedig az összes számnak (1-től 90-ig)
+ennyi az átlaga, a mintavétel – remélhetőleg – itt aztán tökéletesen
+véletlen, és mégis, a mintának, tehát a kihúzott 5 számnak az átlaga
+néha kicsit kisebb mint 45,5, néha kicsit nagyobb. Ezt hívjuk
 mintavételi ingadozásnak.
 
 Nézzük meg ezt egy konkrét példán! Sajnos az adatbázisunk erre a célra
@@ -938,12 +919,14 @@ Ezekből az ábrákból egy dolog látható és egy dolog sejthető. Ami
 látható, az a mintavételi ingadozás: ahogy megbeszéltük, hiába adott,
 állandó, rögzített értékű a valódi összefüggés (piros vonal), hiába
 teljesen véletlen a mintavétel, a mintából becsült hatás ingadozik
-mintáról-mintára, pusztán a mintavétel szeszélye miatt tehát. Ez
-elkerülhetetlen. De az ábrák sugallanak is valamit: hogy van ugyan
-ingadozás, de azt remélhetjük, hogy ennek kellemes tulajdonságai
-lesznek! Az ábrákból ugyanis eléggé az látszik, mintha a becsült érték
-ingadozna ugyan, de *átlagosan* jó lenne, mert a jó érték *körül*
-ingadozik. Vajon igaz ez?
+mintáról-mintára, pusztán a mintavétel szeszélye miatt tehát. Hiába 2 a
+piros görbe meredeksége, hiába vettünk minden alkalommal tökéletesen
+véletlen mintát (és ez most biztos), a kék görbe meredeksége néha kicsit
+nagyobb, néha kicsit kisebb. Ez elkerülhetetlen. De az ábrák sugallanak
+is valamit: hogy van ugyan ingadozás, de azt remélhetjük, hogy ennek
+kellemes tulajdonságai lesznek, például az ábrákból eléggé az látszik,
+mintha a becsült érték ingadozna ugyan, de *átlagosan* jó lenne, mert a
+jó érték *körül* ingadozik. Vajon igaz ez?
 
 Futassuk most ne 20-szor a szimulációt, hanem 10 ezerszer, jegyezzük fel
 minden egyes futtatásnál a becsült hatást, majd nézzük meg ezek
@@ -974,44 +957,6 @@ eszközökkel bizonyítani [is
 lehetne](https://www.youtube.com/playlist?list=PLqdN24UCw5hlIrdfErPUgnoIQC4U6cxiL),
 hogy valóban torzítatlan az így kapott becslés.
 
-De álljunk meg egy pillanatra: korábban kihagyott változó okozta
-*torzítást* emlegettünk! Elég gyanús egybeesés, hogy itt is pont a
-torzítás szó került elő, és elárulhatom, hogy a dolog nem véletlen.
-Készítsünk most egy újabb szimulációt: a valóságban most a kimenetre két
-– összefüggő – változó hat, csak épp az egyiket kihagyjuk a
-regresszióból. Például a GDP és a nővérek száma hat a halálozásra, de mi
-mégis csak a nővérek hatását vizsgáljuk. Mi történik ilyenkor a
-regresszióban bent maradt változó kimutatott hatásával, példánkban a
-nővérekre kimutatott hatással? A piros vonal továbbra is a valódi
-(általunk a szimulációban beállított) értéket jelöli, a fekete görbe
-pedig ugyanúgy a mintákból kapott becslések eloszlása:
-
-``` r
-simbeta <- as.data.table(replicate(1e5, {
-  x1 <- runif(20)
-  x2 <- 1 + 2*x1 + rnorm(20)
-  lm.fit(cbind(1, x1), 1 + 2*x1 + 3*x2 + rnorm(20, 0, 0.5))$coefficients[2]
-}))
-ggplot(simbeta, aes(x = V1)) + geom_density() +
-  geom_vline(xintercept = 2, color = "red") + labs(x = "Becsült hatás", y = "")
-```
-
-![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
-
-Baj van! A becslések továbbra is ingadoznak, van mintavételi ingadozás
-(ez eddig nem meglepő, láttuk, hogy ez elkerülhetetlen) – csak épp most
-már *egy rossz érték körül*! Átlagosan sem jó az értékük, szép szóval
-élve: torzított a becslésünk. Hát ezért hívtuk ezt „kihagyott változó
-okzota torzításnak“…!
-
-Valaki megkérdezheti, hogy ez hogyan lehet, hiszen az előbb még azt
-mondtam, hogy „matematikai eszközökkel bebizonyítható“, hogy a kapott
-becslések torzítatlanok. A válasz az, hogy igen, bebizonyítható, *ha*
-bizonyos feltételek teljesülnek. Rögtön el is árulhatom tehát, hogy a
-confounding, a lényeges változó kihagyása épp e feltételek egyikét fogja
-megsérteni. Ezért nem fog ebben az esetben működni ez a bizonyítás, és
-ezért lesz ilyenkor torzított a kapott eredmény.
-
 A fentiek a mintavételi ingadozást úgy fogalmazták meg, hogy ha tudom,
 hogy a valódi érték mondjuk 10, akkor a mintából becsült lehet 9 vagy
 épp 11 is. A dolognak azonban van egy ezzel egyenértékű, de a mi
@@ -1029,57 +974,61 @@ most nem a confoundingról vagy hasonló gikszerről beszélek, ha minden
 ilyet elkerültünk, és mindent tökéletesen csináltunk, ez *akkor is* igaz
 lesz, pusztán a véletlen ingadozás miatt. Nem biztos, hogy 20 a valódi
 érték, ebben bizonytalanság van, lehet éppenséggel 19 vagy 21 is. De
-lehet 18 vagy 22 is? 15 vagy 25 is? Lehet 0 is…? (Ez utóbbi pláne
-fontos, mert az azt jelentené, hogy a változónak igazából nincs is
-hatása!)
+lehet 18 vagy 22 is? 15 vagy 25 is? Lehet 0 is…? Ez utóbbi pláne fontos,
+mert az azt jelentené, hogy a változónak igazából nincs is hatása!
 
 A kérdésre biztos válasz nincs, de valószínűségi választ adhatunk. Ezt
-teszi meg a harmadik oszlopban feltüntetett úgynevezett
-konfidenciaintervallum (CI). Ez tartalmazza azokat az értékeket, amikre
-igaz, hogy ha az lenne a valódi, akkor könnyen beingadozhatnának abba,
-amit ténylegesen kaptunk is: a -0,142 és a -0,003 közti valódi
-értékekből könnyen kaphatnánk, pusztán a véletlen ingadozás miatt,
--0,072-t. (A fejlécben feltüntett 95% szabályozza azt, hogy mit értünk
-„könnyen“ alatt.) Úgy is szokták mondani, hogy ilyen valódi értékek
-esetén a tényleges érték attól való eltérése betudható a véletlen
-ingadozásnak, szép szóval: nem *szignifikáns* az eltérés. Ha a
-konfidenciaintervallum tartalmazza a nullát (ami ugye, ahogy az előbb is
-mondtuk, azt jelenti, hogy a kérdéses változónak valójában nincs hatása
-az eredményre!), az magyarra lefordítva azt jelenti, hogy nincs okunk
-feltételezni, hogy a változónak van hatása, mert ha nem lenne, akkor is
-kényelmesen kijöhetett volna az, ami ki is jött. Ilyenkor mondjuk azt,
-hogy a változó hatása nem szignifikáns.
+teszi meg a korábbi táblázat harmadik oszlopában feltüntetett
+úgynevezett konfidenciaintervallum (CI). Ez tartalmazza azokat az
+értékeket, amikre igaz, hogy ha az lenne a valódi, akkor könnyen
+beingadozhatnának abba, amit ténylegesen kaptunk is: a GDP esetében
+-0,146 és a -0,00251 közti valódi értékekből könnyen kaphatnánk, pusztán
+a véletlen ingadozás miatt, -0,0742-t. (A fejlécben feltüntett 95%
+szabályozza azt, hogy mit értünk „könnyen“ alatt.) Úgy is szokták
+mondani, hogy ilyen valódi értékek esetén a tényleges érték attól való
+eltérése betudható a véletlen ingadozásnak, szép szóval: nem
+*szignifikáns* az eltérés. Ha a konfidenciaintervallum tartalmazza a
+nullát (ami ugye, ahogy az előbb is mondtuk, azt jelenti, hogy a
+kérdéses változónak valójában nincs hatása az eredményre!), az magyarra
+lefordítva azt jelenti, hogy nincs okunk feltételezni, hogy a változónak
+van hatása, mert ha nem lenne, *akkor is* kényelmesen kijöhetett volna
+pusztán a véletlen ingadozás miatt az, ami ki is jött. Ilyenkor mondjuk
+azt, hogy a változó hatása nem szignifikáns.
 
-A regresszió kérdésköre ezen túlmenően is egy hatalmas, de érdekes, és
-nagyon sok területen – így a biostatisztikában kiemelten – fontos téma.
-Most szinte csak utalásszerűen tudtam megemlíteni pár fontos kérdését,
-de a részletek
-[előadásaimban](https://www.youtube.com/c/FerenciTam%C3%A1s) és
-[jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek (néhány
-adott témába vágót a szövegben is belinkelek a megfelelő helyen).
+És most nézzük meg a nővér-szám konfidenciaintervallumát: azt látjuk,
+hogy -3,9-től megy 1,62-ig. Azaz: benne van a 0! A nővérek számának
+hatása a halálozásra tehát nem szignifikáns! Ami számértéket kaptunk
+(-1,14) kényelmesen kijöhetett úgy, hogy a valódi érték 0, és ezt a
+-1,14-et csak a véletlen miatti ingadozás dobta ki – nincs okunk azt
+feltételezni, hogy valódi hatás van, mert ezek az adatok nem mondanak
+ellent annak, hogy igazából nincs a nővér-számnak hatása.
 
 ### A függvényforma kérdése
 
-A fentiekben hangsúlyosan szerepelt a linearitás, mint a modellünk
-alapfeltevése. Érdemes erről egy picit bővebben is beszélni, azért is,
-mert egyúttal jó általános illusztráció az ilyen modellfeltevések
-szerepére, ellenőrzésére és feloldására is.
+A regresszió bevezetésénél azt mondtuk, hogy a modellünk lineáris,
+tehát, hogy a nővér-szám hatása nem függ sem attól, hogy mi a választott
+GDP-szint, amit rögzítetten tartunk, sem attól, hogy milyen
+nővér-számról indulva növeljük a nővérek számát egy egységgel. Még meg
+is jegyeztük, hogy ennek több előnye is van, kezdve azzal, hogy
+kényelmes az eredmények értelmezése. Később úgy fogjuk mondani, hogy a
+linearitás egy modellfeltevés. Érdemes erről egy picit bővebben is
+beszélni, azért is, mert egyúttal jó általános illusztráció az ilyen
+modellfeltevések szerepére, ellenőrzésére és feloldására is.
 
-Először is kezdjük azzal, hogy egyáltalán miért tételezzük fel, hogy a
-valóság lineárisan működik? Mi van, ha a hatás nem lineáris, például
-eleinte nagyon számítanak a plusz nővérek, de később már egyre kevésbé?
-Mi van, ha a nővérek hatása függ a másik magyarázó változótól, a
-gazdasági fejlettségtől, például alacsony fejlettségnél jobban számít
-plusz egy nővér, de magasnál már kevésbé? (Ez utóbbi esetben
-automatikusan igaz lesz az is, hogy a gazdasági fejlettség halálozásra
-gyakorolt hatása is függ a nővérek számától; ilyenkor szokták azt
-mondani, hogy interakcióban van a két változó.)
+De mi van, ha a hatás nem lineáris? Mi van ha például eleinte, amíg még
+kevés van belőlük, nagyon számítanak a plusz nővérek, de később már
+egyre kevésbé? Mi van, ha a nővérek hatása függ a másik magyarázó
+változótól, a gazdasági fejlettségtől, például alacsony fejlettségnél
+jobban számít plusz egy nővér, de magasnál már kevésbé? (Ez utóbbi
+esetben automatikusan igaz lesz az is, hogy a gazdasági fejlettség
+halálozásra gyakorolt hatása is függ a nővérek számától; ilyenkor
+szokták azt mondani, hogy interakcióban van a két változó.)
 
 Kezdjük ott, hogy igen, csakugyan, a valóság működése általában pont
 hogy nem lineáris. Mégis, jó okaink vannak ennek ellenére is a
 linearitás használatára, legalábbis első közelítésként. Az egyik, hogy a
 lineáris modellek kényelmesek: a kapott eredmények nagyon jól
-interpretálhatóak: egy változó hatása egyetlen szám, azzal a nagyon
+interpretálhatóak, egy változó hatása egyetlen szám, azzal a nagyon
 egyszerű értelmezéssel, hogy +1 egység növekedés minden mást
 változatlanul tartva hogyan hat a kimenetre. Az, hogy egyetlen számot
 kell becsülni, ráadásul statisztikailag is nagyon előnyös, kis mintánkon
@@ -1115,7 +1064,7 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
        y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 Ha például kilaposodó hatást feltételezünk, akkor ennek leírására ez
 alkalmas lehet. Ez ráadásul az érvényességi tartományok kérdésére is jó
@@ -1191,7 +1140,7 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
        y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van
 irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/).
@@ -1202,29 +1151,169 @@ egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik
 (maximum kirajzolhatjuk a görbét), és extrapolálni sem lehet, vagy csak
 trükkökkel. A továbbiakban ilyen modellekkel nem foglalkozunk most.
 
-### Több változó modellezése
+### A kihagyott változós torzítás
 
-Látszólag tehát meg is vagyunk: kimutattuk mind a nővérek számának, mind
-a GDP-nek a hatását, immár korrekt módon – legalábbis, ha az említett
-feltételek teljesülnek, például más változó nem játszik szerepet, ezek
-hatása tényleg lineáris. Kezdjük az első megjegyzéssel: ennél a kettőnél
-ugyanis jóval több – potenciálisan – a kimenetet befolyásoló változónk
-van, és ezt már szépen ábrázolni nem fogjuk tudni. De sebaj, ha
-elszakadunk az ábrázolástól, és áttérünk arra az értelmezésre, hogy egy
-lineáris kapcsolatot feltételezzük, és annak a paramétereit (amiknek
-mind „adott paraméter egységnyi növelésének a hatása a többit
-változatlanul tartva“ értelmük van) szeretnénk megbecsülni, akkor ez nem
-probléma. Márpedig ez az eljárás könnyedén kiterjeszthető tetszőleges
-számú változóra! (A korábban említett lehetőségek a nemlineáris
-kapcsolatok vizsgálatára szintén átvihetőek többváltozós esetre, de
-ezzel most nem fogunk foglalkozni, részint mert nem jelent újdonságot –
-a korábban látott módszerek alkalmazhatóak minden egyes változóra –
-részint mert mindjárt látni fogjuk, hogy ennél most nagyobb problémáink
-lesznek…)
+Természetesen annak, hogy a modell által becsült paraméterek tényleg jó
+választ adjanak, bizonyos feltételeknek meg kell felelniük. A
+linearitást már láttuk, de a talán legkézenfekvőbb: nem fordulhat elő
+például, hogy van *még egy* változó, amiről még mindig megfeledkeztünk.
+Hiszen honnan tudjuk, hogy csak a nővérek és a GDP számít? Mi van, ha
+valamit így is kihagytunk? Ami, ha hat a halálozásra és összefügg a
+GDP-vel vagy a nővér-számmal, megint *pont* a confounding problémáját
+hozza be…! Itt jutunk vissza ahhoz a tételmondathoz, amit már az elején
+is láttunk: megfigyeléses adatoknál mindig a fejünk felett lebeg, hogy
+mi van, ha egy confounding-ot okozó változóról megfeledkezünk. Pontosan
+ez tükröződik itt is vissza: ha egy lényeges változót kihagyunk, akkor
+baj lesz, mégpedig ugyanaz a baj, amivel eddig is küzdöttünk.
 
-Úgyhogy ezt használva bepakoljuk az összes változót egy nagy modellbe,
-és abból kiolvassuk az eredményt, azt is, hogy mi az ami befolyásolta a
-halálozást (és mennyire), és azt is, hogy mi az, ami nem:
+Hogy jobban megértsük a problémát, ne fussunk ennyire előre, és nézzük
+meg a kétváltozós helyzetet, mint amilyen a GDP és a nővér-szám példája
+volt. Valaki mondhatja, hogy de hát ezt már megtárgyaltuk, láttuk mi
+lesz a probléma és miért – igen, „filozofikusan elmesélve“
+megtárgyaltuk, de most nézzük meg számszerűen is!
+
+E célból készítsünk megint egy szimulációt: a valóságban most a
+kimenetre két – összefüggő – változó hat, csak épp az egyiket kihagyjuk
+a regresszióból. Mint amikor a GDP és a nővérek száma hat a halálozásra,
+de mi mégis csak a nővérek hatását vizsgáljuk. Mi történik ilyenkor a
+regresszióban bent maradt változó kimutatott hatásával, példánkban a
+nővérekre kimutatott hatással? A piros vonal továbbra is a valódi
+(általunk a szimulációban beállított) értéket jelöli, a fekete görbe
+pedig ugyanúgy a mintákból kapott becslések eloszlása:
+
+``` r
+simbeta <- as.data.table(replicate(1e5, {
+  x1 <- runif(20)
+  x2 <- 1 + 2*x1 + rnorm(20)
+  lm.fit(cbind(1, x1), 1 + 2*x1 + 3*x2 + rnorm(20, 0, 0.5))$coefficients[2]
+}))
+ggplot(simbeta, aes(x = V1)) + geom_density() +
+  geom_vline(xintercept = 2, color = "red") + labs(x = "Becsült hatás", y = "")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+Baj van! A becslések továbbra is ingadoznak, van mintavételi ingadozás
+(ez eddig nem meglepő, láttuk, hogy ez elkerülhetetlen) – csak épp most
+már *egy rossz érték körül* ingadoznak! Átlagosan sem jó az értékük,
+szép szóval élve: torzított a becslésünk. Ezt hívjuk kihagyott változó
+okozta torzításnak.
+
+Fontos rögzíteni, hogy ennek a problémakörnek semmi köze a véletlen
+ingadozáshoz, a konfidenciaintervallum használata semmiféle védelmet nem
+ad ellene.
+
+Valaki megkérdezheti, hogy ez hogyan lehet, hiszen az előbb még azt
+mondtam, hogy „matematikai eszközökkel bebizonyítható“, hogy a kapott
+becslések torzítatlanok. A válasz az, hogy igen, bebizonyítható – *ha*
+bizonyos feltételek teljesülnek. Rögtön el is árulhatom tehát, hogy a
+confounding, a lényeges változó kihagyása épp e feltételek egyikét fogja
+megsérteni. Ezért nem fog ebben az esetben működni ez a bizonyítás, és
+ezért lesz ilyenkor torzított a kapott eredmény.
+
+Valamit nagyon fontos megérteni részleteiben is a confounding problémája
+kapcsán: ha kihagyunk a regresszióból egy lényeges változót, tehát
+olyat, aminek *valójában* van hatása a kimenetre, akkor annak a hatását
+a bentmaradt változók veszik át. (Attól a gyakorlatban nem túl izgalmas
+esettől eltekintve, ha egyik vizsgált változóval sem függ össze a
+kihagyott változó.)
+
+Igazából ez, mint kihagyott változós torzítás tükröződött vissza a fenti
+példában is: ha kihagyjuk a GDP-t, akkor a nővér változó valójában már
+nem *csak* a nővérek hatását fogja mutatni, hanem a nővérek *és* a GDP
+együttes hatását. A nővér változó, legalábbis részben, *átvette* a GDP
+szerepét is! Általánosan megfogalmazva: a vizsgált változóinkra
+kimutatott hatások – sajnos – a nem vizsgált változók hatásait (is)
+tartalmazzák, ha nem vizsgáltunk olyat, ami valójában lényeges.
+
+Bár tényleg csak átfogalmazásról van szó, azért fontos külön is
+említeni, mert egy gyakori tévedés, ha egy nem vizsgált változóról
+automatikusan kijelentjük, hogy nincs hatása. Ez nem csak hogy nem igaz,
+de a helyzet rosszabb: ezt a hatást, ha van neki, sajnos a vizsgált
+változókra szétosztva fogjuk kimutatni…! Ha a társadalmi
+távolságtartásra vonatkozó szokásokra nincs adatunk (hogy mondjak egy
+csakugyan nehezen mérhető változót), akkor nem mondhatjuk, hogy annak
+nincs hatása, de ez még hagyján, az igazi baj, hogy a hatását, ha van
+neki, a többi változóban fogjuk elszámolni, mert azok *átveszik* a
+kimaradt változó hatását. Ha például a déli országokban szorosabbak a
+szociális kontaktusok mint az északiakban, *és* a déliek és az északiak
+között GDP-ben is van eltérés, akkor a szociális távolság hatását
+vidáman ki fogjuk mutatni GDP címszó alatt!
+
+Ugyanennek egy másik tipikus megjelenési formája: belerakjuk a modellbe
+a cukorbetegség gyakoriságát, találunk hatását, és kijelentjük, hogy
+tehát a cukorbetegség elterjedtsége így meg így hat a halálozásra. A
+probléma itt is ugyanaz: a cukorbetegség jól összefügg egy sor másik
+krónikus betegséggel (azaz, amelyik országban több a cukorbeteg, ott
+általában több magas vérnyomásos, a perifériás érbeteg stb.), ezért a
+„cukorbetegség“ változónkkal azok hatását *is* mérjük! Könnyen lehet,
+hogy valójában sokkal inkább egy „krónikus betegségek“ hatást mutattunk
+ki, és nem *konkrétan* a cukorbetegség hatását. Érdemes végiggondolni az
+extrém példát: ha a cukorbetegség és a magas vérnyomás tökéletesen
+egybeesik (azaz valaki vagy mindkettőben szenved vagy egyikben sem),
+akkor nyugodtan előfordulhat, hogy a cukorbetegségnek semmi hatása
+nincs, de mi cukorbetegség címén kimutatjuk a magas vérnyomás hatását.
+Sőt, ennél jóval több is igaz: ebben az esetben *elvileg lehetetlen* a
+két hatás elkülönítése. (Tökéletesen „össze vannak confound-olódva“.)
+Látni fogjuk, hogy valójában akkor sem biztos, hogy könnyű dolgunk van,
+ha nem tökéletesen esnek egybe, de azért elég jól. Felvethető a kérdés,
+hogy akkor miért nem rakjuk bele a modellbe a cukorbetegséget *és* a
+magas vérnyomást? Miért nem rakunk bele tízféle krónikus betegséget,
+hogy biztosra menjünk? Hiszen a regresszió nagy előnye éppen az, hogy
+elkülöníti a hatásokat…! Ez csakugyan így van, nem is fogom cáfolni, de
+más szempontból jelenthet ez gondot.
+
+A problémát szemlélhetjük még tágabb perspektívából. Mondhatjuk, hogy a
+kihagyott változó okozta torzítás legegyszerűbb kezelési megoldása elég
+kézenfekvő: ne hagyjunk ki lényeges változót… A dolog azonban nem ilyen
+egyszerű, két okból sem. Az egyik, kézenfekvő probléma, hogy mi van, ha
+nincs információnk a lényeges változóról? Akár azért, mert nem tudtuk
+begyűjteni az információt, de akár azért is, mert nem is gondoltunk rá,
+hogy be kellene gyűjteni! (Ugye ez a kísérletes vizsgálatok nagy
+előnye!) A másik probléma az, amire az előbb utaltam: még ha ismerjük is
+a lényeges változókat, baj származhat abból, ha nagyon sok van belőlük
+(a minta nagyságához képest). Ezt átvezet minket a modellezési stratégia
+kérdéséhez: ha nagyon sok potenciális magyarázó változónk van, akkor
+hogyan alakítsuk ki a felhasznált modellt?
+
+## A modellezés stratégiája
+
+A valódi feladatokban szinte minden esetben több – potenciális –
+magyarázó változónk van, adott esetben sok. (A potenciális szót azért
+használom, mert a valóságban persze mi magunk sem tudhatjuk, hogy mely
+változó lényeges!) Nem kivétel ez alól a mostani problémánk sem; én 14
+változót gyűjtöttem ki – miközben mindössze 22 országunk van! És a 14 is
+nagyon kényelmesen bővíthető… Mi ilyenkor a teendő? Mely változókat
+használjuk fel a modellünkben? Az előző fejezetünk vége azt sugallja,
+hogy ezen nincs mit gondolkozni, egyszerűen mindig használjuk fel az
+összes potenciális változót és kész. Hiszen amiről nincs információnk,
+azzal persze nincs mit tenni, de a többinél nehogy megkockázatassuk,
+hogy véletlenül lényeges lenne, és mi meg kihagyjuk, úgyhogy inkább
+vonjunk be a modellbe minden változót. De biztos, hogy ez a legjobb,
+amit tehetünk…?
+
+Először is kezdjük azzal, hogy „technikai“ problémát nem jelent az, hogy
+egy regressziós modellbe nem kettő, hanem több magyarázó változót
+pakolunk. Több változó esetén ugyan már nem tudunk olyen ábrát rajzolni,
+mint a síkot tartalmazó a két magyarázó változós esetben, de azt
+megtehetjük, hogy megtartjuk a linearitást, csak kiterjesztve több
+változóra. Ennek akadálya nincsen, sőt, nem is különösebben nehéz, az
+ennek megfelelő matematikai modell ugyanis könnyen felírható bármennyi
+változóval. Regressziót ekkor is végrehajthatunk: felrajzolni ugyan
+ekkor már nem tudjuk, de a fenti értelmű meredekségeket, tehát, hogy a
+vizsgált kimenet hogyan változik, ha egy magyarázó tényezőt változtatunk
+úgy, hogy közben az összes többi változatlan – ezáltal kiszűrjük a
+rajtuk keresztül fellépő confounding-ot – minden további nélkül
+megkapjuk. Ez a lineáris modell; a korábban említett lehetőségek a
+nemlineáris kapcsolatok vizsgálatára szintén átvihetőek többváltozós
+esetre, de ezzel most nem fogunk foglalkozni, nem jelent újdonságot: a
+korábban látott módszerek alkalmazhatóak minden egyes változóra, illetve
+szintén vizsgálhatunk interakciókat.
+
+Hogy megvizsgáljuk a helyzetet, kezdjük azzal a megoldással, ami az
+előbb felvetődött: egyszerűen pakoljuk be az összes változót egy nagy
+modellbe! És abból kiolvassuk az eredményt, azt is, hogy mi az ami
+befolyásolta a halálozást (és mennyire), és azt is, hogy mi az, ami nem:
 
 ``` r
 fit2 <- lm(cumexcessperpop ~ popdensity + overcrowding + urbanization + gdp + popold +
@@ -1242,39 +1331,40 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
 
 |                   | Becsült hatás | 95% CI          | p     |
 |:------------------|--------------:|:----------------|:------|
-| Tengelymetszet    |     3730.0000 | -11800 – 19300  | 0.587 |
-| popdensity        |        1.5000 | -5.85 – 8.85    | 0.645 |
-| overcrowding      |       56.0000 | -46.9 – 159     | 0.239 |
-| urbanization      |       14.9000 | -83.8 – 114     | 0.732 |
-| gdp               |       -0.0213 | -0.139 – 0.0967 | 0.683 |
-| popold            |     -102.0000 | -640 – 435      | 0.666 |
-| obese             |     -195.0000 | -595 – 206      | 0.288 |
-| smoke             |       24.0000 | -176 – 224      | 0.784 |
-| alcohol           |       55.6000 | -250 – 361      | 0.680 |
-| asthma            |     -496.0000 | -1840 – 852     | 0.413 |
-| chrt_angpec       |      -27.6000 | -809 – 754      | 0.936 |
-| diab              |     -105.0000 | -921 – 711      | 0.770 |
-| hblpr             |      167.0000 | -209 – 543      | 0.329 |
-| healthexpenditure |       -0.2830 | -1.57 – 1.01    | 0.621 |
-| nurses            |        2.9800 | -1.55 – 7.51    | 0.164 |
+| Tengelymetszet    |      3740.000 | -11600 – 19100  | 0.583 |
+| popdensity        |         1.460 | -5.81 – 8.73    | 0.649 |
+| overcrowding      |        55.300 | -46.5 – 157     | 0.240 |
+| urbanization      |        15.000 | -82.7 – 113     | 0.728 |
+| gdp               |        -0.021 | -0.138 – 0.0956 | 0.683 |
+| popold            |       -95.300 | -627 – 436      | 0.684 |
+| obese             |      -196.000 | -592 – 200      | 0.281 |
+| smoke             |        22.200 | -175 – 220      | 0.798 |
+| alcohol           |        56.000 | -246 – 358      | 0.675 |
+| asthma            |      -503.000 | -1840 – 831     | 0.402 |
+| chrt_angpec       |       -13.600 | -786 – 759      | 0.968 |
+| diab              |      -106.000 | -913 – 701      | 0.765 |
+| hblpr             |       163.000 | -210 – 535      | 0.336 |
+| healthexpenditure |        -0.279 | -1.56 – 0.999   | 0.622 |
+| nurses            |         2.980 | -1.5 – 7.46     | 0.159 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
-#### A multikollinearitás problémája
+### A multikollinearitás problémája
 
 Az első probléma abból fakad, hogy ezek a magyarázó változók – ahogy azt
 a GDP és a nővér-szám példáján láttuk is – egymással is összefüggenek.
-Ez probléma? Ha empirikusan szeretnénk meghatározni az egyes változók
-szerepét, akkor igen: ahogy arról volt szó, a regresszió azt próbálja
-megbecsülni, hogy mi a helyzet akkor, ha az egyik változó értéke
-rögzített, és csak a másik változik. Igen ám, de ha a magyarázó változók
-összefüggenek egymással, az épp azt jelenti, hogy ha az egyiket
-lerögzítjük, az elég jól meghatározza a másikat is, azaz kicsi lesz
-abban a szóródás. Márpedig kicsi szóródásból nehéz lesz megbecsülni a
-hatást: mikor mondanánk meg szívesebben empirikus alapon, hogy +1 fok
-hőmérséklet hogyan hat a gázfogyasztásra, ha ezer darab -10 és +30 fok
-közötti napról van információnk, vagy ha ezer darab 20 és 21 fok közötti
-napról? Ezt hívjuk a
+Szintén beszéltünk róla, hogy ez még inkább igaz a cukorbetegség és a
+magas vérnyomás változókra. Ez probléma? Ha empirikusan szeretnénk
+meghatározni az egyes változók szerepét, akkor igen: ahogy arról volt
+szó, a regresszió azt próbálja megbecsülni, hogy mi a helyzet akkor, ha
+az egyik változó értéke rögzített, és csak a másik változik. Igen ám, de
+ha a magyarázó változók összefüggenek egymással, az épp azt jelenti,
+hogy ha az egyiket lerögzítjük, az elég jól meghatározza a másikat is,
+azaz kicsi lesz abban a szóródás. Márpedig kicsi szóródásból nehéz lesz
+megbecsülni a hatást: mikor mondanánk meg szívesebben empirikus alapon,
+hogy +1 fok hőmérséklet hogyan hat a gázfogyasztásra, ha ezer darab -10
+és +30 fok közötti napról van információnk, vagy ha ezer darab 20 és 21
+fok közötti napról? Ezt hívjuk a
 [multikollinearitás](https://www.youtube.com/playlist?list=PLqdN24UCw5hk7KefBBleJkE6QpPSBgszh)
 problémájának. Mint ebből is látható, ez a jelenség egyetlen változóra
 vonatkoztatva is ugyanúgy értelmezhető: amiben kicsi a szóródás, annak
@@ -1320,7 +1410,7 @@ lett volna szignifikáns változó, akkor sem biztos, hogy túlságosan
 hihető lenne az eredmény a jelen esetben. Ennek okát fogjuk megnézni a
 következő pontban.
 
-#### A túlilleszkedés problémája
+### A túlilleszkedés problémája
 
 A másik gond, ami akkor jelentkezik, ha a mintamérethez képest túl sok a
 változónk, a túlilleszkedés. Amikor mi egy regressziós modellt
@@ -1390,11 +1480,11 @@ tekintetben, hogy mit jelent a túlilleszkedés, az, hogy a túl komplex
 modell már a zajokat is megragadja, így bár a mintát egyre jobban
 leírja, a sokaságot meg egyre kevésbé.
 
-A jelenséget úgy is meg szokták fogalmazni, hogy az általánosítóképesség
-romlik: ez a kifejezés jelenti azt, hogy a modellnek a mintában látott
-konkrét dolgokból általánosítania kell a sokaság általános
-viselkedésére. Ha azonban már az adott konkrét minta zajait is elkezdi
-leírni, akkor épp ez sérül.
+A jelenséget úgy is meg szokták fogalmazni, hogy az
+*általánosítóképesség* romlik: ez a kifejezés jelenti azt, hogy a
+modellnek a mintában látott konkrét dolgokból általánosítania kell a
+sokaság általános viselkedésére. Ha azonban már az adott konkrét minta
+zajait is elkezdi leírni, akkor épp ez sérül.
 
 A túlilleszkedés abban jelenik (jelenne) meg, hogy bár a modell az
 *adott, konkrét* mintát jól leírja, ha vennénk egy másik, új mintát,
@@ -1459,7 +1549,9 @@ Egy rövid megjegyzés: a mintavételi ingadozás háttérében igazából
 egyszerűen a multikollinearitás van, semmi egyéb varázslat nem történik.
 Hipotetikusan, ha nem multikollineáris változókból (tehát olyanokból,
 amik egyáltalán nem függenek össze a többi változóval) raknánk be
-újabbakat és újabbakat, akkor nem nőne a mintavételi ingadozás.
+újabbakat és újabbakat, akkor nem nőne a mintavételi ingadozás. A fenti
+példa egyébként azért is lett ilyen drámai, mert olyan magyarázó
+változókat használtunk, amelyek nagyon multikollineárisak.
 
 Sok változó hozzáadása jót tesz torzítás szempontjából (kevésbé
 valószínű, hogy kihagyunk lényeges változót), hasonlóképp a sok
