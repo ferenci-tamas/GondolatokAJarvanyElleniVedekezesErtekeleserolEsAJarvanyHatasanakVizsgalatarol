@@ -115,21 +115,21 @@ kezdjük az első kérdéssel. A probléma ennek kapcsán nyilvánvaló: annak
 eldöntéséhez, hogy „jó“ volt-e a járvány kezelése, muszáj valahogy
 definiálni, hogy mit értünk „jó“ alatt. Ezt legtermészetesebben úgy
 lehet megtenni, amit angolul counterfactual, magyarul a – kissé furcsán
-ható – tényellenes szóval szoktak jellemezni: megnézzük, hogy a járvány
-ideális kezelése esetében mi lett volna a kimenet, és ehhez hasonlítjuk
-a tényleges kimenetet. (Ez is mutatja, hogy a kérdés nem triviális:
-lehet olyan helyzet, hogy 10 halott nagyon rossz kezelést jelent és az
-1000 jót – ha az ideális esetben az első helyzetben 1 lett volna, a
-másodikban pedig 999.) Igen ám, de mi az, hogy „ideális kezelés“?
-Amennyiben van időgépünk, akkor ez semmiféle problémát nem jelent:
-visszamegyünk időben, próbálkozunk más döntésekkel, és megkeressük, hogy
-melyik a legjobb. Időgép híján azonban gondban vagyunk. Mihez
-viszonyítsunk? Az egyetlen épkézláb, empirikusan vizsgálható
-viszonyítási pontot az jelenti, hogy *más országokban* mi a helyzet
-(feltéve, hogy nem mindenki pontosan ugyanúgy kezelte a járványt),
-csakhogy ez elég problémás viszonyítási pont: más országok ezernyi,
-milliónyi egyéb tényezőben is eltér(het)nek tőlünk azon túl, hogy
-máshogy kezelték a járványt, mint mi – ha találunk is különbséget a
+ható – tényellentétes szóval szoktak jellemezni: megnézzük, hogy a
+járvány ideális kezelése esetében mi lett volna a kimenet, és ehhez
+hasonlítjuk a tényleges kimenetet. (Ez is mutatja, hogy a kérdés nem
+triviális: lehet olyan helyzet, hogy 10 halott nagyon rossz kezelést
+jelent és az 1000 jót – ha az ideális esetben az első helyzetben 1 lett
+volna, a másodikban pedig 999.) Igen ám, de mi az, hogy „ideális
+kezelés“? Amennyiben van időgépünk, akkor ez semmiféle problémát nem
+jelent: visszamegyünk időben, próbálkozunk más döntésekkel, és
+megkeressük, hogy melyik a legjobb. Időgép híján azonban gondban
+vagyunk. Mihez viszonyítsunk? Az egyetlen épkézláb, empirikusan
+vizsgálható viszonyítási pontot az jelenti, hogy *más országokban* mi a
+helyzet (feltéve, hogy nem mindenki pontosan ugyanúgy kezelte a
+járványt), csakhogy ez elég problémás viszonyítási pont: más országok
+ezernyi, milliónyi egyéb tényezőben is eltér(het)nek tőlünk azon túl,
+hogy máshogy kezelték a járványt, mint mi – ha találunk is különbséget a
 végeredményben, a járvány okozta pusztítás méretében, honnan tudjuk,
 hogy ez mennyiben tudható be az eltérő kezelésnek, és mennyiben az egyéb
 különbségeknek? Ha valahol kevesebb halott van, az azt jelenti, hogy ott
@@ -181,7 +181,7 @@ Ezt a problémát szokták úgy hívni angol szóval, hogy confounding.
 (Angolul nagyon találó kifejezés: szó szerint „egybemosódást“ jelent, és
 valóban arról van szó, hogy a különböző tényezők hatása egybemosódik, a
 több nővér egybemosódik a kevesebb elhízottal. Magyarra leginkább
-„zavaró vátozós hatásként“ szoktak fordítani, csak sajnos ez jóval
+„zavaró változós hatásként“ szoktak fordítani, csak sajnos ez jóval
 nyakatekertebb, mint az angol kifejezés.) Ez egy általános probléma, ami
 akkor jelentkezik, ha adott tényező szerint eltérő csoportokat
 hasonlítunk össze, de azok a csoportok más tényezőkben is el fognak
@@ -192,7 +192,7 @@ miatt. A fenti példából is látható módon leginkább úgy ragadható meg a
 probléma, hogy van egy – vagy több – háttérben lévő változó, a példában
 mondjuk a gazdasági fejlettség, ami *egyszerre* függ össze a vizsgált
 tényezővel (fejlettebb országokban több a nővér) *és* hat a kimenetre
-(fejletebb országokban kevesebb az elhízott, ami szintén csökkenti a
+(fejlettebb országokban kevesebb az elhízott, ami szintén csökkenti a
 halálozást).
 
 A probléma általánosságából adódóan számos más területen fellép,
@@ -432,9 +432,9 @@ továbbfejlesztési lehetőségek megfogalmazását. Ha valakit ez a része nem
 érdekel a kérdésnek, bátran ugorja át a szürke hátterű kódokat és e
 fejezet hátralevő részét.
 
-A számítások `R` statisztikai programnyelven készültek, 4.1.2-es verziót
+A számítások `R` statisztikai programnyelven készültek, 4.2.0-es verziót
 használva. Felhasználtam a `data.table` (1.14.2-es verzió) és `ggplot2`
-(3.3.5-es verzió) csomagokat.
+(3.3.6-es verzió) csomagokat.
 
 A kimeneti adat, azaz a többlethalálozási számok forrása a
 ‘Többlethalálozási adatok európai összevetésben’ című
@@ -532,28 +532,28 @@ knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 
 | geo | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure |
 |:----|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|
-| AT  |          0 | Austria     |          1799.4 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
-| BE  |          0 | Belgium     |          2040.6 |      377.3 |          5.7 |         29.5 | 36925.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
-| BG  |          0 | Bulgaria    |          8373.6 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
-| CY  |          0 | Cyprus      |           852.5 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
-| CZ  |          0 | Czechia     |          3848.5 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
-| DE  |          0 | Germany     |           946.1 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
-| DK  |          0 | Denmark     |           319.0 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
-| EE  |          0 | Estonia     |          2218.2 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
-| EL  |          0 | Greece      |          2307.6 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
-| ES  |          0 | Spain       |          1805.8 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
-| HR  |          0 | Croatia     |          3794.2 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
-| HU  |          0 | Hungary     |          3400.3 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
-| IT  |          0 | Italy       |          2736.0 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
-| LT  |          0 | Lithuania   |          4769.5 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
-| LU  |          0 | Luxembourg  |           458.8 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
-| LV  |          0 | Latvia      |          3137.5 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
-| NL  |          0 | Netherlands |          1591.7 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
-| NO  |          0 | Norway      |           512.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
-| PL  |          0 | Poland      |          4346.1 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
-| RO  |          0 | Romania     |          6111.2 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
-| SE  |          0 | Sweden      |          1471.9 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
-| SI  |          0 | Slovenia    |          2210.7 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
+| AT  |          0 | Austria     |          1806.7 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
+| BE  |          0 | Belgium     |          2028.8 |      377.3 |          5.7 |         29.5 | 36925.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
+| BG  |          0 | Bulgaria    |          8376.3 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
+| CY  |          0 | Cyprus      |           852.0 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
+| CZ  |          0 | Czechia     |          3852.2 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
+| DE  |          0 | Germany     |           964.2 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
+| DK  |          0 | Denmark     |           309.1 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
+| EE  |          0 | Estonia     |          2223.3 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
+| EL  |          0 | Greece      |          2302.1 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
+| ES  |          0 | Spain       |          1705.1 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
+| HR  |          0 | Croatia     |          3798.8 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
+| HU  |          0 | Hungary     |          3542.7 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
+| IT  |          0 | Italy       |          2736.1 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
+| LT  |          0 | Lithuania   |          4783.8 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
+| LU  |          0 | Luxembourg  |           436.1 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
+| LV  |          0 | Latvia      |          3120.4 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
+| NL  |          0 | Netherlands |          1593.3 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
+| NO  |          0 | Norway      |           504.9 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
+| PL  |          0 | Poland      |          4347.4 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
+| RO  |          0 | Romania     |          6119.1 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
+| SE  |          0 | Sweden      |          1468.5 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
+| SI  |          0 | Slovenia    |          2229.9 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -836,8 +836,8 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit)[-1], 3),
 
 |        | Becsült hatás | 95% CI            | p     |
 |:-------|--------------:|:------------------|:------|
-| gdp    |       -0.0742 | -0.146 – -0.00251 | 0.043 |
-| nurses |       -1.1400 | -3.9 – 1.62       | 0.400 |
+| gdp    |       -0.0752 | -0.147 – -0.00328 | 0.041 |
+| nurses |       -1.1100 | -3.88 – 1.66      | 0.411 |
 
 Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy,
 hogy a nővérek száma közben nem változik, akkor 0,0742-vel megy lejjebb
@@ -1331,21 +1331,21 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
 
 |                   | Becsült hatás | 95% CI          | p     |
 |:------------------|--------------:|:----------------|:------|
-| Tengelymetszet    |      3740.000 | -11600 – 19100  | 0.583 |
-| popdensity        |         1.460 | -5.81 – 8.73    | 0.649 |
-| overcrowding      |        55.300 | -46.5 – 157     | 0.240 |
-| urbanization      |        15.000 | -82.7 – 113     | 0.728 |
-| gdp               |        -0.021 | -0.138 – 0.0956 | 0.683 |
-| popold            |       -95.300 | -627 – 436      | 0.684 |
-| obese             |      -196.000 | -592 – 200      | 0.281 |
-| smoke             |        22.200 | -175 – 220      | 0.798 |
-| alcohol           |        56.000 | -246 – 358      | 0.675 |
-| asthma            |      -503.000 | -1840 – 831     | 0.402 |
-| chrt_angpec       |       -13.600 | -786 – 759      | 0.968 |
-| diab              |      -106.000 | -913 – 701      | 0.765 |
-| hblpr             |       163.000 | -210 – 535      | 0.336 |
-| healthexpenditure |        -0.279 | -1.56 – 0.999   | 0.622 |
-| nurses            |         2.980 | -1.5 – 7.46     | 0.159 |
+| Tengelymetszet    |      3700.000 | -11900 – 19300  | 0.592 |
+| popdensity        |         1.610 | -5.76 – 8.99    | 0.621 |
+| overcrowding      |        55.000 | -48.2 – 158     | 0.248 |
+| urbanization      |        13.400 | -85.5 – 112     | 0.757 |
+| gdp               |        -0.021 | -0.139 – 0.0972 | 0.687 |
+| popold            |       -97.000 | -636 – 442      | 0.683 |
+| obese             |      -199.000 | -600 – 203      | 0.280 |
+| smoke             |        26.200 | -174 – 227      | 0.766 |
+| alcohol           |        48.900 | -258 – 356      | 0.717 |
+| asthma            |      -481.000 | -1830 – 871     | 0.428 |
+| chrt_angpec       |       -24.800 | -808 – 759      | 0.942 |
+| diab              |      -110.000 | -928 – 708      | 0.760 |
+| hblpr             |       169.000 | -209 – 546      | 0.326 |
+| healthexpenditure |        -0.291 | -1.59 – 1       | 0.611 |
+| nurses            |         2.950 | -1.6 – 7.49     | 0.169 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
@@ -1899,14 +1899,33 @@ azon is működik-e a szabály…!
 
 De mennyire „kényelmetlen tudomány“ helyzet a mi mostani kérdésünk?
 
-Egyrészt megpróbálhatjuk növelni a mintanagyságot. Lejjebb tudunk menni
-megyei szintre? Esetleg járásira? Ez csábító lehetőség, de két nehézség
-lesz. Az egyik az adatokhoz kapcsolódik: van adatunk arra, hogy *megyei*
-szinten hány nővér jut egy betegre? Egyáltalán, értelmezhető ez a mutató
-megyei szinten? (Pláne járásin!) A másik gond, hogy sok változó van,
-amiben az országon *belüli* adatokban nem lesz nagy szóródás (például a
-bevezetett intézkedések akár teljesen egységesek is lehetnek), ami
-nehezíti a becslésüket, ahogy a multikollinearitásnál láttuk is.
+Egyrészt megpróbálhatjuk növelni a mintanagyságot. Ennek két
+csapásiránya lehetséges, az egyik, hogy még több országot vonunk be.
+Elvégre a világon azért van több ország, mint a most vizsgált 22…! Igen
+ám, de itt jön az adatminőség kérdése: szinte biztos, hogy az afrikai,
+dél-amerikai, ázsiai országok nagy részére nem érhető el olyan
+pontosságú, megbízhatóságú adat, mint az európaiakra, még csak
+közelítőleg sem, sőt, jó eséllyel egyáltalán nem érhetőek el azok az
+adatok, amikre itt szükségünk lenne az elemzéshez. (Azt se felejtsük el,
+hogy egy adott ország teljeskörű elemezhetőségéhez az kell, hogy
+*mindegyik* változója meglegyen!) De még ha ettől el is tekintünk, akkor
+is ott van az a probléma, hogy az európai mivolt, noha itt is vannak
+hatalmas különbségek, mondjuk Bulgária és Norvégia között, de azért
+mégis jelent egy erős homogenitást, amit nem biztos, hogy érdemes
+feladni. Egyrészt a confounding miatt, hiszen a homogenitás azt is
+jelenti, hogy sokféle, potenciálisan a kimenetet, a halálozást is
+befolyásoló eltérés nem jelenik meg, másrészt mert az extrém eltérő
+országok esetében, Ruandától Svájcig, már az sem biztos, hogy a
+halálozás oksági magyarázatai, mechanizmusa is azonos. A másik
+csapásirány, hogy maradunk az európai országoknál, de finomítjuk a
+térbeli felbontást: lejjebb tudunk menni megyei szintre? Esetleg
+járásira? Ez csábító lehetőség, de két nehézség lesz. Az egyik itt is az
+adatokhoz kapcsolódik: van adatunk arra, hogy *megyei* szinten hány
+nővér jut egy betegre? Egyáltalán, értelmezhető ez a mutató megyei
+szinten? (Pláne járásin!) A másik gond, hogy sok változó van, amiben az
+országon *belüli* adatokban nem lesz nagy szóródás (például a bevezetett
+intézkedések akár teljesen egységesek is lehetnek), ami nehezíti a
+becslésüket, ahogy a multikollinearitásnál láttuk is.
 
 Kísérletezhetünk azzal is, hogy idődimenziót is adunk a vizsgálatnak,
 tehát nem egyben vizsgáljuk az egész járványt, hanem időszakonként. Ez
