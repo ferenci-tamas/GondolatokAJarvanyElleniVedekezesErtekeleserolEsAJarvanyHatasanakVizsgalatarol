@@ -1,7 +1,8 @@
 ---
 title: Gondolatok a járvány elleni védekezés értékeléséről, és a járvány hatásának
   vizsgálatáról
-author: "Ferenci Tamás"
+author:
+  - Ferenci Tamás (tamas.ferenci@medstat.hu)
 lang: hu
 output:
   github_document:
