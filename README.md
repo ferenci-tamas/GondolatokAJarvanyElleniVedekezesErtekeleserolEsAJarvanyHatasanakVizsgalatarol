@@ -3,29 +3,48 @@ hatásának vizsgálatáról
 ================
 Ferenci Tamás (<tamas.ferenci@medstat.hu>)
 
--   [Egy gondolkodási keret, és a confounding mindent átható
-    problémája](#egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája)
--   [Egy előkészítő pont: kimenet
-    megválasztása](#egy-előkészítő-pont-kimenet-megválasztása)
--   [Az elméleti megalapozás: kauzális diagram egy járvány
-    hatására](#az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására)
--   [Technikai részletek](#technikai-részletek)
--   [Az empirikus vizsgálat lehetőségei és nehézségei: a confounding
-    problémája](#az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája)
--   [A regresszió eszköze](#a-regresszió-eszköze)
-    -   [A mintavételi ingadozás
-        fogalma](#a-mintavételi-ingadozás-fogalma)
-    -   [A függvényforma kérdése](#a-függvényforma-kérdése)
-    -   [A kihagyott változós torzítás](#a-kihagyott-változós-torzítás)
--   [A modellezés stratégiája](#a-modellezés-stratégiája)
-    -   [A multikollinearitás
-        problémája](#a-multikollinearitás-problémája)
-    -   [A túlilleszkedés problémája](#a-túlilleszkedés-problémája)
-    -   [A torzítás-variancia dilemma](#a-torzítás-variancia-dilemma)
-    -   [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
-    -   [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
--   [Záró gondolatok](#záró-gondolatok)
--   [Ajánlott olvasmányok](#ajánlott-olvasmányok)
+- <a
+  href="#egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája"
+  id="toc-egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája">Egy
+  gondolkodási keret, és a confounding mindent átható problémája</a>
+- <a href="#egy-előkészítő-pont-kimenet-megválasztása"
+  id="toc-egy-előkészítő-pont-kimenet-megválasztása">Egy előkészítő pont:
+  kimenet megválasztása</a>
+- <a href="#az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására"
+  id="toc-az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására">Az
+  elméleti megalapozás: kauzális diagram egy járvány hatására</a>
+- <a href="#technikai-részletek" id="toc-technikai-részletek">Technikai
+  részletek</a>
+- <a
+  href="#az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája"
+  id="toc-az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája">Az
+  empirikus vizsgálat lehetőségei és nehézségei: a confounding
+  problémája</a>
+- <a href="#a-regresszió-eszköze" id="toc-a-regresszió-eszköze">A
+  regresszió eszköze</a>
+  - <a href="#a-mintavételi-ingadozás-fogalma"
+    id="toc-a-mintavételi-ingadozás-fogalma">A mintavételi ingadozás
+    fogalma</a>
+  - <a href="#a-függvényforma-kérdése" id="toc-a-függvényforma-kérdése">A
+    függvényforma kérdése</a>
+  - <a href="#a-kihagyott-változós-torzítás"
+    id="toc-a-kihagyott-változós-torzítás">A kihagyott változós torzítás</a>
+- <a href="#a-modellezés-stratégiája" id="toc-a-modellezés-stratégiája">A
+  modellezés stratégiája</a>
+  - <a href="#a-multikollinearitás-problémája"
+    id="toc-a-multikollinearitás-problémája">A multikollinearitás
+    problémája</a>
+  - <a href="#a-túlilleszkedés-problémája"
+    id="toc-a-túlilleszkedés-problémája">A túlilleszkedés problémája</a>
+  - <a href="#a-torzítás-variancia-dilemma"
+    id="toc-a-torzítás-variancia-dilemma">A torzítás-variancia dilemma</a>
+  - <a href="#a-változószelekció-kérdésköre"
+    id="toc-a-változószelekció-kérdésköre">A változószelekció kérdésköre</a>
+  - <a href="#a-kényelmetlen-tudomány" id="toc-a-kényelmetlen-tudomány">A
+    kényelmetlen tudomány</a>
+- <a href="#záró-gondolatok" id="toc-záró-gondolatok">Záró gondolatok</a>
+- <a href="#ajánlott-olvasmányok" id="toc-ajánlott-olvasmányok">Ajánlott
+  olvasmányok</a>
 
 *“Ne fogjon senki könnyelműen*  
 *A húrok pengetésihez!*  
@@ -51,14 +70,14 @@ járvány’’ kitétel alatt a COVID-19 járványt értem, de az elmondottak
 lényegében teljesen általánosak, és más esetre is alkalmazhatóak.)
 Jelesül:
 
--   Hogyan értékeljük egy ország járványügyi intézkedéseit? Megfelelő
-    lépéseket hoztak és a kellő időben? Jó volt a járványügyi rendszer,
-    a tesztelés, a korlátozó intézkedések, a tájékoztatás vagy lehetett
-    volna jobban is eljárni?
--   Mi hat arra, hogy a járvány egy adott országban mekkora pusztítást
-    végez? Miért van az, hogy valahol ez nagyobb, máshol viszont kisebb,
-    adott esetben akár jóval kisebb? Mik a közreható tényezők, és
-    melyiknek mekkora a szerepe?
+- Hogyan értékeljük egy ország járványügyi intézkedéseit? Megfelelő
+  lépéseket hoztak és a kellő időben? Jó volt a járványügyi rendszer, a
+  tesztelés, a korlátozó intézkedések, a tájékoztatás vagy lehetett
+  volna jobban is eljárni?
+- Mi hat arra, hogy a járvány egy adott országban mekkora pusztítást
+  végez? Miért van az, hogy valahol ez nagyobb, máshol viszont kisebb,
+  adott esetben akár jóval kisebb? Mik a közreható tényezők, és
+  melyiknek mekkora a szerepe?
 
 Mostani írásom egyik első állítása az lesz, hogy a két kérdés(csoport)
 valójában szorosan összefügg, sőt, lényegében ugyanarról a
@@ -432,9 +451,9 @@ továbbfejlesztési lehetőségek megfogalmazását. Ha valakit ez a része nem
 érdekel a kérdésnek, bátran ugorja át a szürke hátterű kódokat és e
 fejezet hátralevő részét.
 
-A számítások `R` statisztikai programnyelven készültek, 4.2.0-es verziót
-használva. Felhasználtam a `data.table` (1.14.2-es verzió) és `ggplot2`
-(3.3.6-es verzió) csomagokat.
+A számítások `R` statisztikai programnyelven készültek, 4.2.2-es verziót
+használva. Felhasználtam a `data.table` (1.14.6-es verzió) és `ggplot2`
+(3.4.0-es verzió) csomagokat.
 
 A kimeneti adat, azaz a többlethalálozási számok forrása a
 ‘Többlethalálozási adatok európai összevetésben’ című
@@ -518,11 +537,11 @@ A változók sora – mint a fenti leírás is mutatta – végeláthatatlanul
 bővíthető, ez pusztán egy illusztrációs kiindulópont.
 
 A vizsgált országok körét meghatározza az a tény, hogy mely országokra
-van információnk; végeredményben 22 ország lesz az adatbázisunkban;
+van információnk; végeredményben 23 ország lesz az adatbázisunkban;
 angol nevükkel ezek a következőek: Austria, Belgium, Bulgaria, Cyprus,
 Czechia, Germany, Denmark, Estonia, Greece, Spain, Croatia, Hungary,
-Italy, Lithuania, Luxembourg, Latvia, Netherlands, Norway, Poland,
-Romania, Sweden, Slovenia.
+Italy, Lithuania, Luxembourg, Latvia, Malta, Netherlands, Norway,
+Poland, Romania, Sweden, Slovenia.
 
 A begyűjtött adataink:
 
@@ -530,30 +549,31 @@ A begyűjtött adataink:
 knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
 ```
 
-| geo | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr | healthexpenditure |
-|:----|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|------------------:|
-| AT  |          0 | Austria     |          1806.7 |      107.6 |         15.1 |         31.0 | 39519.5 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |            4671.6 |
-| BE  |          0 | Belgium     |          2030.8 |      377.3 |          5.7 |         29.5 | 36925.2 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |            4418.1 |
-| BG  |          0 | Bulgaria    |          8376.3 |       63.4 |         41.1 |         44.8 | 16665.6 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |             625.6 |
-| CY  |          0 | Cyprus      |           852.0 |       95.7 |          2.2 |         51.8 | 28803.0 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |            1771.2 |
-| CZ  |          0 | Czechia     |          3854.4 |      138.2 |         15.4 |         30.0 | 29155.7 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |            1644.1 |
-| DE  |          0 | Germany     |           964.2 |      235.2 |          7.8 |         36.3 | 37860.6 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |            4855.3 |
-| DK  |          0 | Denmark     |           309.1 |      138.5 |         10.0 |         37.6 | 39916.4 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |            5355.1 |
-| EE  |          0 | Estonia     |          2223.3 |       30.5 |         13.9 |         61.0 | 25789.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |            1426.0 |
-| EL  |          0 | Greece      |          2298.4 |       82.4 |         28.7 |         36.9 | 20651.3 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |            1340.8 |
-| ES  |          0 | Spain       |          1705.1 |       93.8 |          5.9 |         49.6 | 28382.8 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |            2411.7 |
-| HR  |          0 | Croatia     |          3795.9 |       72.8 |         38.5 |         29.6 | 20768.9 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |             930.6 |
-| HU  |          0 | Hungary     |          3535.2 |      107.1 |         20.3 |         32.8 | 22800.1 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |             949.4 |
-| IT  |          0 | Italy       |          2742.8 |      201.5 |         28.3 |         35.3 | 30189.0 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |            2599.2 |
-| LT  |          0 | Lithuania   |          5037.0 |       44.6 |         22.9 |         43.2 | 26219.1 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |            1223.8 |
-| LU  |          0 | Luxembourg  |           441.3 |      239.8 |          7.1 |         19.6 | 79634.8 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |            5502.1 |
-| LV  |          0 | Latvia      |          3262.1 |       30.2 |         42.2 |         43.8 | 21697.3 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |            1045.6 |
-| NL  |          0 | Netherlands |          1603.4 |      507.3 |          4.8 |         56.2 | 40140.0 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |            4748.7 |
-| NO  |          0 | Norway      |           508.3 |       17.3 |          6.1 |         28.9 | 45442.3 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |            7126.7 |
-| PL  |          0 | Poland      |          4347.4 |      123.6 |         37.6 |         35.0 | 22740.6 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |             906.1 |
-| RO  |          0 | Romania     |          6124.8 |       82.7 |         45.8 |         28.8 | 21674.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |             661.3 |
-| SE  |          0 | Sweden      |          1474.8 |       25.2 |         15.6 |         40.3 | 37143.3 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |            5041.8 |
-| SI  |          0 | Slovenia    |          2233.0 |      103.7 |         11.6 |         19.5 | 27659.9 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |            1975.2 |
+| geo | cumexpected | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr |
+|:----|------------:|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|
+| AT  |    153601.1 |          0 | Austria     |          1272.3 |      107.6 |         15.1 |         31.0 | 39402.0 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |
+| BE  |    201196.8 |          0 | Belgium     |          1647.8 |      377.3 |          5.7 |         29.5 | 36816.8 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |
+| BG  |    193388.5 |          0 | Bulgaria    |          8848.1 |       63.4 |         41.1 |         44.8 | 16606.9 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |
+| CY  |     11278.9 |          0 | Cyprus      |          1254.8 |       95.7 |          2.2 |         51.8 | 29056.3 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |
+| CZ  |    204276.7 |          0 | Czechia     |          4235.5 |      138.2 |         15.4 |         30.0 | 29177.8 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |
+| DE  |   1824132.1 |          0 | Germany     |           276.0 |      235.2 |          7.8 |         36.3 | 37869.9 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |
+| DK  |     95939.2 |          0 | Denmark     |          1182.5 |      138.5 |         10.0 |         37.6 | 39510.7 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |
+| EE  |     28278.5 |          0 | Estonia     |          2796.5 |       30.5 |         13.9 |         61.0 | 25776.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |
+| EL  |    226841.4 |          0 | Greece      |          2314.2 |       82.4 |         28.7 |         36.9 | 20556.2 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |
+| ES  |    792276.2 |          0 | Spain       |          1527.1 |       93.8 |          5.9 |         49.6 | 28460.3 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |
+| HR  |     93873.6 |          0 | Croatia     |          4255.3 |       72.8 |         38.5 |         29.6 | 20831.3 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |
+| HU  |    236210.1 |          0 | Hungary     |          3913.4 |      107.1 |         20.3 |         32.8 | 22854.2 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |
+| IT  |   1175831.7 |          0 | Italy       |          2740.3 |      201.5 |         28.3 |         35.3 | 30217.9 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |
+| LT  |     68968.6 |          0 | Lithuania   |          5648.8 |       44.6 |         22.9 |         43.2 | 26359.0 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |
+| LU  |      7975.9 |          0 | Luxembourg  |           640.3 |      239.8 |          7.1 |         19.6 | 78681.4 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |
+| LV  |     50790.1 |          0 | Latvia      |          4218.7 |       30.2 |         42.2 |         43.8 | 21732.4 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |
+| MT  |      6826.4 |          0 | Malta       |          1322.7 |     1595.1 |          3.7 |         89.6 | 32412.8 |   18.7 |  28.7 |  25.1 |     7.9 |    6.0 |         2.4 |  7.5 |  18.1 |
+| NL  |    292930.1 |          0 | Netherlands |          1164.5 |      507.3 |          4.8 |         56.2 | 39724.3 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |
+| NO  |     73023.2 |          0 | Norway      |           462.5 |       17.3 |          6.1 |         28.9 | 46128.8 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |
+| PL  |    754597.1 |          0 | Poland      |          4591.1 |      123.6 |         37.6 |         35.0 | 22823.8 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |
+| RO  |    468459.3 |          0 | Romania     |          6104.9 |       82.7 |         45.8 |         28.8 | 21791.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |
+| SE  |    158680.6 |          0 | Sweden      |          1306.2 |       25.2 |         15.6 |         40.3 | 37214.5 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |
+| SI  |     38676.3 |          0 | Slovenia    |          2274.8 |      103.7 |         11.6 |         19.5 | 27761.1 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -836,8 +856,8 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit)[-1], 3),
 
 |        | Becsült hatás | 95% CI            | p     |
 |:-------|--------------:|:------------------|:------|
-| gdp    |       -0.0757 | -0.148 – -0.00325 | 0.041 |
-| nurses |       -1.1200 | -3.91 – 1.67      | 0.412 |
+| gdp    |       -0.0831 | -0.163 – -0.00362 | 0.041 |
+| nurses |       -1.3600 | -4.49 – 1.76      | 0.374 |
 
 Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy,
 hogy a nővérek száma közben nem változik, akkor 0,0742-vel megy lejjebb
@@ -912,6 +932,9 @@ for(i in 1:nSim)
                                   yend = 1 + 2*(1.2)), inherit.aes = FALSE, color = "red",
                        size = 1.2))
 ```
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
 
 ![](README_files/figure-gfm/unnamed-chunk-11-.gif)<!-- -->
 
@@ -1329,23 +1352,23 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
                                                            names(coef(fit2))[-1])))
 ```
 
-|                   | Becsült hatás | 95% CI          | p     |
-|:------------------|--------------:|:----------------|:------|
-| Tengelymetszet    |     3580.0000 | -11700 – 18800  | 0.596 |
-| popdensity        |        1.7500 | -5.47 – 8.97    | 0.585 |
-| overcrowding      |       53.9000 | -47.2 – 155     | 0.248 |
-| urbanization      |       14.5000 | -82.4 – 111     | 0.735 |
-| gdp               |       -0.0191 | -0.135 – 0.0967 | 0.708 |
-| popold            |      -85.7000 | -614 – 442      | 0.713 |
-| obese             |     -205.0000 | -598 – 188      | 0.258 |
-| smoke             |       19.7000 | -176 – 216      | 0.819 |
-| alcohol           |       40.5000 | -260 – 341      | 0.759 |
-| asthma            |     -516.0000 | -1840 – 808     | 0.388 |
-| chrt_angpec       |      -35.8000 | -803 – 731      | 0.915 |
-| diab              |     -123.0000 | -923 – 678      | 0.728 |
-| hblpr             |      185.0000 | -184 – 555      | 0.274 |
-| healthexpenditure |       -0.2840 | -1.55 – 0.985   | 0.613 |
-| nurses            |        2.9800 | -1.47 – 7.43    | 0.157 |
+|                   | Becsült hatás | 95% CI         | p     |
+|:------------------|--------------:|:---------------|:------|
+| Tengelymetszet    |     3320.0000 | -10000 – 16700 | 0.581 |
+| popdensity        |        0.6410 | -3.28 – 4.56   | 0.716 |
+| overcrowding      |       63.7000 | -13.9 – 141    | 0.095 |
+| urbanization      |       23.9000 | -52.2 – 100    | 0.490 |
+| gdp               |       -0.0147 | -0.118 – 0.089 | 0.753 |
+| popold            |     -142.0000 | -605 – 321     | 0.499 |
+| obese             |     -166.0000 | -485 – 153     | 0.265 |
+| smoke             |       42.2000 | -127 – 212     | 0.582 |
+| alcohol           |       88.3000 | -157 – 333     | 0.430 |
+| asthma            |     -219.0000 | -1280 – 841    | 0.646 |
+| chrt_angpec       |      -20.6000 | -630 – 589     | 0.940 |
+| diab              |     -328.0000 | -991 – 336     | 0.288 |
+| hblpr             |      189.0000 | -128 – 506     | 0.206 |
+| healthexpenditure |       -0.6060 | -1.66 – 0.443  | 0.220 |
+| nurses            |        3.2300 | -0.547 – 7.01  | 0.084 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 
@@ -1722,21 +1745,21 @@ változók kiválogatására, ami nem használja fel a kimenet értékeit.
 
 Tehát néhány jó módszer:
 
--   Pusztán a magyarázó változók struktúráját, azaz egymás közti
-    kapcsolataikat vizsgálva elhagyni olyanokat, amik redundánsak (azaz
-    a bennük lévő információk más magyarázó változókban is jórészt
-    megvannak).
--   Pusztán a magyarázó változók struktúráját, azaz egymás közti
-    kapcsolataikat vizsgálva új magyarázó változókat képezni
-    összevonással (erre vannak statisztikai módszerek).
--   Nem statisztikai, hanem szakmai alapon képezve összevonásokat. Egy
-    tipikus példa, hogy az „alany cukorbeteg“, az „alanynak magas
-    vérnyomása van“, az „alanynak perifériás érbetegsége van“ változók
-    helyett berakunk egy darab az „alanynak krónikus betegsége van“
-    változót. Igen, jobb lenne megmondani, hogy *külön-külön* mi a
-    hatása a cukorbetegségnek, a magas vérnyomásnak és a perifériás
-    érbetegségnek, de ha egyszerűen nincs elég nagy mintánk, akkor el
-    kell fogadni, hogy erre nem leszünk képesek.
+- Pusztán a magyarázó változók struktúráját, azaz egymás közti
+  kapcsolataikat vizsgálva elhagyni olyanokat, amik redundánsak (azaz a
+  bennük lévő információk más magyarázó változókban is jórészt
+  megvannak).
+- Pusztán a magyarázó változók struktúráját, azaz egymás közti
+  kapcsolataikat vizsgálva új magyarázó változókat képezni összevonással
+  (erre vannak statisztikai módszerek).
+- Nem statisztikai, hanem szakmai alapon képezve összevonásokat. Egy
+  tipikus példa, hogy az „alany cukorbeteg“, az „alanynak magas
+  vérnyomása van“, az „alanynak perifériás érbetegsége van“ változók
+  helyett berakunk egy darab az „alanynak krónikus betegsége van“
+  változót. Igen, jobb lenne megmondani, hogy *külön-külön* mi a hatása
+  a cukorbetegségnek, a magas vérnyomásnak és a perifériás
+  érbetegségnek, de ha egyszerűen nincs elég nagy mintánk, akkor el kell
+  fogadni, hogy erre nem leszünk képesek.
 
 A végére hagytam a legjobb jó módszert: szakmai alapon, tárgyterületi
 ismereteket használva megpróbálni szűrni a felhasznált változók körét.
@@ -1746,40 +1769,40 @@ visszatérek később.)
 
 Nézzünk most néhány rossz módszert:
 
--   Megnézni, hogy melyik potenciális magyarázó változó függ össze
-    *önmagában* (kétváltozósan) az eredményváltozóval, és csak azokat
-    belerakni a többváltozós modellbe. Ez a módszer [teljesen
-    hibás](https://www.jclinepi.com/article/0895-4356(96)00025-X/pdf).
-    Az még csak hagyján, hogy az előzetes szűrés is egy statisztikai
-    teszttel történik, ami nem tökéletes (a valóságban az
-    eredményváltozóval nem összefüggőre is mondhatja, hogy összefüggő,
-    vagy, ami a mi mostani szempontunkból még nagyobb probléma, pont
-    fordítva), de az igazi gond, hogy nem veszi figyelembe a
-    többváltozós struktúrát: mi van, ha egy változó csak az *után* válik
-    lényegessé, ha más változók már bent vannak a modellben?!
--   Megcsinálni a többváltozós modellt, majd elhagyni az inszignifikáns
-    változókat. Ez a módszer [szintén
-    hibás](https://www.tandfonline.com/doi/abs/10.1080/00031305.1983.10482729).
-    A helyzet ugyanaz pepitában: egyrészt az, hogy „inszignifikáns“, nem
-    ugyanaz, mint hogy biztosan nulla a hatása: az inszignifikanciát is
-    egy statisztikai teszttel ítéljük meg. Ha ez téved, márpedig ez
-    előfordulhat, és lényeges változót hagyunk el, akkor épp a kihagyott
-    változó okozta torzítást fogjuk előhozni! Épp emiatt a dolog
-    ráadásul filozófiailag is érthetetlen, hiszen attól még, mert egy
-    változó inszignifikáns, nagyon is segíthet a többi paraméterét
-    helyes értékre beállítani.
--   Pláne
-    [horrorisztikusak](https://journalofbigdata.springeropen.com/articles/10.1186/s40537-018-0143-6)
-    azok a módszerek, amelyek oda-vissza veszik be és dobálják ki a
-    változókat, keresve a valamilyen mutató szerinti legjobbat
-    („stepwise regresszió“). Ez lényegében felturbózza az előbbi
-    módszerek hibáit: szinte garantáltan túlilleszkedett modellre vezet,
-    aminek praktikusan minden létező paramétere [torzított/hibás
-    lesz](https://stats.stackexchange.com/a/20856).
--   Amire kevesebben gondolnak, pedig ugyanaz a helyzet, amikor a kutató
-    az előbbit „kézzel“ hozza létre: össze-vissza keresgél, kidobva és
-    bevonva változókat, próbálkozva különböző modellekkel, hogy mi a
-    legjobb.
+- Megnézni, hogy melyik potenciális magyarázó változó függ össze
+  *önmagában* (kétváltozósan) az eredményváltozóval, és csak azokat
+  belerakni a többváltozós modellbe. Ez a módszer [teljesen
+  hibás](https://www.jclinepi.com/article/0895-4356(96)00025-X/pdf). Az
+  még csak hagyján, hogy az előzetes szűrés is egy statisztikai teszttel
+  történik, ami nem tökéletes (a valóságban az eredményváltozóval nem
+  összefüggőre is mondhatja, hogy összefüggő, vagy, ami a mi mostani
+  szempontunkból még nagyobb probléma, pont fordítva), de az igazi gond,
+  hogy nem veszi figyelembe a többváltozós struktúrát: mi van, ha egy
+  változó csak az *után* válik lényegessé, ha más változók már bent
+  vannak a modellben?!
+- Megcsinálni a többváltozós modellt, majd elhagyni az inszignifikáns
+  változókat. Ez a módszer [szintén
+  hibás](https://www.tandfonline.com/doi/abs/10.1080/00031305.1983.10482729).
+  A helyzet ugyanaz pepitában: egyrészt az, hogy „inszignifikáns“, nem
+  ugyanaz, mint hogy biztosan nulla a hatása: az inszignifikanciát is
+  egy statisztikai teszttel ítéljük meg. Ha ez téved, márpedig ez
+  előfordulhat, és lényeges változót hagyunk el, akkor épp a kihagyott
+  változó okozta torzítást fogjuk előhozni! Épp emiatt a dolog ráadásul
+  filozófiailag is érthetetlen, hiszen attól még, mert egy változó
+  inszignifikáns, nagyon is segíthet a többi paraméterét helyes értékre
+  beállítani.
+- Pláne
+  [horrorisztikusak](https://journalofbigdata.springeropen.com/articles/10.1186/s40537-018-0143-6)
+  azok a módszerek, amelyek oda-vissza veszik be és dobálják ki a
+  változókat, keresve a valamilyen mutató szerinti legjobbat („stepwise
+  regresszió“). Ez lényegében felturbózza az előbbi módszerek hibáit:
+  szinte garantáltan túlilleszkedett modellre vezet, aminek praktikusan
+  minden létező paramétere [torzított/hibás
+  lesz](https://stats.stackexchange.com/a/20856).
+- Amire kevesebben gondolnak, pedig ugyanaz a helyzet, amikor a kutató
+  az előbbit „kézzel“ hozza létre: össze-vissza keresgél, kidobva és
+  bevonva változókat, próbálkozva különböző modellekkel, hogy mi a
+  legjobb.
 
 Ha valaki nem hiszi el a fentieket nekem (nagyon jól teszi!), akkor
 statisztikai programnyelven maga is leszimulálhatja, és saját kezűleg
@@ -1885,17 +1908,17 @@ ez az „uncomfortable science“, a kényelmetlen tudomány.
 
 A talán leghíresebb példa erre a Titius–Bode-szabály. Ez azt állítja,
 hogy a Naprendszerben a sorrendben *n*-edik bolygó távolsága a naptól
-0,4 + 0,3 · 2<sup>*n*</sup> (egy csillagászati egységnek nevezett
-mértékegységben mérve). Ezt a 18. században vetették fel, és az akkor
-ismert bolygókra prímán működött. De itt vajon tényleg valamilyen
-matematikai összefüggés van? Ez borzasztó fontos, mert ha igen, akkor
-valamilyen csillagászati, mechanikai okot kell keresni amögött, hogy ez
-így alakult. Vagy egyszerűen csak véletlen egybeesésről van szó? Azaz:
-lehet szó túlilleszkedésről? Hogyne, simán, elvégre ki tudja, hogy
-Titius és Bode vajon hány formulát próbált ki, mire ez működött…! De
-akkor mit tegyünk, hogyan ellenőrizzük ezt le? És itt jön a kényelmetlen
-tudomány: aligha tudunk venni még egy bolygót mintának, hogy kipróbáljuk
-azon is működik-e a szabály…!
+0,4 + 0,3 · 2$^n$ (egy csillagászati egységnek nevezett mértékegységben
+mérve). Ezt a 18. században vetették fel, és az akkor ismert bolygókra
+prímán működött. De itt vajon tényleg valamilyen matematikai összefüggés
+van? Ez borzasztó fontos, mert ha igen, akkor valamilyen csillagászati,
+mechanikai okot kell keresni amögött, hogy ez így alakult. Vagy
+egyszerűen csak véletlen egybeesésről van szó? Azaz: lehet szó
+túlilleszkedésről? Hogyne, simán, elvégre ki tudja, hogy Titius és Bode
+vajon hány formulát próbált ki, mire ez működött…! De akkor mit tegyünk,
+hogyan ellenőrizzük ezt le? És itt jön a kényelmetlen tudomány: aligha
+tudunk venni még egy bolygót mintának, hogy kipróbáljuk azon is
+működik-e a szabály…!
 
 De mennyire „kényelmetlen tudomány“ helyzet a mi mostani kérdésünk?
 
@@ -2021,38 +2044,38 @@ de segítséget jelent ebben.
 A következő könyvek érdekesek és tanulságosak lehetnek szerintem a téma
 iránt mélyebben érdeklődőeknek:
 
--   Frank E. Harrell. Regression modeling strategies: with applications
-    to linear models, logistic and ordinal regression, and survival
-    analysis. Springer, 2015.
-    [Link](https://link.springer.com/book/10.1007/978-3-319-19425-7).
-    *Az* alapmű. Hangsúlyozni kell azonban, hogy ez nem első bevezetés a
-    regresszióba, azoknak szól, akik a regresszió alapjait már ismerik.
-    Számukra azonban fantasztikusan hasznos, szemet felnyitó, a bevezető
-    irodalmakban sokszor nem tárgyalt – de a gyakorlatban nagyon fontos
-    – kérdéseket bemutató könyv, ami megismerteti a modellezés
-    stratégiáját, nem pusztán a regresszió technikai használatát. A
-    könyvhöz egy nagyon jól használható `R` csomag, az
-    [`rms`](https://cran.r-project.org/web/packages/rms/index.html)
-    tartozik, illetve számos kiegészítés elérhető a szerző
-    [honlapján](https://hbiostat.org/).
--   Judea Pearl. Causality – Models, reasoning and inference. Cambridge
-    University Press, 2009. [Link](http://bayes.cs.ucla.edu/BOOK-2K/).
-    Az egyik legismertebb könyv, ami általában tárgyalja az okozatiság
-    kérdését, a filozofikus kérdéseket is érintve. Kitér az olyan
-    kapcsolódó kérdésekre, mint a confounding, és hangsúlyosan
-    alkalmazza a kauzális diagramok eszközét.
--   Trevor Hastie, Jerome Friedman, Robert Tibshirani. The Elements of
-    Statistical Learning – Data Mining, Inference, and Prediction.
-    Springer, 2009. [Link](https://hastie.su.domains/ElemStatLearn/). Az
-    egyik legalaposabb könyv ami a statisztikai nézőpontból tárgyalja a
-    tipikusan kevésbé statisztika, inkább „adatbányászat“, „gépi
-    tanulás“ címkék alá besorolt témákat.
--   Ewout W. Steyerberg. Clinical Prediction Models – A Practical
-    Approach to Development, Validation, and Updating. Springer, 2009.
-    [Link](https://link.springer.com/book/10.1007/978-0-387-77244-8).
-    Mint címe is mutatja, ez a könyv elsősorban a klinikai predikciós
-    modellekkel foglalkozik, de sok hasznos tanulság is leszűrhető
-    belőle általában a regressziós modellezésre nézve.
+- Frank E. Harrell. Regression modeling strategies: with applications to
+  linear models, logistic and ordinal regression, and survival analysis.
+  Springer, 2015.
+  [Link](https://link.springer.com/book/10.1007/978-3-319-19425-7). *Az*
+  alapmű. Hangsúlyozni kell azonban, hogy ez nem első bevezetés a
+  regresszióba, azoknak szól, akik a regresszió alapjait már ismerik.
+  Számukra azonban fantasztikusan hasznos, szemet felnyitó, a bevezető
+  irodalmakban sokszor nem tárgyalt – de a gyakorlatban nagyon fontos –
+  kérdéseket bemutató könyv, ami megismerteti a modellezés stratégiáját,
+  nem pusztán a regresszió technikai használatát. A könyvhöz egy nagyon
+  jól használható `R` csomag, az
+  [`rms`](https://cran.r-project.org/web/packages/rms/index.html)
+  tartozik, illetve számos kiegészítés elérhető a szerző
+  [honlapján](https://hbiostat.org/).
+- Judea Pearl. Causality – Models, reasoning and inference. Cambridge
+  University Press, 2009. [Link](http://bayes.cs.ucla.edu/BOOK-2K/). Az
+  egyik legismertebb könyv, ami általában tárgyalja az okozatiság
+  kérdését, a filozofikus kérdéseket is érintve. Kitér az olyan
+  kapcsolódó kérdésekre, mint a confounding, és hangsúlyosan alkalmazza
+  a kauzális diagramok eszközét.
+- Trevor Hastie, Jerome Friedman, Robert Tibshirani. The Elements of
+  Statistical Learning – Data Mining, Inference, and Prediction.
+  Springer, 2009. [Link](https://hastie.su.domains/ElemStatLearn/). Az
+  egyik legalaposabb könyv ami a statisztikai nézőpontból tárgyalja a
+  tipikusan kevésbé statisztika, inkább „adatbányászat“, „gépi tanulás“
+  címkék alá besorolt témákat.
+- Ewout W. Steyerberg. Clinical Prediction Models – A Practical Approach
+  to Development, Validation, and Updating. Springer, 2009.
+  [Link](https://link.springer.com/book/10.1007/978-0-387-77244-8). Mint
+  címe is mutatja, ez a könyv elsősorban a klinikai predikciós
+  modellekkel foglalkozik, de sok hasznos tanulság is leszűrhető belőle
+  általában a regressziós modellezésre nézve.
 
 ------------------------------------------------------------------------
 
