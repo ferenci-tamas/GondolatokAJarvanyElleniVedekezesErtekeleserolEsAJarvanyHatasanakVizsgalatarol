@@ -1,50 +1,29 @@
 Gondolatok a járvány elleni védekezés értékeléséről, és a járvány
 hatásának vizsgálatáról
 ================
-Ferenci Tamás (<tamas.ferenci@medstat.hu>)
+Ferenci Tamás (<https://www.medstat.hu/>)
 
-- <a
-  href="#egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája"
-  id="toc-egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája">Egy
-  gondolkodási keret, és a confounding mindent átható problémája</a>
-- <a href="#egy-előkészítő-pont-kimenet-megválasztása"
-  id="toc-egy-előkészítő-pont-kimenet-megválasztása">Egy előkészítő pont:
-  kimenet megválasztása</a>
-- <a href="#az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására"
-  id="toc-az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására">Az
-  elméleti megalapozás: kauzális diagram egy járvány hatására</a>
-- <a href="#technikai-részletek" id="toc-technikai-részletek">Technikai
-  részletek</a>
-- <a
-  href="#az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája"
-  id="toc-az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája">Az
-  empirikus vizsgálat lehetőségei és nehézségei: a confounding
-  problémája</a>
-- <a href="#a-regresszió-eszköze" id="toc-a-regresszió-eszköze">A
-  regresszió eszköze</a>
-  - <a href="#a-mintavételi-ingadozás-fogalma"
-    id="toc-a-mintavételi-ingadozás-fogalma">A mintavételi ingadozás
-    fogalma</a>
-  - <a href="#a-függvényforma-kérdése" id="toc-a-függvényforma-kérdése">A
-    függvényforma kérdése</a>
-  - <a href="#a-kihagyott-változós-torzítás"
-    id="toc-a-kihagyott-változós-torzítás">A kihagyott változós torzítás</a>
-- <a href="#a-modellezés-stratégiája" id="toc-a-modellezés-stratégiája">A
-  modellezés stratégiája</a>
-  - <a href="#a-multikollinearitás-problémája"
-    id="toc-a-multikollinearitás-problémája">A multikollinearitás
-    problémája</a>
-  - <a href="#a-túlilleszkedés-problémája"
-    id="toc-a-túlilleszkedés-problémája">A túlilleszkedés problémája</a>
-  - <a href="#a-torzítás-variancia-dilemma"
-    id="toc-a-torzítás-variancia-dilemma">A torzítás-variancia dilemma</a>
-  - <a href="#a-változószelekció-kérdésköre"
-    id="toc-a-változószelekció-kérdésköre">A változószelekció kérdésköre</a>
-  - <a href="#a-kényelmetlen-tudomány" id="toc-a-kényelmetlen-tudomány">A
-    kényelmetlen tudomány</a>
-- <a href="#záró-gondolatok" id="toc-záró-gondolatok">Záró gondolatok</a>
-- <a href="#ajánlott-olvasmányok" id="toc-ajánlott-olvasmányok">Ajánlott
-  olvasmányok</a>
+- [Egy gondolkodási keret, és a confounding mindent átható
+  problémája](#egy-gondolkodási-keret-és-a-confounding-mindent-átható-problémája)
+- [Egy előkészítő pont: kimenet
+  megválasztása](#egy-előkészítő-pont-kimenet-megválasztása)
+- [Az elméleti megalapozás: kauzális diagram egy járvány
+  hatására](#az-elméleti-megalapozás-kauzális-diagram-egy-járvány-hatására)
+- [Technikai részletek](#technikai-részletek)
+- [Az empirikus vizsgálat lehetőségei és nehézségei: a confounding
+  problémája](#az-empirikus-vizsgálat-lehetőségei-és-nehézségei-a-confounding-problémája)
+- [A regresszió eszköze](#a-regresszió-eszköze)
+  - [A mintavételi ingadozás fogalma](#a-mintavételi-ingadozás-fogalma)
+  - [A függvényforma kérdése](#a-függvényforma-kérdése)
+  - [A kihagyott változós torzítás](#a-kihagyott-változós-torzítás)
+- [A modellezés stratégiája](#a-modellezés-stratégiája)
+  - [A multikollinearitás problémája](#a-multikollinearitás-problémája)
+  - [A túlilleszkedés problémája](#a-túlilleszkedés-problémája)
+  - [A torzítás-variancia dilemma](#a-torzítás-variancia-dilemma)
+  - [A változószelekció kérdésköre](#a-változószelekció-kérdésköre)
+  - [A kényelmetlen tudomány](#a-kényelmetlen-tudomány)
+- [Záró gondolatok](#záró-gondolatok)
+- [Ajánlott olvasmányok](#ajánlott-olvasmányok)
 
 *“Ne fogjon senki könnyelműen*  
 *A húrok pengetésihez!*  
@@ -56,9 +35,9 @@ Ferenci Tamás (<tamas.ferenci@medstat.hu>)
 ------------------------------------------------------------------------
 
 (A dolgozat letölthető
-[PDF](https://raw.githubusercontent.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf)
+[PDF](https://raw.githubusercontent.com/ferenci-tamas/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf)
 és
-[EPUB](https://github.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub)
+[EPUB](https://github.com/ferenci-tamas/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub)
 formátumokban is.)
 
 E pillanatban Európa a koronavírus-járványt lényegileg lezártnak
@@ -217,11 +196,11 @@ halálozást).
 A probléma általánosságából adódóan számos más területen fellép,
 orvostudománytól a közgazdaságig
 ([videó-előadás](https://www.youtube.com/watch?v=dYt6vqqdtYQ), [írott
-jegyzet](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/az-empirikus-megismer%C3%A9s-alapgondolata-%C3%A9s-a-confounding.html)).
+jegyzet](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/alapok-confounding.html)).
 
 Érdemes megjegyezni, hogy *elvileg* van mód a probléma megoldására
 időgép nélkül is: az, ha tudunk
-[randomizálni](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/a-confounding-megold%C3%A1sai-megfigyel%C3%A9s-%C3%A9s-k%C3%ADs%C3%A9rlet.html).
+[randomizálni](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeles-kiserlet.html).
 Ez azt jelenti, hogy fogjuk a vizsgálat tárgyát képező alanyokat, és
 pénzfeldobással két csoportba sorsoljuk őket, az egyik a vizsgált
 tényező egyik értékét kapja, a másik a másikat, majd ezeket hasonlítjuk
@@ -246,7 +225,7 @@ kisorsolni, hogy melyik országban legyen 1000 nővér és melyikben 2000.
 Marad az, hogy nézzük a tényadatokat – csak épp ott, szemben a kísérlet
 példájával, a nővérek száma már összefügghet más jellemzőkkel is. Az
 ilyen vizsgálatokat szokás [megfigyeléses
-vizsgálatnak](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/a-confounding-megold%C3%A1sai-megfigyel%C3%A9s-%C3%A9s-k%C3%ADs%C3%A9rlet.html)
+vizsgálatnak](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeles-kiserlet.html)
 nevezni. Az ilyen típusú vizsgálatoknál, általában is, nem csak ennél a
 példánál, a confounding egy mindent átható probléma, olyan értelemben,
 hogy folyamatosan, minden elemzési lépésnél gondolnunk kell rá, mert
@@ -294,7 +273,7 @@ besorolásra alkalmazott definíciók. Ezek megnehezíthetik az országok
 összehasonlítását, de adott esetben akár egy országon belül is
 változhatnak időben. E kérdések önmagukban is nagyon érdekesek, itt most
 csak utaltam a problémára, de egy [másik
-írásom](https://github.com/tamas-ferenci/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban)
+írásom](https://github.com/ferenci-tamas/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban)
 részletesen bemutatja a problémát.
 
 Ez a gond vezet el egy másik mutatóhoz: az úgynevezett
@@ -318,10 +297,10 @@ gondolni, például mi van, ha megnő az öngyilkosságok száma a szociális
 elszigetelődés miatt. A többlethalálozás nem teszi lehetővé ezek biztos
 elkülönítését. Itt is igaz, hogy e problémakör önmagában több oldalnyi
 tárgyalást igényelne, ami az [említett
-írásomban](https://github.com/tamas-ferenci/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban)
+írásomban](https://github.com/ferenci-tamas/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban)
 megtalálható, itt megint csak a címszavakban összefoglalásra
 szorítkoztam. Egyetlen
-[megállapítást](https://github.com/tamas-ferenci/ExcessMortEUR#%C3%B6sszevet%C3%A9s-a-jelentett-hal%C3%A1loz%C3%A1ssal)
+[megállapítást](https://github.com/ferenci-tamas/ExcessMortEUR#%C3%B6sszevet%C3%A9s-a-jelentett-hal%C3%A1loz%C3%A1ssal)
 emelnék ki: Európán belül öt országtól (Bulgária, Románia, Litvánia,
 Lengyelország és félig-meddig Szlovákia) eltekintve a két mutató értékei
 nagyon hasonlóak egymáshoz.
@@ -341,11 +320,12 @@ ezt a dátumot most lerögzítjük):
 
 ``` r
 RawData <- fread(
-  "https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
-  dec = ",")[time=="2021W52"&nuts_level==0&age=="TOTAL"]
+  "https://github.com/ferenci-tamas/ExcessMortEUR/raw/refs/heads/main/ExcessMortEUR_data.csv",
+  dec = ",")[year == 2021 & week == 52 & nuts_level == 0 & age =="TOTAL" &
+               ED == "ExPost" & model == "poisson" & !sens]
 RawData$cumexcessperpop <- RawData$cumexcess/RawData$meanpopulation*1e6
 ggplot(RawData[order(cumexcessperpop)],
-       aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo=="HU")) +
+       aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo == "HU")) +
   geom_col() + guides(fill = "none") +
   labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
 ```
@@ -451,16 +431,16 @@ továbbfejlesztési lehetőségek megfogalmazását. Ha valakit ez a része nem
 érdekel a kérdésnek, bátran ugorja át a szürke hátterű kódokat és e
 fejezet hátralevő részét.
 
-A számítások `R` statisztikai programnyelven készültek, 4.2.2-es verziót
-használva. Felhasználtam a `data.table` (1.14.6-es verzió) és `ggplot2`
-(3.4.0-es verzió) csomagokat.
+A számítások `R` statisztikai programnyelven készültek, 4.5.1-es verziót
+használva. Felhasználtam a `data.table` (1.17.8-es verzió) és `ggplot2`
+(3.5.2-es verzió) csomagokat.
 
 A kimeneti adat, azaz a többlethalálozási számok forrása a
 ‘Többlethalálozási adatok európai összevetésben’ című
-[anyagom](https://github.com/tamas-ferenci/ExcessMortEUR). Ebben minden
+[anyagom](https://github.com/ferenci-tamas/ExcessMortEUR). Ebben minden
 további technikai kérdés részletesen le van írva, de egy mondatban
 összefoglalva: Acosta és Irizarry
-[módszerét](https://www.medrxiv.org/content/10.1101/2020.06.06.20120857v3)
+[módszerét](https://journals.lww.com/epidem/abstract/2022/05000/a_flexible_statistical_framework_for_estimating.6.aspx)
 használtam a többlethalálozás becsléséhez.
 
 A potenciális magyarázó adatok forrása az egységesség és az egyszerűség
@@ -497,37 +477,62 @@ esetlegesen felhasználók dolgát:
 RawData <- Reduce(function(...) merge(..., by = "geo"), list(
   RawData,
   as.data.table(eurostat::get_eurostat("tps00003"))[
-    unit=="PER_KM2"&time=="2019-01-01",.(geo, popdensity = values)],
+    unit=="PER_KM2"&TIME_PERIOD=="2019-01-01",.(geo, popdensity = values)],
   as.data.table(eurostat::get_eurostat("tessi170"))[
-    sex=="T"&time=="2019-01-01",.(geo, overcrowding = values)],
+    sex=="T"&TIME_PERIOD=="2019-01-01",.(geo, overcrowding = values)],
   as.data.table(eurostat::get_eurostat("ilc_lvho01"))[
-    incgrp=="TOTAL"&building=="TOTAL"&deg_urb=="DEG1"&time=="2019-01-01",
+    incgrp=="TOTAL"&building=="TOTAL"&deg_urb=="DEG1"&TIME_PERIOD=="2019-01-01",
     .(geo, urbanization = values)],
   as.data.table(eurostat::get_eurostat("nama_10_pc"))[
-    unit=="CP_PPS_EU27_2020_HAB"&na_item=="B1GQ"&time=="2019-01-01",
+    unit=="CP_PPS_EU27_2020_HAB"&na_item=="B1GQ"&TIME_PERIOD=="2019-01-01",
     .(geo, gdp = values)],
   as.data.table(eurostat::get_eurostat("demo_pjan"))[
-    sex=="T"&time=="2019-01-01",
+    sex=="T"&TIME_PERIOD=="2019-01-01",
     .(popold = sum(values[age%in%c(paste0("Y", 65:99),
                                    "Y_OPEN")])/values[age=="TOTAL"]*100), .(geo)],
   as.data.table(eurostat::get_eurostat("sdg_02_10"))[
-    bmi=="BMI_GE30"&time=="2019-01-01", .(geo, obese = values)],
+    bmi=="BMI_GE30"&TIME_PERIOD=="2019-01-01", .(geo, obese = values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_sk1i"))[
-    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&TIME_PERIOD=="2019-01-01",
     .(geo, smoke = 100-values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_al1i"))[
-    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&TIME_PERIOD=="2019-01-01",
     .(geo, alcohol = values)],
   dcast(as.data.table(eurostat::get_eurostat("hlth_ehis_cd1e"))[
-    unit=="PC"&isced11=="TOTAL"&time=="2019-01-01"&sex=="T"&age=="TOTAL"&
+    unit=="PC"&isced11=="TOTAL"&TIME_PERIOD=="2019-01-01"&sex=="T"&age=="TOTAL"&
       hlth_pb%in%c("ASTHMA", "HBLPR", "DIAB", "CHRT_ANGPEC"), .(geo, hlth_pb, values)],
     geo ~ hlth_pb, value.var = "values"),
   as.data.table(eurostat::get_eurostat("hlth_sha11_hf"))[
-    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01",
+    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&TIME_PERIOD=="2019-01-01",
     .(geo, healthexpenditure = values)],
   as.data.table(eurostat::get_eurostat("hlth_rs_prsns"))[
-    unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
+    unit=="P_HTHAB"&wstatus=="PRACT"&TIME_PERIOD=="2017-01-01"&isco08=="OC2221_3221",
     .(geo, nurses = values)]))
+```
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+    ## indexed 0B in  0s, 0B/sindexed 2.15GB in  0s, 2.15GB/s                                                                              
+
+``` r
 names(RawData) <- tolower(names(RawData))
 
 write.csv2(RawData, "RawData.csv", row.names = FALSE)
@@ -537,43 +542,48 @@ A változók sora – mint a fenti leírás is mutatta – végeláthatatlanul
 bővíthető, ez pusztán egy illusztrációs kiindulópont.
 
 A vizsgált országok körét meghatározza az a tény, hogy mely országokra
-van információnk; végeredményben 23 ország lesz az adatbázisunkban;
+van információnk; végeredményben 24 ország lesz az adatbázisunkban;
 angol nevükkel ezek a következőek: Austria, Belgium, Bulgaria, Cyprus,
 Czechia, Germany, Denmark, Estonia, Greece, Spain, Croatia, Hungary,
-Italy, Lithuania, Luxembourg, Latvia, Malta, Netherlands, Norway,
-Poland, Romania, Sweden, Slovenia.
+Iceland, Italy, Lithuania, Luxembourg, Latvia, Malta, Netherlands,
+Norway, Poland, Romania, Sweden, Slovenia.
 
 A begyűjtött adataink:
 
 ``` r
-knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
+knitr::kable(RawData[
+  ,c("geo", "cumexpected", "nuts_level", "geoname", "cumexcessperpop", 
+     "popdensity", "overcrowding", "urbanization", "gdp", "popold", 
+     "obese", "smoke", "alcohol", "asthma", "chrt_angpec", "diab", 
+     "hblpr")], digits = 1)
 ```
 
-| geo | cumexpected | nuts_level | geoname     | cumexcessperpop | popdensity | overcrowding | urbanization |     gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr |
-|:----|------------:|-----------:|:------------|----------------:|-----------:|-------------:|-------------:|--------:|-------:|------:|------:|--------:|-------:|------------:|-----:|------:|
-| AT  |    153601.1 |          0 | Austria     |          1272.3 |      107.6 |         15.1 |         31.0 | 39402.0 |   18.8 |  17.1 |  26.2 |     5.7 |    4.3 |         3.2 |  6.0 |  21.8 |
-| BE  |    201196.8 |          0 | Belgium     |          1647.8 |      377.3 |          5.7 |         29.5 | 36816.8 |   18.9 |  16.3 |  19.4 |     9.7 |    5.8 |         1.5 |  5.8 |  17.4 |
-| BG  |    193388.5 |          0 | Bulgaria    |          8848.1 |       63.4 |         41.1 |         44.8 | 16606.9 |   21.3 |  13.6 |  36.2 |    10.2 |    2.2 |         7.0 |  6.9 |  29.7 |
-| CY  |     11278.9 |          0 | Cyprus      |          1254.8 |       95.7 |          2.2 |         51.8 | 29056.3 |   16.1 |  15.2 |  25.5 |     4.0 |    4.0 |         2.1 |  7.0 |  18.9 |
-| CZ  |    204276.7 |          0 | Czechia     |          4235.5 |      138.2 |         15.4 |         30.0 | 29177.8 |   19.6 |  19.8 |  26.4 |     7.8 |    4.6 |         2.8 |  8.8 |  26.3 |
-| DE  |   1824132.1 |          0 | Germany     |           276.0 |      235.2 |          7.8 |         36.3 | 37869.9 |   21.5 |  19.0 |  28.3 |     7.5 |    8.0 |         4.4 |  8.7 |  26.2 |
-| DK  |     95939.2 |          0 | Denmark     |          1182.5 |      138.5 |         10.0 |         37.6 | 39510.7 |   19.6 |  16.5 |  20.0 |     9.6 |    7.2 |         1.4 |  5.3 |  18.9 |
-| EE  |     28278.5 |          0 | Estonia     |          2796.5 |       30.5 |         13.9 |         61.0 | 25776.7 |   19.8 |  21.8 |  24.8 |     1.3 |    4.1 |         4.7 |  6.0 |  23.3 |
-| EL  |    226841.4 |          0 | Greece      |          2314.2 |       82.4 |         28.7 |         36.9 | 20556.2 |   22.0 |  16.7 |  28.6 |     5.9 |    3.3 |         2.9 |  8.0 |  19.6 |
-| ES  |    792276.2 |          0 | Spain       |          1527.1 |       93.8 |          5.9 |         49.6 | 28460.3 |   19.4 |  16.0 |  22.1 |    13.0 |    4.1 |         0.7 |  7.5 |  19.3 |
-| HR  |     93873.6 |          0 | Croatia     |          4255.3 |       72.8 |         38.5 |         29.6 | 20831.3 |   20.6 |  23.0 |  25.7 |    10.2 |    4.8 |         8.9 | 12.1 |  37.3 |
-| HU  |    236210.1 |          0 | Hungary     |          3913.4 |      107.1 |         20.3 |         32.8 | 22854.2 |   19.3 |  24.5 |  27.2 |     6.3 |    5.0 |         3.6 |  8.9 |  31.5 |
-| IT  |   1175831.7 |          0 | Italy       |          2740.3 |      201.5 |         28.3 |         35.3 | 30217.9 |   22.9 |  11.7 |  22.4 |    12.1 |    4.6 |         2.1 |  6.5 |  20.4 |
-| LT  |     68968.6 |          0 | Lithuania   |          5648.8 |       44.6 |         22.9 |         43.2 | 26359.0 |   19.8 |  18.9 |  23.7 |     0.8 |    2.8 |         6.0 |  5.3 |  29.9 |
-| LU  |      7975.9 |          0 | Luxembourg  |           640.3 |      239.8 |          7.1 |         19.6 | 78681.4 |   14.4 |  16.5 |  18.2 |     8.9 |    6.0 |         1.7 |  4.6 |  15.5 |
-| LV  |     50790.1 |          0 | Latvia      |          4218.7 |       30.2 |         42.2 |         43.8 | 21732.4 |   20.3 |  23.0 |  26.8 |     1.2 |    3.8 |         5.8 |  5.7 |  31.7 |
-| MT  |      6826.4 |          0 | Malta       |          1322.7 |     1595.1 |          3.7 |         89.6 | 32412.8 |   18.7 |  28.7 |  25.1 |     7.9 |    6.0 |         2.4 |  7.5 |  18.1 |
-| NL  |    292930.1 |          0 | Netherlands |          1164.5 |      507.3 |          4.8 |         56.2 | 39724.3 |   19.2 |  14.7 |  21.1 |     8.3 |    6.4 |         2.6 |  5.8 |  16.1 |
-| NO  |     73023.2 |          0 | Norway      |           462.5 |       17.3 |          6.1 |         28.9 | 46128.8 |   17.2 |  14.1 |  18.1 |     1.4 |    7.9 |         1.4 |  4.5 |  15.1 |
-| PL  |    754597.1 |          0 | Poland      |          4591.1 |      123.6 |         37.6 |         35.0 | 22823.8 |   17.7 |  19.0 |  22.6 |     1.6 |    4.1 |         7.5 |  8.1 |  26.5 |
-| RO  |    468459.3 |          0 | Romania     |          6104.9 |       82.7 |         45.8 |         28.8 | 21791.5 |   18.5 |  10.9 |  27.3 |     2.9 |    1.5 |         1.5 |  5.0 |  15.7 |
-| SE  |    158680.6 |          0 | Sweden      |          1306.2 |       25.2 |         15.6 |         40.3 | 37214.5 |   19.9 |  15.3 |  12.6 |     1.8 |    7.5 |         1.3 |  6.3 |  18.2 |
-| SI  |     38676.3 |          0 | Slovenia    |          2274.8 |      103.7 |         11.6 |         19.5 | 27761.1 |   19.8 |  19.9 |  23.2 |     6.6 |    4.8 |         3.2 |  7.8 |  25.4 |
+| geo | cumexpected | nuts_level | geoname | cumexcessperpop | popdensity | overcrowding | urbanization | gdp | popold | obese | smoke | alcohol | asthma | chrt_angpec | diab | hblpr |
+|:---|---:|---:|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| AT | 153652.1 | 0 | Austria | 1267.3 | 107.6 | 15.1 | 31.0 | 39259.3 | 18.8 | 17.1 | 26.2 | 5.7 | 4.3 | 3.2 | 6.0 | 21.8 |
+| BE | 200743.8 | 0 | Belgium | 1654.9 | 377.3 | 5.7 | 29.5 | 36880.6 | 18.9 | 16.3 | 19.4 | 9.7 | 5.8 | 1.5 | 5.8 | 17.4 |
+| BG | 191178.9 | 0 | Bulgaria | 9641.1 | 63.4 | 41.1 | 44.8 | 17438.0 | 22.5 | 13.6 | 36.2 | 10.2 | 2.2 | 7.0 | 6.9 | 29.7 |
+| CY | 11301.7 | 0 | Cyprus | 1377.0 | 95.7 | 3.4 | 52.4 | 28870.1 | 16.2 | 15.2 | 25.5 | 4.0 | 4.0 | 2.1 | 7.0 | 18.9 |
+| CZ | 204642.1 | 0 | Czechia | 4221.8 | 138.2 | 15.4 | 30.0 | 30004.9 | 19.6 | 19.8 | 26.4 | 7.8 | 4.6 | 2.8 | 8.8 | 26.3 |
+| DE | 1764142.3 | 0 | Germany | 993.6 | 235.2 | 7.8 | 36.3 | 38988.0 | 21.5 | 19.0 | 28.3 | 7.5 | 8.0 | 4.4 | 8.7 | 26.2 |
+| DK | 100874.7 | 0 | Denmark | 337.5 | 138.5 | 10.0 | 37.6 | 39388.3 | 19.6 | 16.5 | 20.0 | 9.6 | 7.2 | 1.4 | 5.3 | 18.9 |
+| EE | 28444.8 | 0 | Estonia | 2468.5 | 30.5 | 13.9 | 61.0 | 26435.1 | 19.8 | 21.8 | 24.8 | 1.3 | 4.1 | 4.7 | 6.0 | 23.3 |
+| EL | 226886.6 | 0 | Greece | 2338.6 | 82.4 | 28.7 | 36.9 | 20762.7 | 22.0 | 16.7 | 28.6 | 5.9 | 3.3 | 2.9 | 8.0 | 19.6 |
+| ES | 772545.7 | 0 | Spain | 1928.3 | 93.8 | 5.9 | 49.6 | 28660.1 | 19.3 | 16.0 | 22.1 | 13.0 | 4.1 | 0.7 | 7.5 | 19.3 |
+| HR | 94314.7 | 0 | Croatia | 4263.1 | 72.8 | 38.5 | 29.6 | 21298.9 | 21.1 | 23.0 | 25.7 | 10.2 | 4.8 | 8.9 | 12.1 | 37.3 |
+| HU | 233931.6 | 0 | Hungary | 4180.0 | 107.1 | 20.3 | 32.8 | 23168.8 | 19.2 | 24.5 | 27.2 | 6.3 | 5.0 | 3.6 | 8.9 | 31.5 |
+| IS | 4428.9 | 0 | Iceland | -519.1 | 3.6 | 13.5 | 60.8 | 40837.0 | 14.2 | 22.3 | 13.7 | 1.0 | 10.2 | 4.1 | 5.6 | 24.5 |
+| IT | 1177137.3 | 0 | Italy | 2746.9 | 201.5 | 28.3 | 35.3 | 30344.7 | 22.9 | 11.7 | 22.4 | 12.1 | 4.6 | 2.1 | 6.5 | 20.4 |
+| LT | 70443.2 | 0 | Lithuania | 5054.9 | 44.6 | 22.9 | 43.2 | 26379.1 | 19.6 | 18.9 | 23.7 | 0.8 | 2.8 | 6.0 | 5.3 | 29.9 |
+| LU | 7876.9 | 0 | Luxembourg | 821.5 | 239.8 | 7.1 | 19.6 | 78735.2 | 14.4 | 16.5 | 18.2 | 8.9 | 6.0 | 1.7 | 4.6 | 15.5 |
+| LV | 49875.9 | 0 | Latvia | 4721.6 | 30.2 | 42.2 | 43.8 | 20946.3 | 20.3 | 23.0 | 26.8 | 1.2 | 3.8 | 5.8 | 5.7 | 31.7 |
+| MT | 6882.0 | 0 | Malta | 1270.3 | 1595.1 | 3.7 | 89.6 | 33378.1 | 18.4 | 28.7 | 25.1 | 7.9 | 6.0 | 2.4 | 7.5 | 18.1 |
+| NL | 291591.9 | 0 | Netherlands | 1235.3 | 507.3 | 4.8 | 56.2 | 40543.6 | 19.2 | 14.7 | 21.1 | 8.3 | 6.4 | 2.6 | 5.8 | 16.1 |
+| NO | 76815.1 | 0 | Norway | -230.6 | 17.3 | 6.1 | 28.9 | 46131.9 | 17.2 | 14.1 | 18.1 | 1.4 | 7.9 | 1.4 | 4.5 | 15.1 |
+| PL | 739400.3 | 0 | Poland | 5069.3 | 123.6 | 37.6 | 35.0 | 23345.3 | 17.7 | 19.0 | 22.6 | 1.6 | 4.1 | 7.5 | 8.1 | 26.5 |
+| RO | 456062.1 | 0 | Romania | 6805.0 | 82.7 | 45.8 | 28.8 | 21850.1 | 18.5 | 10.9 | 27.3 | 2.9 | 1.5 | 1.5 | 5.0 | 15.7 |
+| SE | 161544.0 | 0 | Sweden | 756.7 | 25.2 | 15.6 | 40.3 | 36990.3 | 19.9 | 15.3 | 12.6 | 1.8 | 7.5 | 1.3 | 6.3 | 18.2 |
+| SI | 37980.5 | 0 | Slovenia | 2600.3 | 103.7 | 11.6 | 19.5 | 27547.4 | 19.8 | 19.9 | 23.2 | 6.6 | 4.8 | 3.2 | 7.8 | 25.4 |
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió
 lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek,
@@ -689,7 +699,7 @@ odébbmászik.
 részábrákban a GDP adott értékű (közelítőleg), azaz, amikor a kis
 részábrákat nézzük, akkor a fenti hatást kikapcsoltuk! Ilyen értelemben
 ez az ábrázolás az ápolók számának valódi hatását igyekszik megragadni,
-[tisztítva](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/megfigyel%C3%A9ses-vizsg%C3%A1latok-a-gyakorlatban.html)
+[tisztítva](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeleses-vizsgalatok.html)
 a fejlettség miatti confounding-tól. (Ezt a módszert szokás egyébként
 rétegzésnek nevezni.)
 
@@ -735,7 +745,7 @@ rgl::lines3d(rep(gdpgrid[10], 2), c(nursegrid[1], nursegrid[10]),
              c(predgrid[10], predgrid[100]), col = "green")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1-rgl.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.-rgl.png)<!-- -->
 
 Amit látunk, hogy a GDP–halálozás vetületben ferde a sík (nézzük a kék
 élet) – ez fejezi ki azt, hogy a GDP növekedtével csökken a halálozás.
@@ -829,9 +839,9 @@ becsüljük meg a begyűjtött tényadatok alapján. Ezt hívjuk regressziónak.
 A regresszió kérdésköre egy hatalmas, de érdekes, és nagyon sok
 területen – így a biostatisztikában kiemelten – fontos téma. Most szinte
 csak utalásszerűen tudom megemlíteni pár fontos kérdését, de a részletek
-[előadásaimban](https://www.youtube.com/c/FerenciTam%C3%A1s) és
-[jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek; néhány
-adott témába vágót a szövegben is belinkelek a megfelelő helyen.
+[előadásaimban](https://www.youtube.com/@FerenciTamas) és [jegyzeteim
+között](https://ferenci-tamas.github.io/) elérhetőek; néhány adott
+témába vágót a szövegben is belinkelek a megfelelő helyen.
 
 (Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése:
 ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk
@@ -854,16 +864,16 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit)[-1], 3),
                         check.names = FALSE, row.names = names(coef(fit))[-1]))
 ```
 
-|        | Becsült hatás | 95% CI            | p     |
-|:-------|--------------:|:------------------|:------|
-| gdp    |       -0.0831 | -0.163 – -0.00362 | 0.041 |
-| nurses |       -1.3600 | -4.49 – 1.76      | 0.374 |
+|        | Becsült hatás | 95% CI          | p     |
+|:-------|--------------:|:----------------|:------|
+| gdp    |       -0.0763 | -0.16 – 0.00778 | 0.073 |
+| nurses |       -2.4400 | -5.52 – 0.64    | 0.114 |
 
 Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy,
-hogy a nővérek száma közben nem változik, akkor 0,0742-vel megy lejjebb
+hogy a nővérek száma közben nem változik, akkor 0,0763-mal megy lejjebb
 a halálozás. Ha a nővérek számát növeljük eggyel miközben a GDP-t
-változatlanul tartjuk, akkor 1,14-gyel csökken a halálozás. Elértük a
-célunkat, ezek a confounding-tól tisztított értékek: az 1,14 a
+változatlanul tartjuk, akkor 2,44-gyel csökken a halálozás. Elértük a
+célunkat, ezek a confounding-tól tisztított értékek: az 2,44 a
 nővér-szám tisztított hatása, amiben megszabadultunk a GDP miatti
 confounding-tól! Noha csak megfigyeléses adataink voltak, mégis meg
 tudtuk határozni a nővérek számának *valódi* hatását a halálozásra.
@@ -877,7 +887,7 @@ a nővér-számnak? Hiszen korábban még azt állapítottuk meg, hogy
 nincsen…!
 
 A helyzet az, hogy tényleg nincsen, és ennek nem mond ellent a fenti
--1,14, de ennek megértéséhez meg kell egy új kérdéskörrel ismerkednünk.
+-2,44, de ennek megértéséhez meg kell egy új kérdéskörrel ismerkednünk.
 
 ### A mintavételi ingadozás fogalma
 
@@ -935,6 +945,9 @@ for(i in 1:nSim)
 
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
     ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
 ![](README_files/figure-gfm/unnamed-chunk-11-.gif)<!-- -->
 
@@ -1166,8 +1179,8 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van
-irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/).
-E modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami
+irodalma](https://ferenci-tamas.github.io/simitas-spline/). E
+modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami
 hatalmas fegyvertény, de cserében rosszabbul becsülhetőek, olyan
 értelemben, hogy nagyobb mintát igényelnek, paraméter híján nincs
 egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik
@@ -1352,23 +1365,23 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit2), 3),
                                                            names(coef(fit2))[-1])))
 ```
 
-|                   | Becsült hatás | 95% CI         | p     |
-|:------------------|--------------:|:---------------|:------|
-| Tengelymetszet    |     3320.0000 | -10000 – 16700 | 0.581 |
-| popdensity        |        0.6410 | -3.28 – 4.56   | 0.716 |
-| overcrowding      |       63.7000 | -13.9 – 141    | 0.095 |
-| urbanization      |       23.9000 | -52.2 – 100    | 0.490 |
-| gdp               |       -0.0147 | -0.118 – 0.089 | 0.753 |
-| popold            |     -142.0000 | -605 – 321     | 0.499 |
-| obese             |     -166.0000 | -485 – 153     | 0.265 |
-| smoke             |       42.2000 | -127 – 212     | 0.582 |
-| alcohol           |       88.3000 | -157 – 333     | 0.430 |
-| asthma            |     -219.0000 | -1280 – 841    | 0.646 |
-| chrt_angpec       |      -20.6000 | -630 – 589     | 0.940 |
-| diab              |     -328.0000 | -991 – 336     | 0.288 |
-| hblpr             |      189.0000 | -128 – 506     | 0.206 |
-| healthexpenditure |       -0.6060 | -1.66 – 0.443  | 0.220 |
-| nurses            |        3.2300 | -0.547 – 7.01  | 0.084 |
+|                   | Becsült hatás | 95% CI           | p     |
+|:------------------|--------------:|:-----------------|:------|
+| Tengelymetszet    |     2270.0000 | -10200 – 14700   | 0.691 |
+| popdensity        |        1.5800 | -1.98 – 5.14     | 0.342 |
+| overcrowding      |       56.4000 | -15.3 – 128      | 0.109 |
+| urbanization      |        4.6800 | -64.8 – 74.2     | 0.882 |
+| gdp               |        0.0032 | -0.0932 – 0.0996 | 0.942 |
+| popold            |      -71.9000 | -456 – 312       | 0.681 |
+| obese             |     -214.0000 | -525 – 97.1      | 0.154 |
+| smoke             |       98.4000 | -65.5 – 262      | 0.208 |
+| alcohol           |       60.2000 | -166 – 287       | 0.562 |
+| asthma            |     -243.0000 | -1160 – 669      | 0.561 |
+| chrt_angpec       |       -0.0950 | -591 – 591       | 1.000 |
+| diab              |     -267.0000 | -885 – 351       | 0.354 |
+| hblpr             |      183.0000 | -125 – 491       | 0.212 |
+| healthexpenditure |       -0.7020 | -1.67 – 0.269    | 0.136 |
+| nurses            |        2.7900 | -0.833 – 6.41    | 0.116 |
 
 Akkor most végeztünk? Sajnos a helyzet nem ilyen egyszerű.
 

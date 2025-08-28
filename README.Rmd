@@ -2,7 +2,7 @@
 title: Gondolatok a járvány elleni védekezés értékeléséről, és a járvány hatásának
   vizsgálatáról
 author:
-  - Ferenci Tamás (tamas.ferenci@medstat.hu)
+  - Ferenci Tamás (https://www.medstat.hu/)
 lang: hu
 output:
   github_document:
@@ -37,9 +37,10 @@ options(rgl.useNULL = TRUE, max.print = 10000)
 rgl::setupKnitr(autoprint = TRUE)
 library(data.table)
 library(ggplot2)
+theme_set(theme_bw())
 ```
 
-(A dolgozat letölthető [PDF](https://raw.githubusercontent.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf) és [EPUB](https://github.com/tamas-ferenci/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub) formátumokban is.)
+(A dolgozat letölthető [PDF](https://raw.githubusercontent.com/ferenci-tamas/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/main/README.pdf) és [EPUB](https://github.com/ferenci-tamas/GondolatokAJarvanyElleniVedekezesErtekeleserolEsAJarvanyHatasanakVizsgalatarol/raw/main/README.epub) formátumokban is.)
 
 E pillanatban Európa a koronavírus-járványt lényegileg lezártnak tekinti. Noha a dolog véglegességében azért van még kérdőjel, az alkalom tökéletesen megfelelő arra, hogy feltegyünk két olyan kérdést, melyek legjobban visszatekintve válaszolhatóak meg, egy járvány végén relevánsak -- de akkor viszont nagyon is. (Ebben a dolgozatban az ,,a járvány'' kitétel alatt a COVID-19 járványt értem, de az elmondottak lényegében teljesen általánosak, és más esetre is alkalmazhatóak.) Jelesül:
 
@@ -66,11 +67,11 @@ A probléma, hogy itt _pontosan ugyanabba_ a helyzetbe futunk bele, mint az elő
 
 Ezt a problémát szokták úgy hívni angol szóval, hogy confounding. (Angolul nagyon találó kifejezés: szó szerint „egybemosódást“ jelent, és valóban arról van szó, hogy a különböző tényezők hatása egybemosódik, a több nővér egybemosódik a kevesebb elhízottal. Magyarra leginkább „zavaró változós hatásként“ szoktak fordítani, csak sajnos ez jóval nyakatekertebb, mint az angol kifejezés.) Ez egy általános probléma, ami akkor jelentkezik, ha adott tényező szerint eltérő csoportokat hasonlítunk össze, de azok a csoportok más tényezőkben is el fognak térni -- innen kezdve, ha találunk is különbséget a kimenetben, nem lehet tudni, hogy az mi miatt van: az általunk vizsgált eltérés miatt, a vele együtt járó egyéb eltérés(ek) miatt, vagy ezek valamilyen keveréke miatt. A fenti példából is látható módon leginkább úgy ragadható meg a probléma, hogy van egy -- vagy több -- háttérben lévő változó, a példában mondjuk a gazdasági fejlettség, ami _egyszerre_ függ össze a vizsgált tényezővel (fejlettebb országokban több a nővér) _és_ hat a kimenetre (fejlettebb országokban kevesebb az elhízott, ami szintén csökkenti a halálozást).
 
-A probléma általánosságából adódóan számos más területen fellép, orvostudománytól a közgazdaságig ([videó-előadás](https://www.youtube.com/watch?v=dYt6vqqdtYQ), [írott jegyzet](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/az-empirikus-megismer%C3%A9s-alapgondolata-%C3%A9s-a-confounding.html)).
+A probléma általánosságából adódóan számos más területen fellép, orvostudománytól a közgazdaságig ([videó-előadás](https://www.youtube.com/watch?v=dYt6vqqdtYQ), [írott jegyzet](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/alapok-confounding.html)).
 
-Érdemes megjegyezni, hogy _elvileg_ van mód a probléma megoldására időgép nélkül is: az, ha tudunk [randomizálni](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/a-confounding-megold%C3%A1sai-megfigyel%C3%A9s-%C3%A9s-k%C3%ADs%C3%A9rlet.html). Ez azt jelenti, hogy fogjuk a vizsgálat tárgyát képező alanyokat, és pénzfeldobással két csoportba sorsoljuk őket, az egyik a vizsgált tényező egyik értékét kapja, a másik a másikat, majd ezeket hasonlítjuk egymáshoz. Ez könnyen elképzelhető -- és meg is valósítható -- egy gyógyszer kipróbálásánál: az „egyik érték“, hogy kap gyógyszert, a másik, hogy nem. Ezt valóban kioszthatjuk pénzfeldobással. És ez csakugyan fontos is: ha nem ezt tennénk, hanem mondjuk az orvosokra bízzuk, hogy belátásuk szerint adjanak bizonyos betegeknek gyógyszert, másoknak pedig nem, akkor azonnal jönne ugyanaz a probléma -- mi van, ha inkább a súlyosabb állapotúaknak adják a készítményt, vagy pont, hogy az enyhébb eseteknek? A randomizálás megoldja ezt a problémát: ha pénzfeldobással soroltuk őket csoportokba, akkor _biztosan_ nem lehet _semmilyen_ tulajdonságukban szisztematikus különbség. (Különösen fontos, hogy ez azt is jelenti, hogy azokban a tulajdonságokban sem, amikről nincs információnk, sőt, azokban sem, amikről eszünkbe sem jutott, hogy confounding-ot okozhatnak!) Ehhez azonban arra van szükség, hogy mi tudjuk irányítani, meghatározni, hogy ki milyen tényezőnek van kitéve; az ilyen vizsgálatokat szokás kísérletes kutatásnak nevezni.
+Érdemes megjegyezni, hogy _elvileg_ van mód a probléma megoldására időgép nélkül is: az, ha tudunk [randomizálni](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeles-kiserlet.html). Ez azt jelenti, hogy fogjuk a vizsgálat tárgyát képező alanyokat, és pénzfeldobással két csoportba sorsoljuk őket, az egyik a vizsgált tényező egyik értékét kapja, a másik a másikat, majd ezeket hasonlítjuk egymáshoz. Ez könnyen elképzelhető -- és meg is valósítható -- egy gyógyszer kipróbálásánál: az „egyik érték“, hogy kap gyógyszert, a másik, hogy nem. Ezt valóban kioszthatjuk pénzfeldobással. És ez csakugyan fontos is: ha nem ezt tennénk, hanem mondjuk az orvosokra bízzuk, hogy belátásuk szerint adjanak bizonyos betegeknek gyógyszert, másoknak pedig nem, akkor azonnal jönne ugyanaz a probléma -- mi van, ha inkább a súlyosabb állapotúaknak adják a készítményt, vagy pont, hogy az enyhébb eseteknek? A randomizálás megoldja ezt a problémát: ha pénzfeldobással soroltuk őket csoportokba, akkor _biztosan_ nem lehet _semmilyen_ tulajdonságukban szisztematikus különbség. (Különösen fontos, hogy ez azt is jelenti, hogy azokban a tulajdonságokban sem, amikről nincs információnk, sőt, azokban sem, amikről eszünkbe sem jutott, hogy confounding-ot okozhatnak!) Ehhez azonban arra van szükség, hogy mi tudjuk irányítani, meghatározni, hogy ki milyen tényezőnek van kitéve; az ilyen vizsgálatokat szokás kísérletes kutatásnak nevezni.
 
-A mostani esetünkben ez nyilván szóba sem jön: nem lehet pénzfeldobással kisorsolni, hogy melyik országban legyen 1000 nővér és melyikben 2000. Marad az, hogy nézzük a tényadatokat -- csak épp ott, szemben a kísérlet példájával, a nővérek száma már összefügghet más jellemzőkkel is. Az ilyen vizsgálatokat szokás [megfigyeléses vizsgálatnak](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/a-confounding-megold%C3%A1sai-megfigyel%C3%A9s-%C3%A9s-k%C3%ADs%C3%A9rlet.html) nevezni. Az ilyen típusú vizsgálatoknál, általában is, nem csak ennél a példánál, a confounding egy mindent átható probléma, olyan értelemben, hogy folyamatosan, minden elemzési lépésnél gondolnunk kell rá, mert Damoklész kardjaként lebeg mindig a fejünk felett.
+A mostani esetünkben ez nyilván szóba sem jön: nem lehet pénzfeldobással kisorsolni, hogy melyik országban legyen 1000 nővér és melyikben 2000. Marad az, hogy nézzük a tényadatokat -- csak épp ott, szemben a kísérlet példájával, a nővérek száma már összefügghet más jellemzőkkel is. Az ilyen vizsgálatokat szokás [megfigyeléses vizsgálatnak](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeles-kiserlet.html) nevezni. Az ilyen típusú vizsgálatoknál, általában is, nem csak ennél a példánál, a confounding egy mindent átható probléma, olyan értelemben, hogy folyamatosan, minden elemzési lépésnél gondolnunk kell rá, mert Damoklész kardjaként lebeg mindig a fejünk felett.
 
 ## Egy előkészítő pont: kimenet megválasztása
 
@@ -80,9 +81,9 @@ Először is, az önmagában választás kérdése, hogy egyáltalán a haláloz
 
 Mégis, a halálozási szám használata a járvány terhének mérésére elég univerzális, és sok szempontból indokolható. Egyrészt a legnagyobb súlyú és legdrámaibb vetület, másrészt általában azért jól korrelált a többi szempont is vele (még ha nem is tökéletesen, ahogy az előbbi megjegyzés is mondta), harmadrészt az egyik legbiztosabban mérhető mutató (gondoljuk meg mennyivel nehezebb lenne azt megmondani, hogy hány munkaóra esett ki a járvány miatt, de igazából még azt is, hogy hány fertőzött volt -- ne feledjük, hogy azok száma rettenetesen függ a tesztelési intenzitástól). Valójában persze a halálozási mutató is elrejt szempontokat, például azt, hogy milyen életkorban történik a halálozás, vagy milyen egészségi állapotú alanyban, egyszóval az elvesztett életévek számának [problémáját](https://link.springer.com/article/10.1007/s10654-021-00774-0), de most ezt is utaljuk egy másik vizsgálódás témakörébe.
 
-A második kérdéskör, hogy a halálozást hogyan mérjük. Nagyon kézenfekvőnek látszik a jelentett halálozás használata (hát az épp az, hogy hány halálozás volt, nem?), de sajnos ez sem ilyen egyszerű: a jelentett halálozási számokat is befolyásolja a tesztelési aktivitás (még ha kevésbé is, mint a jelentett fertőzött-számot) és a haláloki besorolásra alkalmazott definíciók. Ezek megnehezíthetik az országok összehasonlítását, de adott esetben akár egy országon belül is változhatnak időben. E kérdések önmagukban is nagyon érdekesek, itt most csak utaltam a problémára, de egy [másik írásom](https://github.com/tamas-ferenci/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban) részletesen bemutatja a problémát.
+A második kérdéskör, hogy a halálozást hogyan mérjük. Nagyon kézenfekvőnek látszik a jelentett halálozás használata (hát az épp az, hogy hány halálozás volt, nem?), de sajnos ez sem ilyen egyszerű: a jelentett halálozási számokat is befolyásolja a tesztelési aktivitás (még ha kevésbé is, mint a jelentett fertőzött-számot) és a haláloki besorolásra alkalmazott definíciók. Ezek megnehezíthetik az országok összehasonlítását, de adott esetben akár egy országon belül is változhatnak időben. E kérdések önmagukban is nagyon érdekesek, itt most csak utaltam a problémára, de egy [másik írásom](https://github.com/ferenci-tamas/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban) részletesen bemutatja a problémát.
 
-Ez a gond vezet el egy másik mutatóhoz: az úgynevezett többlethalálozáshoz. Itt a járvány előtti adatokat használva statisztikai úton készítünk egy előrejelzést a halálozások számára, ezt tekintjük úgy -- mivel a járvány hatása nélküli adatokból készült -- mint az a halálozás ami akkor lett volna, ha nincs járvány. Kivonva ezt az értéket a tényleges halálozási adatból, kapjuk a többlethalálozást. E mutató hatalmas előnye, hogy biztosan semennyire nem függ a tesztelési aktivitástól és biztosan semennyire nem függ a haláloki besorolástól. Hátránya azonban -- azon túl, hogy a leglassabban ismertté váló mutató -- egyrészt, hogy függ az előrejelzés jóságától, de még inkább az, hogy egy bruttó jellegű mutató: egybeméri a járvány direkt hatásaival (belehalnak emberek) annak indirekt hatásait is, amik ráadásul egyaránt lehetnek pozitívak és negatívak. Pozitív indirekt hatás, hogy az intézkedések mondjuk az influenza ellen is jót tesznek, de kicsit elengedve a fantáziánkat, az is pozitív indirekt hatás lehet, hogy kevesebb autóbaleset történik. Negatív indirekt hatás, hogy más betegség ellátása nehezedik meg vagy lehetetlenül el, de itt is lehet távlatibb kérdésekre gondolni, például mi van, ha megnő az öngyilkosságok száma a szociális elszigetelődés miatt. A többlethalálozás nem teszi lehetővé ezek biztos elkülönítését. Itt is igaz, hogy e problémakör önmagában több oldalnyi tárgyalást igényelne, ami az [említett írásomban](https://github.com/tamas-ferenci/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban) megtalálható, itt megint csak a címszavakban összefoglalásra szorítkoztam. Egyetlen [megállapítást](https://github.com/tamas-ferenci/ExcessMortEUR#%C3%B6sszevet%C3%A9s-a-jelentett-hal%C3%A1loz%C3%A1ssal) emelnék ki: Európán belül öt országtól (Bulgária, Románia, Litvánia, Lengyelország és félig-meddig Szlovákia) eltekintve a két mutató értékei nagyon hasonlóak egymáshoz.
+Ez a gond vezet el egy másik mutatóhoz: az úgynevezett többlethalálozáshoz. Itt a járvány előtti adatokat használva statisztikai úton készítünk egy előrejelzést a halálozások számára, ezt tekintjük úgy -- mivel a járvány hatása nélküli adatokból készült -- mint az a halálozás ami akkor lett volna, ha nincs járvány. Kivonva ezt az értéket a tényleges halálozási adatból, kapjuk a többlethalálozást. E mutató hatalmas előnye, hogy biztosan semennyire nem függ a tesztelési aktivitástól és biztosan semennyire nem függ a haláloki besorolástól. Hátránya azonban -- azon túl, hogy a leglassabban ismertté váló mutató -- egyrészt, hogy függ az előrejelzés jóságától, de még inkább az, hogy egy bruttó jellegű mutató: egybeméri a járvány direkt hatásaival (belehalnak emberek) annak indirekt hatásait is, amik ráadásul egyaránt lehetnek pozitívak és negatívak. Pozitív indirekt hatás, hogy az intézkedések mondjuk az influenza ellen is jót tesznek, de kicsit elengedve a fantáziánkat, az is pozitív indirekt hatás lehet, hogy kevesebb autóbaleset történik. Negatív indirekt hatás, hogy más betegség ellátása nehezedik meg vagy lehetetlenül el, de itt is lehet távlatibb kérdésekre gondolni, például mi van, ha megnő az öngyilkosságok száma a szociális elszigetelődés miatt. A többlethalálozás nem teszi lehetővé ezek biztos elkülönítését. Itt is igaz, hogy e problémakör önmagában több oldalnyi tárgyalást igényelne, ami az [említett írásomban](https://github.com/ferenci-tamas/ExcessMortEUR#a-t%C3%B6bblethal%C3%A1loz%C3%A1si-mutat%C3%B3r%C3%B3l-%C3%A1ltal%C3%A1ban) megtalálható, itt megint csak a címszavakban összefoglalásra szorítkoztam. Egyetlen [megállapítást](https://github.com/ferenci-tamas/ExcessMortEUR#%C3%B6sszevet%C3%A9s-a-jelentett-hal%C3%A1loz%C3%A1ssal) emelnék ki: Európán belül öt országtól (Bulgária, Románia, Litvánia, Lengyelország és félig-meddig Szlovákia) eltekintve a két mutató értékei nagyon hasonlóak egymáshoz.
 
 Ez azért is fontos, mert azt mondja, hogy -- szerencsére -- a két mutató közti választás nem várható, hogy nagy hatást gyakoroljon a végeredményre. Így különösebben sokat nem kell gondolkozni azon, hogy melyiket választjuk, én most a többlethalálozást fogom használni a teher végső mutatójaként, azért, mert az empirikus elemzés különböző országok adatait fogja egybevetni, így fontos, hogy országok között robusztusan összehasonlítható mutatót használjunk.
 
@@ -90,11 +91,12 @@ Ennek az értékei így néznek ki a 2021. 52. heti állapot szerint (ezt az ind
 
 ```{r}
 RawData <- fread(
-  "https://github.com/tamas-ferenci/ExcessMortEUR/raw/main/ExcessMortEUR_data.csv",
-  dec = ",")[time=="2021W52"&nuts_level==0&age=="TOTAL"]
+  "https://github.com/ferenci-tamas/ExcessMortEUR/raw/refs/heads/main/ExcessMortEUR_data.csv",
+  dec = ",")[year == 2021 & week == 52 & nuts_level == 0 & age =="TOTAL" &
+               ED == "ExPost" & model == "poisson" & !sens]
 RawData$cumexcessperpop <- RawData$cumexcess/RawData$meanpopulation*1e6
 ggplot(RawData[order(cumexcessperpop)],
-       aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo=="HU")) +
+       aes(x = factor(geo, levels = geo), y = cumexcessperpop, fill = geo == "HU")) +
   geom_col() + guides(fill = "none") +
   labs(x = "", y = "Összesített többlethalálozás [fő/1M fő]")
 ```
@@ -158,7 +160,7 @@ Az ebből való tanuláson túl az ilyen kódok közlését elvileg is fontosnak
 
 A számítások `R` statisztikai programnyelven készültek, `r paste0(version$major, ".", version$minor)`-es verziót használva. Felhasználtam a `data.table` (`r packageVersion("data.table")`-es verzió) és `ggplot2` (`r packageVersion("ggplot2")`-es verzió) csomagokat.
 
-A kimeneti adat, azaz a többlethalálozási számok forrása a 'Többlethalálozási adatok európai összevetésben' című [anyagom](https://github.com/tamas-ferenci/ExcessMortEUR). Ebben minden további technikai kérdés részletesen le van írva, de egy mondatban összefoglalva: Acosta és Irizarry [módszerét](https://www.medrxiv.org/content/10.1101/2020.06.06.20120857v3) használtam a többlethalálozás becsléséhez.
+A kimeneti adat, azaz a többlethalálozási számok forrása a 'Többlethalálozási adatok európai összevetésben' című [anyagom](https://github.com/ferenci-tamas/ExcessMortEUR). Ebben minden további technikai kérdés részletesen le van írva, de egy mondatban összefoglalva: Acosta és Irizarry [módszerét](https://journals.lww.com/epidem/abstract/2022/05000/a_flexible_statistical_framework_for_estimating.6.aspx) használtam a többlethalálozás becsléséhez.
 
 A potenciális magyarázó adatok forrása az egységesség és az egyszerűség kedvéért mindenhol az [Eurostat](https://ec.europa.eu/eurostat) volt. A következő adatokat gyűjtöttem le (nem feltétlenül fogom kivétel nélkül mindegyiket használni a későbbiekben, de az adatbázisban rendelkezésre áll, ha valaki szeretne tovább kísérletezni a témában); igyekeztem mindenhol a legkésőbbi, a járvány időpontjához legközelebbi adatokat használni:
 
@@ -185,36 +187,36 @@ Elsőként letöltjük ezeket az adatforrást, majd egy táblában egyesítjük 
 RawData <- Reduce(function(...) merge(..., by = "geo"), list(
   RawData,
   as.data.table(eurostat::get_eurostat("tps00003"))[
-    unit=="PER_KM2"&time=="2019-01-01",.(geo, popdensity = values)],
+    unit=="PER_KM2"&TIME_PERIOD=="2019-01-01",.(geo, popdensity = values)],
   as.data.table(eurostat::get_eurostat("tessi170"))[
-    sex=="T"&time=="2019-01-01",.(geo, overcrowding = values)],
+    sex=="T"&TIME_PERIOD=="2019-01-01",.(geo, overcrowding = values)],
   as.data.table(eurostat::get_eurostat("ilc_lvho01"))[
-    incgrp=="TOTAL"&building=="TOTAL"&deg_urb=="DEG1"&time=="2019-01-01",
+    incgrp=="TOTAL"&building=="TOTAL"&deg_urb=="DEG1"&TIME_PERIOD=="2019-01-01",
     .(geo, urbanization = values)],
   as.data.table(eurostat::get_eurostat("nama_10_pc"))[
-    unit=="CP_PPS_EU27_2020_HAB"&na_item=="B1GQ"&time=="2019-01-01",
+    unit=="CP_PPS_EU27_2020_HAB"&na_item=="B1GQ"&TIME_PERIOD=="2019-01-01",
     .(geo, gdp = values)],
   as.data.table(eurostat::get_eurostat("demo_pjan"))[
-    sex=="T"&time=="2019-01-01",
+    sex=="T"&TIME_PERIOD=="2019-01-01",
     .(popold = sum(values[age%in%c(paste0("Y", 65:99),
                                    "Y_OPEN")])/values[age=="TOTAL"]*100), .(geo)],
   as.data.table(eurostat::get_eurostat("sdg_02_10"))[
-    bmi=="BMI_GE30"&time=="2019-01-01", .(geo, obese = values)],
+    bmi=="BMI_GE30"&TIME_PERIOD=="2019-01-01", .(geo, obese = values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_sk1i"))[
-    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    smoking=="NSM"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&TIME_PERIOD=="2019-01-01",
     .(geo, smoke = 100-values)],
   as.data.table(eurostat::get_eurostat("hlth_ehis_al1i"))[
-    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&time=="2019-01-01",
+    frequenc=="DAY"&quant_inc=="TOTAL"&sex=="T"&age=="TOTAL"&TIME_PERIOD=="2019-01-01",
     .(geo, alcohol = values)],
   dcast(as.data.table(eurostat::get_eurostat("hlth_ehis_cd1e"))[
-    unit=="PC"&isced11=="TOTAL"&time=="2019-01-01"&sex=="T"&age=="TOTAL"&
+    unit=="PC"&isced11=="TOTAL"&TIME_PERIOD=="2019-01-01"&sex=="T"&age=="TOTAL"&
       hlth_pb%in%c("ASTHMA", "HBLPR", "DIAB", "CHRT_ANGPEC"), .(geo, hlth_pb, values)],
     geo ~ hlth_pb, value.var = "values"),
   as.data.table(eurostat::get_eurostat("hlth_sha11_hf"))[
-    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&time=="2019-01-01",
+    unit=="EUR_HAB"&icha11_hf=="TOT_HF"&TIME_PERIOD=="2019-01-01",
     .(geo, healthexpenditure = values)],
   as.data.table(eurostat::get_eurostat("hlth_rs_prsns"))[
-    unit=="P_HTHAB"&wstatus=="PRACT"&time=="2017-01-01"&isco08=="OC2221_3221",
+    unit=="P_HTHAB"&wstatus=="PRACT"&TIME_PERIOD=="2017-01-01"&isco08=="OC2221_3221",
     .(geo, nurses = values)]))
 names(RawData) <- tolower(names(RawData))
 
@@ -228,7 +230,11 @@ A vizsgált országok körét meghatározza az a tény, hogy mely országokra va
 A begyűjtött adataink:
 
 ```{r}
-knitr::kable(RawData[, c(1, 20, 21:35)], digits = 1)
+knitr::kable(RawData[
+  ,c("geo", "cumexpected", "nuts_level", "geoname", "cumexcessperpop", 
+     "popdensity", "overcrowding", "urbanization", "gdp", "popold", 
+     "obese", "smoke", "alcohol", "asthma", "chrt_angpec", "diab", 
+     "hblpr")], digits = 1)
 ```
 
 Érzékelhetőek a hatalmas különbségek: a többlethalálozás az egymillió lakosonként 500 alattitől (Dánia) a 8000 felettiig (Bulgária) terjednek, és több magyarázó jellegű változóban is vannak drámai eltérések, nagyságrendi különbségek vannak a népsűrűségben, az alkoholfogyasztásban, de még az egészségügyre fordított kiadásokban is.
@@ -288,7 +294,7 @@ Bár az eleve sem túl nagy mintanagyság további szétosztódása miatt ez kic
 
 Ahhoz, hogy megértsük, hogy itt mi történik, gondoljuk végig, hogy az első ábra esetében mit jelent a confounding problémája. Mi ott a probléma? Az, hogy ha megyünk jobbra (több ápoló), akkor _egyúttal_ a gazdasági fejlettség is javul, nem csak az ápolók száma nő. Azaz, amit látunk (csökkenő halálozás), valójában nem pusztán a több ápoló, hanem a több ápoló _és_ magasabb GDP _együttes_ hatása (és nem tudjuk, hogy milyen arányban). A probléma tehát, hogy egy változót akartunk vizsgálni (ápolók száma), de ahogy az változik az ábrán, vele együtt valami más is odébbmászik.
 
-...ez a mostani ábrázolás azonban pont ezt oldja meg! Hiszen az egyes kis részábrákban a GDP adott értékű (közelítőleg), azaz, amikor a kis részábrákat nézzük, akkor a fenti hatást kikapcsoltuk! Ilyen értelemben ez az ábrázolás az ápolók számának valódi hatását igyekszik megragadni, [tisztítva](https://tamas-ferenci.github.io/FerenciTamas_AzOrvosiMegismeresModszertanaEsAzOrvosiKutatasokKritikusErtekelese/megfigyel%C3%A9ses-vizsg%C3%A1latok-a-gyakorlatban.html) a fejlettség miatti confounding-tól. (Ezt a módszert szokás egyébként rétegzésnek nevezni.)
+...ez a mostani ábrázolás azonban pont ezt oldja meg! Hiszen az egyes kis részábrákban a GDP adott értékű (közelítőleg), azaz, amikor a kis részábrákat nézzük, akkor a fenti hatást kikapcsoltuk! Ilyen értelemben ez az ábrázolás az ápolók számának valódi hatását igyekszik megragadni, [tisztítva](https://ferenci-tamas.github.io/orvosi-megismeres-modszertan/megfigyeleses-vizsgalatok.html) a fejlettség miatti confounding-tól. (Ezt a módszert szokás egyébként rétegzésnek nevezni.)
 
 Ez itt egy nagyon fontos általános gondolat: hogy egy változó hatását úgy kapjuk meg, ha _csak_ a kérdéses tényezőt változtatjuk. És most értünk körbe, hiszen honnan indultunk? Abból, hogy az a probléma, hogy nem tudunk „egyetlen és csakis egyetlen tényezőt“ változtatni -- ezt látjuk a fenti ábrákban megjelenni. Csakhogy most már, ezzel az utolsó ábrával, az e probléma elleni küzdelem eszköze is kezd a kezünkbe kerülni.
 
@@ -335,7 +341,7 @@ Az egész kulcsa a „miközben a GDP értéke rögzített“ kitétel: a confou
 
 Vegyük észre, hogy ilyen szempontból annak, hogy épp síkot (és nem más alakú felületet) illesztettünk az adatokra, van egy nagyon kellemes tulajdonsága: az, hogy a nővér-szám szerinti meredekség nem függ sem attól, hogy mi a választott GDP-szint, amit rögzítetten tartunk, sem attól, hogy milyen nővér-számról indulva növeljük a nővérek számát egy egységgel! Akármilyen értéken is rögzítjük a GDP-t, azaz akárhol is vagyunk a bal oldali tengelyen, és akárhonnan indulva növeljük a nővér-számot, azaz akárhonnan vagyunk a jobb oldalin, ahonnan egyet jobbra-felfelé lépünk, a sík _mindenképp_ ugyanannyit megy lejjebb. Azaz ezt a meredekséget használhatjuk, egyetlen számként, a nővérek hatásának leírására. Ezt a tulajdonságot fogjuk később úgy hívni, hogy linearitás.
 
-Ez lesz a sík behúzásának igazi értelme: nem a görbeillesztés a lényeg, hanem, hogy feltételezünk egy modellt (ami a sík matematikai leírása lesz), és annak a paramétereit, ezeket a bizonyos meredekségeket becsüljük meg a begyűjtött tényadatok alapján. Ezt hívjuk regressziónak. A regresszió kérdésköre egy hatalmas, de érdekes, és nagyon sok területen -- így a biostatisztikában kiemelten -- fontos téma. Most szinte csak utalásszerűen tudom megemlíteni pár fontos kérdését, de a részletek [előadásaimban](https://www.youtube.com/c/FerenciTam%C3%A1s) és [jegyzeteim között](https://tamas-ferenci.github.io/) elérhetőek; néhány adott témába vágót a szövegben is belinkelek a megfelelő helyen.
+Ez lesz a sík behúzásának igazi értelme: nem a görbeillesztés a lényeg, hanem, hogy feltételezünk egy modellt (ami a sík matematikai leírása lesz), és annak a paramétereit, ezeket a bizonyos meredekségeket becsüljük meg a begyűjtött tényadatok alapján. Ezt hívjuk regressziónak. A regresszió kérdésköre egy hatalmas, de érdekes, és nagyon sok területen -- így a biostatisztikában kiemelten -- fontos téma. Most szinte csak utalásszerűen tudom megemlíteni pár fontos kérdését, de a részletek [előadásaimban](https://www.youtube.com/@FerenciTamas) és [jegyzeteim között](https://ferenci-tamas.github.io/) elérhetőek; néhány adott témába vágót a szövegben is belinkelek a megfelelő helyen.
 
 (Észrevehető, hogy ez a módszer lényegében a rétegzés továbbfejlesztése: ott is arra törekedtünk, hogy a nővérek számának hatását úgy mutassuk ki, hogy a GDP nem változik vele együtt, azt állandóan tartjuk, de most ezt ügyesebben tesszük meg: például nem kell kategóriákra osztani a GDP-t, amik ha túl szélesek, akkor nagyon különböző dolgokat mosnak egybe, ha túl szűkek, akkor kevés pont jut egy kategóriába, közvetlenül számszerű választ kapunk, jobban kiterjeszthető lesz majd az eredmény több változóra is stb.)
 
@@ -350,11 +356,11 @@ knitr::kable(data.frame(`Becsült hatás` = signif(coef(fit)[-1], 3),
                         check.names = FALSE, row.names = names(coef(fit))[-1]))
 ```
 
-Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy, hogy a nővérek száma közben nem változik, akkor 0,0742-vel megy lejjebb a halálozás. Ha a nővérek számát növeljük eggyel miközben a GDP-t változatlanul tartjuk, akkor 1,14-gyel csökken a halálozás. Elértük a célunkat, ezek a confounding-tól tisztított értékek: az 1,14 a nővér-szám tisztított hatása, amiben megszabadultunk a GDP miatti confounding-tól! Noha csak megfigyeléses adataink voltak, mégis meg tudtuk határozni a nővérek számának _valódi_ hatását a halálozásra.
+Tehát azt mondhatjuk, hogy ha a GDP-t egy egységgel növeljük, de úgy, hogy a nővérek száma közben nem változik, akkor 0,0763-mal megy lejjebb a halálozás. Ha a nővérek számát növeljük eggyel miközben a GDP-t változatlanul tartjuk, akkor 2,44-gyel csökken a halálozás. Elértük a célunkat, ezek a confounding-tól tisztított értékek: az 2,44 a nővér-szám tisztított hatása, amiben megszabadultunk a GDP miatti confounding-tól! Noha csak megfigyeléses adataink voltak, mégis meg tudtuk határozni a nővérek számának _valódi_ hatását a halálozásra.
 
 Annak, hogy a nővérek hatásának számértéke nagyobb mint a GDP-é, nincsen jelentősége, hiszen ez az érték függ a mértékegységtől (egy _egységgel_ növeltük, ahol az egység az, amiben a kérdéses változót mérjük), márpedig a nővérek számának és a GDP-nek teljesen más a mértékegysége. Az viszont mindenképpen meglepő lehet, hogy akkor most mégis van hatása a nővér-számnak? Hiszen korábban még azt állapítottuk meg, hogy nincsen...!
 
-A helyzet az, hogy tényleg nincsen, és ennek nem mond ellent a fenti -1,14, de ennek megértéséhez meg kell egy új kérdéskörrel ismerkednünk.
+A helyzet az, hogy tényleg nincsen, és ennek nem mond ellent a fenti -2,44, de ennek megértéséhez meg kell egy új kérdéskörrel ismerkednünk.
 
 ### A mintavételi ingadozás fogalma
 
@@ -447,7 +453,7 @@ ggplot(RawData, aes(x = nurses, y = cumexcessperpop)) + geom_point() +
        y = "Összesített többlethalálozás [fő/1M fő]")
 ```
 
-Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van irodalma](https://tamas-ferenci.github.io/FerenciTamas_SimitasSplineRegresszioAdditivModellek/). E modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami hatalmas fegyvertény, de cserében rosszabbul becsülhetőek, olyan értelemben, hogy nagyobb mintát igényelnek, paraméter híján nincs egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik (maximum kirajzolhatjuk a görbét), és extrapolálni sem lehet, vagy csak trükkökkel. A továbbiakban ilyen modellekkel nem foglalkozunk most.
+Ebben a kontextusban ezt szokás simításnak is nevezni, ennek is [van irodalma](https://ferenci-tamas.github.io/simitas-spline/). E modelleknél tehát a rossz függvényforma miatt nem kell aggódnunk, ami hatalmas fegyvertény, de cserében rosszabbul becsülhetőek, olyan értelemben, hogy nagyobb mintát igényelnek, paraméter híján nincs egyszerű szám, amihez jó esetben még tárgyterületi értelem is tartozik (maximum kirajzolhatjuk a görbét), és extrapolálni sem lehet, vagy csak trükkökkel. A továbbiakban ilyen modellekkel nem foglalkozunk most.
 
 ### A kihagyott változós torzítás
 
